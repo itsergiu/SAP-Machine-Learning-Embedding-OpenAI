@@ -1,0 +1,46 @@
+
+Notebook
+Python & HANA ML Check¶This Notebooks installs the required library to connect to SAP HANA Cloud under SAP Data Warehouse Cloud and tests the connectivity.
+Documentation¶
+SAP HANA Python Client API for Machine Learning Algorithms:
+https://pypi.org/project/hana-ml/
+SAP HANA Automated Predictive Library (APL):
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/hana_ml.algorithms.apl.html
+SAP HANA Predictive Analysis Library (PAL):
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/hana_ml.algorithms.pal.html
+Package Dependencies: 
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/Installation.html
+Examples: 
+https://github.com/SAP-samples/hana-ml-samples/tree/main/Python-API/pal/notebooks
+SAP HANA ML Library¶You will be using the 'SAP HANA Python Client API for Machine Learning Algorithm'. Begin by ensuring that you have the correct version available.
+In [ ]:
+import hana_ml
+print(hana_ml.__version__)
+In case you have an oldder version than 2.14.22102800, run the following cell to upgrade the library.Running this cell, even if you have already that version installed, does not do any harm.
+In [ ]:
+!pip install hana-ml==2.14.22102800
+!pip install shapely
+After upgrading the library you have to restart the Kernel to ensure the new version is loaded in your current session. In the Jupyter Lab menu go into "Kernel" -> "Restart Kernel...". Once the Kernel has been restarted, continue with the next cell.
+In [ ]:
+import hana_ml
+print(hana_ml.__version__)
+Test connection to SAP HANA¶Establish a connection to the SAP HANA system and send a statement to verify the connection is working as expected. For simplicity you will use the user name and password in clear text. Fore a more realistic and secure approach it is possible to leverage credentials that are safely kept in the Secure User Store from the SAP HANA client, as described in the following blog: https://blogs.sap.com/2020/07/27/hands-on-tutorial-automated-predictive-apl-in-sap-hana-cloud/
+You must update these logon credentials as provided to you by your workshop host.
+In [ ]:
+hana_address = '>YOURHORSTNAME>' 
+hana_port = 443 # Adjust if needed / as advised
+hana_user = 'YOURUSERNAME' 
+hana_password = 'YOURPASSWORD' 
+hana_encrypt = 'true' # Adjust if needed / as advised
+import hana_ml.dataframe as dataframe
+# Instantiate connection object
+conn = dataframe.ConnectionContext(address = hana_address,
+                                   port = hana_port,
+                                   user = hana_user, 
+                                   password = hana_password, 
+                                   encrypt = hana_encrypt,
+                                   sslValidateCertificate = 'false' 
+                                  )
+# Control connection
+conn.connection.isconnected()
+The above cell should execute without error and display the value True.

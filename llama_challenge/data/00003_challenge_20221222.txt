@@ -1,0 +1,87 @@
+
+SAP HANA Cloud Machine Learning Challenge 2022 | The winners are… | SAP Blogs
+ 
+Skip to Content
+SAP Community Log-in UpdateIn a few months, SAP Community will switch to SAP Universal ID as the only option to login. Don’t wait, create your SAP Universal ID now! If you have multiple accounts, use the Consolidation Tool to merge your content.Get started with SAP Universal ID
+Home
+Community
+Ask a Question
+Write a Blog Post
+Login / Sign-up
+ 
+Event Information
+ 
+Susen Poppe
+ 
+December 22, 2022
+2 minute read
+SAP HANA Cloud Machine Learning Challenge 2022 | The winners are…
+1        
+7        
+571        
+Dear SAP Community,
+As you may already know, we’ve launched the very first SAP HANA Cloud Machine Learning Challenge in November 2022.
+On behalf of the entire SAP HANA Cloud Machine Learning Challenge Team and the SAP HANA Product Management Team, congratulations to all the participants who accepted the challenge and took the time to submit their solution! It is great to see the different approaches and how all our participants tackled the challenge in diverse ways.
+Now, we are excited to announce the winners of the SAP HANA Cloud Machine Learning Challenge in 2022:
+Clemens Wöhrer
+Sergiu Iatco  & Vishwas Madhuvarshi
+Once again, a big thank you for all your contributions! Keep up your good work, excitement, and enthusiasm for SAP HANA Cloud’s Machine Learning capabilities!
+You are not one of the lucky winners? How about sharing your experience with the SAP Community via a blogpost? Start blogging right away. Looking for some inspiration? Dirk Kemper’s blog is a good starting point. Read it now.
+Prizes
+Apart from learning more about the Machine Learning capabilities in SAP HANA Cloud, the chosen first place winner will be contacted via email to receive their price.
+We will also reach out to all winners to clarify the details of the opportunity to present their solutions in an SAP Community call together with our SAP HANA Cloud Machine Learning experts!
+What’s next?
+Stay tuned for upcoming events, including the SAP Community Call with the winners of this challenge, by following our product tag in the SAP Community.
+Did you stumble about this blogpost without having participated in the challenge? Don’t worry, you can still accept the challenge and find your way to prevent employee churn. Read this blogpost or watch this video for more details. The challenge data set can be found in this GitHub repository.
+Please note that neither the free tier nor the free trial for SAP HANA Cloud are suitable to use SAP HANA Cloud’s Machine Learning capabilities!
+For more information about SAP HANA Cloud:
+Blogpost: Hands-On Tutorial: Leverage SAP HANA Machine Learning in the Cloud through the Predictive Analysis Library
+Blogpost: Hands-On Tutorial: Automated Predictive (APL) in SAP HANA Cloud
+Blogpost: Data Yoga-It is all about finding the right balance
+Video: Build your Machine Learning Scenario for your SAP HANA Cloud application from Python
+Video: Intelligence out of the Box – Native Machine Learning in SAP HANA Cloud | SAP Community Call
+Find a list of all scheduled SAP Community Calls here
+Follow us on  YouTube
+ 
+Do you have questions regarding another topic? Ask the SAP Community.
+ 
+All the best, happy holidays, and a great start into the new year,
+Your SAP HANA Cloud Machine Learning Challenge team
+Follow Like 
+RSS Feed
+            
+ 
+Alert Moderator
+    
+Alerting is not available for unauthorized users
+Assigned TagsSimilar Blog PostsRelated Questions 
+/
+      1 Comment      
+                You must be Logged on to comment or reply to a post.
+        
+ 
+Witalij Rudnicki  
+January 1, 2023 at 4:33 pm
+Clemens Wöhrer, Sergiu Iatco, Vishwas Madhuvarshi, congratulations!
+Like 1ShareRight click and copy the link to share this comment
+ 
+ 
+Find us on
+Privacy
+Terms of Use
+Legal Disclosure
+Copyright
+Trademark
+Newsletter
+Support
+ 
+ 
+ Insert/edit link
+Close
+Enter the destination URL
+URL
+Link Text
+ Open link in a new tab
+Or link to existing content
+Search
+No search term specified. Showing recent items.

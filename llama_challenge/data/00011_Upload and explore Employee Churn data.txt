@@ -1,0 +1,90 @@
+
+Notebook
+Notebook - Data Upload¶This Notebooks transforms and uploads the  data to SAP HANA.
+Documentation¶
+SAP HANA Python Client API for Machine Learning Algorithms:
+https://pypi.org/project/hana-ml/
+SAP HANA Automated Predictive Library (APL):
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/hana_ml.algorithms.apl.html
+SAP HANA Predictive Analysis Library (PAL):
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/hana_ml.algorithms.pal.html
+Package Dependencies: 
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/Installation.html
+Examples: 
+https://github.com/SAP-samples/hana-ml-samples/tree/main/Python-API/pal/notebooks
+SAP HANA ML Library¶You will be using the 'SAP HANA Python Client API for Machine Learning Algorithm'. Begin by ensuring that you have the correct version available.
+__Note__, in case you have a version prior to 2.13.22072200, run the following cell to upgrade the library.Running this cell, even if you have already that version installed, does not do any harm.  
+The current hana-ml version on pypi.org  is 2.14.22101400 and can also be used certainly.
+In [1]:
+#!pip install hana-ml==2.14.22101400
+#!pip install shapely
+In [ ]:
+import hana_ml
+print(hana_ml.__version__)
+Connect¶
+In [ ]:
+hana_address = '<HOSTNAME>' 
+hana_port = 443 # Adjust if needed / as advised
+hana_user = 'YOURUSERNAME' 
+hana_password = 'YOURPASSWORD' 
+hana_encrypt = 'true' # Adjust if needed / as advised
+import hana_ml.dataframe as dataframe
+# Instantiate connection object
+conn = dataframe.ConnectionContext(address = hana_address,
+                                   port = 443, 
+                                   user = hana_user, 
+                                   password = hana_password, 
+                                   encrypt = hana_encrypt,
+                                   sslValidateCertificate = 'false' 
+                                  )
+# Control connection
+print(conn.connection.isconnected())
+print(conn.hana_version())
+Load the CSV file into a Python object (Pandas DataFrame)¶
+In [ ]:
+import pandas as pd
+df_data = pd.read_csv(r'.\Emp_Churn_Original.csv', sep = ',')
+df_data.head(5)
+Before uploading the data to SAP HANA Cloud, carry out a few transformations. Turn the column headers into upper case.
+In [ ]:
+df_data.columns = map(str.upper, df_data.columns)
+df_data.head(5)
+Upload the data to SAP HANA¶...and upload the Pandas DataFrame into a table called after your Username.
+In [ ]:
+hdf_employeechurn = dataframe.create_dataframe_from_pandas(connection_context = conn, 
+                                                   pandas_df = df_data, 
+                                                   table_name = 'EMPLOYEE_CHURN_ORG',
+                                                   force = True,
+                                                   replace = False)
+In [ ]:
+# if you have uploaded the data already, there are multiple ways to create the HANA dataframe
+# hdf_employeechurn = conn.table('EMPLOYEE_CHURN_ORG') 
+# hdf_employeechurn = conn.sql('Select * from EMPLOYEE_CHURN_ORG') 
+Exploring the uploaded data set¶
+In [ ]:
+#control the variable types in SAP HANA
+hdf_employeechurn.dtypes()
+In [ ]:
+hdf_employeechurn.columns
+In [ ]:
+# Display Top 10 rows
+display(hdf_employeechurn.head(10).collect())
+display(hdf_employeechurn.count())
+In [ ]:
+# Display row count
+display(hdf_employeechurn.count())
+#display(hdf_employeechurn.distinct('EMPLOYEE_ID').count())
+In [ ]:
+# Explore column descriptive statistics using the describe method
+hdf_employeechurn.describe().collect()
+In [ ]:
+#dropping some columns PREVCOUNTRYLAT PREVCOUNTRYLON
+hdf_employeechurn=hdf_employeechurn.drop('PREVCOUNTRYLAT').drop('PREVCOUNTRYLON')
+In [ ]:
+hdf_employeechurn.agg([('count', 'EMPLOYEE_ID', 'N')], group_by='FLIGHT_RISK').collect()
+In [ ]:
+ 
+What could be next?¶
+Looking at missing values
+Splitting Train / Test data samples ...
+Exploring data yoga approaches 

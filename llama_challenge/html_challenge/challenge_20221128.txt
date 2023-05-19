@@ -1,0 +1,191 @@
+
+“I quit!” – How to predict employee churn | SAP HANA Cloud Machine Learning Challenge [Submission closed] | SAP Blogs
+ 
+Skip to Content
+SAP Community Log-in UpdateIn a few months, SAP Community will switch to SAP Universal ID as the only option to login. Don’t wait, create your SAP Universal ID now! If you have multiple accounts, use the Consolidation Tool to merge your content.Get started with SAP Universal ID
+Home
+Community
+Ask a Question
+Write a Blog Post
+Login / Sign-up
+ 
+Event Information
+ 
+Susen Poppe
+ 
+November 28, 2022
+6 minute read
+“I quit!” – How to predict employee churn | SAP HANA Cloud Machine Learning Challenge [Submission closed]
+4        
+9        
+1,146        
+Companies want to prevent their highly skilled employees from leaving the company. Today, many of them rely on their managers’ intuition to foresee employee churn. However, this method is neither precise nor unbiased.
+Think about how some managers say that their best guess for a high churn probability is an employee’s new haircut. A new haircut might indicate that a person is ready for more important changes. However, could we really deduce this from one factor?
+By looking at concrete data and analyzing complex patterns, we can better make effective business decisions. There are people who would argue that human behavior is too complex to be reflected in datasets. However, we don’t favor one approach over the other. Instead, we are suggesting using both subjective information (such as the opinion of a manager) and the analytical and mathematical conclusions from the data to discover new insights.
+Consider this when analyzing employee churn:
+A high churn rate among new hires could indicate that the onboarding process needs to be improved and thus leads to a reflection of the company culture and a change in the treatment of new hires.
+We could also take a closer look at internal employee turnover and their success rate or make better learning recommendations based on data.
+Further, data could be used to help reflect on whether we are leveraging the full potential of our most experienced colleagues.
+Understand our challenge
+Watch the recording of our kick-off call
+The purpose of the challenge is to give participants some hands-on experience on how the Machine Learning embedded in SAP HANA Cloud and SAP Data Warehouse Cloud can be utilized. IT experts can experiment with Machine Learning with the support of a global team of experts, ready to support in different time zones and seasoned Data Scientists can participate to become familiar with SAP’s components for Machine Learning on structured data.
+To win the challenge, you will need to come up with a clever implementation of the use case with SAP HANA Machine Learning​ and an appealing presentation delivering a clear message that matches your persona and use case. We are NOT just looking for the highest accuracy, precision or recall but also a catchy presentation, or a solid story.​
+Join us on
+December 16, 2022, 8AM CET (4PM KST) | Join here
+December 16, 2022, 4PM CET (10AM EST) | Join here
+to present your solution to our SAP expert team.
+If you cannot attend the calls, please publish an SAP Community blogpost with your solution until December 16, 2022 11:59pm CET.
+Support
+During the challenge, we are happy to offer “open office hours” where you can join our experts to get your open questions answered and address any issues you are dealing with regarding the challenge. Please find the slots offered below:
+November 29, 2022, 9AM CET (5PM KST) | Join here
+December 1, 2022, 5PM CET (11AM EST) | Join here
+December 6, 2022, 9AM CET (5PM KST) | Join here
+December 8, 2022, 5PM CET (11AM EST) | Join  here
+December 13, 2022, 9AM CET (5PM KST) | Join here
+December 15, 2022, 5PM CET (11AM EST) | Join here
+We are also happy to offer you the option to discuss open questions in this discussion thread.*
+Do you accept the challenge? Let us know by commenting “I am no quitter” and tag your fellow machine learning enthusiasts that should also participate. Follow this blogpost to not miss any updates.
+Prerequisites
+To be able to participate in the challenge there are some prerequisites you need to fulfil.
+You will need an SAP HANA Cloud instance. Free tier or trial are not compatible with the challenge contents. If you don’t have an adequate set-up, please reach out to the team to get access to a suitable instance.
+You need to have a local Python environment (You need to use version 3.4 – 3.8)
+Install Python Machine Learning client for HANA
+Please take a look at the technical prerequisites at https://pypi.org/project/hana-ml/ or in the documentation
+Please test the connection from your python environment to SAP HANA Cloud
+Read this blogpost for an example APL hands-on blogpost (how to set up your local python environment)
+Access the challenge data set via this Jupyter Notebook
+An extensive list can be found in our Prerequisites blogpost.
+What’s in for you
+Apart from learning more about and getting hands on experience with the machine learning capabilities embedded in SAP HANA Cloud, we will give chosen winners the opportunity to present their solution in an SAP Community call together with our SAP HANA machine learning experts!
+Moreover, the chosen winner(s) will be awarded a gift card.
+Winners will be contacted after the challenge to clarify the details of the SAP Community call.
+1st price: Gift card + Invitation to present in an SAP Community Call together with our SAP machine learning experts
+2nd & 3rd: Invitation to present in an SAP Community Call together with our SAP machine learning experts
+Overall Timeline
+November 28, 2022
+Official Challenge Kick-off | Watch the recording here
+November 29, 2022 (9AM CET)
+Open Office Hour Challenge (Asia Pacific & European time zone)
+December 1, 2022 (5PM CET)
+Open Office Hour Challenge (European & American time zone)
+December 6, 2022 (9AM CET)
+Open Office Hour Challenge (Asia Pacific & European time zone)
+December 8, 2022 (5PM CET)
+Open Office Hour Challenge (European & American time zone)
+December 13, 2022 (9AM CET)
+Open Office Hour Challenge (Asia Pacific & European time zone)
+December 15, 2022 (5PM CET)
+Open Office Hour Challenge (European & American time zone)
+December 16, 2022
+End of the challenge + Presentation slots for your solution
+·       Slot 1 (8AM CET): Asia Pacific & European time zone 
+·       Slot 2 (4PM CET): European and American time zone
+CW51, 2022
+Announcement of the winners
+CW4, 2023
+Community Call with the winners
+Keep exploring
+Blogpost: Hands-On Tutorial: Leverage SAP HANA Machine Learning in the Cloud through the Predictive Analysis Library
+Blogpost: Hands-On Tutorial: Automated Predictive (APL) in SAP HANA Cloud 
+Blogpost: Data Yoga-It is all about finding the right balance
+Video: Build your Machine Learning Scenario for your SAP HANA Cloud application from Python
+Video: Intelligence out of the Box – Native Machine Learning in SAP HANA Cloud | SAP Community Call
+ 
+Are you ready? Set? GOOOO!
+The SAP HANA Cloud Machine Learning Challenge team is wishing you good luck!
+ 
+Terms & Conditions
+Challenge definition
+The SAP HANA Machine learning challenge is an online challenge, taking place in SAP Community (community.sap.com) where the announcement of the challenge as well as the winner selection is being published as a blogpost in SAP Community. Valid submissions need to be presented during the presentation slots at the end of the challenge or written down in a blogpost in the SAP Community as described in this announcement where every interested individual SAP Community member can participate in handing in their solution. Participation in the challenge is subject to these Terms and Conditions.
+The Promoter of this challenge is the SAP HANA product management team.
+Prize draw entry period details 
+Eligible individuals may participate in the challenge from November 28 to December 16, 2022 at 11:59 PM Central European Time.
+Eligibility Criteria 
+Entrants must (i) be eighteen (18) years or older; (ii) be a registered and active member of the SAP Community (community.sap.com) (iii) you are prohibited from participating in this Challenge if you are located in a country embargoed by the United States or if you are on the U.S. treasury department’s list of specially designated nationals or if you are an government official.  (iv) SAP reserves the right to verify eligibility and to adjudicate on any dispute at any time. The Challenge is subject to all federal, state, and local laws and is void where prohibited. Participants in the Challenge agree to be bound by these Official Rules and the decisions of the Sponsor.
+Contest Rules & submission requirements 
+Challenge solutions must:
+be submitted by an individual authentic account
+be presented during one of the presentation slots on December 16 or must be described in a blogpost before December 16, 2022 11:59pm CET.
+ 
+Selection and Notification of Winner 
+One can win this challenge by presenting a correct solution in one of the calls on December 16 or writing a blogpost about a correct solution until December 16, 2022 11:59pm.  Winners will be featured and linked in future blogposts.
+Winners will be chosen by the SAP HANA Cloud Machine Learning Challenge team.
+Consent and Release  
+Promoter is not responsible for any typographical or other error in the printing of the offer, administration of the Prize Draw or in the announcement of prize or for any suspension of the Prize Draw or inability to implement the Prize Draw or award the prize as contemplated herein due to any event beyond its control, including delays or interruptions caused by acts of God, acts of war, natural disasters, weather, utility outages, acts of terrorism or any national, federal, territorial or local government law, order, or regulation, order of any court or regulator. This Prize Draw shall be governed by and interpreted under the laws of Germany without regard to its conflicts of laws provisions. Any and all disputes, claims, and causes of action arising out of or in connection with this Prize Draw, shall be resolved individually, without resort to any form of class action. Any claims, judgments and/or awards shall be limited to actual out-of-pocket costs associated with entering this prize draw. Participant hereby waives any rights or claims to legal fees, indirect, special, punitive, incidental or consequential damages of participant, whether foreseeable or not and whether based on negligence or otherwise.
+Personal information and privacy 
+By participating in the Challenge, Participant consents to the collection, use and disclosure of Participant’s personal information as described at https://www.sap.com/corporate/en/legal/terms-of-use.html?view=PP.
+ 
+ 
+* Please note that you will need to separately register for SAP Groups.
+ 
+ 
+ 
+Follow Like 
+RSS Feed
+            
+ 
+Alert Moderator
+    
+Alerting is not available for unauthorized users
+Assigned TagsSimilar Blog PostsRelated Questions 
+/
+      4 Comments      
+                You must be Logged on to comment or reply to a post.
+        
+ 
+Christoph Morgen  
+November 29, 2022 at 1:46 pm
+Have you been able to connect to SAP HANA CLoud and upload the employee-churn data set yet?
+If you got stuck, here is an example Jupyter Notebook in our ML community challenge github example repo 
+Join our open office calls (see above for times & days) for questions or post your questions in this Q&A thread.
+Have fun working on the challenge!
+Christoph
+Like 3ShareRight click and copy the link to share this comment
+ 
+Christoph Morgen  
+December 12, 2022 at 2:14 pm
+Last week of our SAP HANA Cloud Machine Learning challenge hast started!
+Tune and finalize your models, looking forward for all your results presentations this Friday 16th Dec.
+Presentation slots for your solution
+·       Slot 1 (8AM CET): Asia Pacific & European time zone 
+·       Slot 2 (4PM CET): European and American time zone
+See you all this Friday!
+Christoph
+Like 0ShareRight click and copy the link to share this comment
+ 
+Dirk Kemper 
+December 14, 2022 at 9:19 am
+Hi Christoph,
+unfortunately I am not able to join the call next Friday on the provided time slots. I have written the following blog post about my analysis: https://blogs.sap.com/2022/12/14/sap-hana-cloud-machine-learning-challenge-preventing-employee-churn/
+Looking forward to your comments.
+Regards, Dirk
+Like 0ShareRight click and copy the link to share this comment
+ 
+Susen Poppe Blog Post Author  
+December 16, 2022 at 6:34 am
+Hi Dirk,
+We will definitely consider your blogpost. Thanks for already publishing it.
+All the best,
+Susen on behalf of the team
+Like 0ShareRight click and copy the link to share this comment
+ 
+ 
+Find us on
+Privacy
+Terms of Use
+Legal Disclosure
+Copyright
+Trademark
+Newsletter
+Support
+ 
+ 
+ Insert/edit link
+Close
+Enter the destination URL
+URL
+Link Text
+ Open link in a new tab
+Or link to existing content
+Search
+No search term specified. Showing recent items.

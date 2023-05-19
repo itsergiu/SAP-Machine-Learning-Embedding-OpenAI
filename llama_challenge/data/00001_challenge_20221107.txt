@@ -1,0 +1,126 @@
+
+SAP Community Call | SAP HANA Cloud Machine Learning Challenge: I quit!” – How to prevent employee churn! | SAP Blogs
+ 
+Skip to Content
+SAP Community Log-in UpdateIn a few months, SAP Community will switch to SAP Universal ID as the only option to login. Don’t wait, create your SAP Universal ID now! If you have multiple accounts, use the Consolidation Tool to merge your content.Get started with SAP Universal ID
+Home
+Community
+Ask a Question
+Write a Blog Post
+Login / Sign-up
+ 
+Event Information
+ 
+Susen Poppe
+ 
+November 7, 2022
+2 minute read
+SAP Community Call | SAP HANA Cloud Machine Learning Challenge: I quit!” – How to prevent employee churn!
+8        
+24        
+800        
+Dear SAP Community, 
+We are excited to invite you to the kick-off call for our next SAP Community challenge: “I quit!” – How to prevent employee churn! After having discovered the graph world last time, we are more than excited to dive deeper into the world of machine learning in SAP HANA Cloud this time. 
+What: “I quit!” – How to prevent employee churn | SAP HANA Cloud Machine Learning Challenge 
+When: November 28, 11am EST / 5pm CET 
+Duration: 1 hour (presentation + Community challenge kick-off + Q&A) 
+SAP HANA Cloud offers a comprehensive, natively embedded set of machine learning capabilities and interfaces, allowing you to develop smart applications and to analyze sensitive data while ensuring privacy. Within SAP HANA Cloud, SAP HANA database you get two machine learning libraries: The Predictive Analysis Library (PAL) and the Automated Predictive Library (APL). Targeting data scientists, that are leveraging SAP HANA Cloud’s native machine learning capabilities, there are Python and R machine learning client packages available. This truly simplifies moving from an open-source scenario to embedded machine learning in SAP HANA Cloud. 
+In our SAP community call, we will provide you with an overview of the embedded machine learning capabilities in SAP HANA Cloud. This includes the Predictive Analysis Library (PAL) for the machine learning expert and a more automated approach through the Automated Predictive Library (APL). You will for example learn how you can stay in your favorite Python environment and create machine learning models without extracting data into your local environment. Finally, we are excited to kick-off our SAP HANA Cloud Machine Learning challenge, that will be hosted in cooperation with our SAP Machine Learning Experts.  
+Don’t worry, in case you cannot attend the call, we will also publish a dedicated blogpost describing the challenge. Stay tuned for a blogpost on the prerequisites that will be published in the next couple of days.  
+So, if you are interested in SAP HANA Cloud’s natively embedded Machine Learning capabilities and want to get hands-on experience with them, this call will be a great fit for you. Join our experts Christoph Morgen, Yannick Schaper, Sarah Detzler, and Andreas Forster to dive deep into the topic of machine learning in SAP HANA Cloud. 
+Register now!
+In case you cannot attend the call, don’t worry, we are live streaming on YouTube and the recording will be available right afterwards for you to re-watch and share with others that might also be interested in the contents presented. We will also include the link to the recording on the SAP HANA on-premises and cloud databases Community Page afterwards, as well as a dedicated blog post explaining the SAP HANA Cloud Machine Learning Challenge in detail.  
+Do you already have questions? Feel free to post them in the comment section below this blogpost. Also, feel free to tag your colleagues that should join this call together with you. 
+Do you want to learn more about machine learning in SAP HANA Cloud in advance of the call? Then check out these resources: 
+Webinar: Accelerate your Machine Learning efforts – benefit from SAP HANA Cloud AutoML 
+Blogpost: Hands-On Tutorial: Leverage SAP HANA Machine Learning in the Cloud through the Predictive Analysis Library 
+Blogpost: Hands-On Tutorial: Automated Predictive (APL) in SAP HANA Cloud  
+Blogpost: Data Yoga-It is all about finding the right balance 
+Video: Build your Machine Learning Scenario for your SAP HANA Cloud application from Python 
+Video: Intelligence out of the box | Native Machine Learning in SAP HANA Cloud
+Find a list of all scheduled SAP Community Calls here 
+Do you have questions regarding another topic? Ask the SAP Community.  
+We are looking forward to seeing you in the call, 
+Susen on behalf the SAP HANA Cloud Machine Learning Challenge team 
+Follow Like 
+RSS Feed
+            
+ 
+Alert Moderator
+    
+Alerting is not available for unauthorized users
+Assigned TagsSimilar Blog PostsRelated Questions 
+/
+      8 Comments      
+                You must be Logged on to comment or reply to a post.
+        
+ 
+Sergiu Iatco 
+November 14, 2022 at 8:15 am
+Hi Susen. I am a full stack SAP BW developer and I learned and understood what machine learning is by experimenting on Kaggle. Reading is not sufficient you have to work with data and code. Kaggle provides the playground with knowledge projects, competitions and shared working codes. How can I get such an environment on SAP HANA cloud? Regards. Sergey.
+Like 0ShareRight click and copy the link to share this comment
+ 
+Susen Poppe Blog Post Author  
+November 14, 2022 at 9:33 am
+Hi Sergiu,
+Thanks for reaching out! You should definitely stay tuned for our challenge where you will have the opportunity to get hands-on-experience with machine learning in SAP HANA Cloud. Register for the kick-off call. More information will follow soon.
+All the best,
+Susen
+Like 1ShareRight click and copy the link to share this comment
+ 
+Sergiu Iatco 
+November 16, 2022 at 7:57 am
+Hi Susen. Please recommend some books for machine learning in SAP HANA Cloud. Regards. Sergiu.
+Like 0ShareRight click and copy the link to share this comment
+ 
+Christoph Morgen  
+November 16, 2022 at 8:09 am
+Hi Sergiu,
+the is a HANA Machine Learning blog collection SAP HANA Machine Learning Resources | SAP Blogs, which crosses a great variety of different topics and use cases applying ML in context of SAP HANA!
+Best regards,
+Christoph
+Like 3ShareRight click and copy the link to share this comment
+ 
+Susen Poppe Blog Post Author  
+November 16, 2022 at 8:14 am
+In case you are german speaking, I can recommend this recently published book: https://www.rheinwerk-verlag.de/data-science-mit-sap-hana/
+Like 0ShareRight click and copy the link to share this comment
+ 
+Sergiu Iatco 
+November 16, 2022 at 10:33 am
+I speak English. I found in blogs official documentation for the components.
+SAP HANA Python Client API for Machine Learning Algorithms
+SAP HANA Predictive Analysis Library (PAL)
+Documentation comes along with statistics used in processing. Statistics for developers is to understand how it works and insert some enhancements, but the focus should be on end-to-end project implementations. If a problem can be solved with an AutoML probably there is a chance for fine tuning by exploring other libraries. To improve something in the first place, you need something that works.
+Like 0ShareRight click and copy the link to share this comment
+ 
+Susen Poppe Blog Post Author  
+November 17, 2022 at 8:01 am
+Hi Sergiu, If you are looking for more insights into AutoML, you should join our SAP Community Call on SAP HANA Cloud's Auto ML capabilities on November 23: https://groups.community.sap.com/t5/sap-community-calls/accelerate-your-machine-learning-efforts-benefit-from-sap-hana/ec-p/124250#M84
+Like 0ShareRight click and copy the link to share this comment
+ 
+Christoph Morgen  
+November 21, 2022 at 4:03 pm
+A BW specific end-2-end implementation blog would be SAP HANA Machine Learning with ABAP Managed Database Procedures in SAP BW/4HANA | SAP Blogs
+Like 0ShareRight click and copy the link to share this comment
+ 
+ 
+Find us on
+Privacy
+Terms of Use
+Legal Disclosure
+Copyright
+Trademark
+Newsletter
+Support
+ 
+ 
+ Insert/edit link
+Close
+Enter the destination URL
+URL
+Link Text
+ Open link in a new tab
+Or link to existing content
+Search
+No search term specified. Showing recent items.

@@ -1,0 +1,1067 @@
+
+SAP HANA Cloud Machine Learning Challenge “I quit!” – understanding metrics | SAP Blogs
+ 
+Skip to Content
+SAP Community Log-in UpdateIn a few months, SAP Community will switch to SAP Universal ID as the only option to login. Don’t wait, create your SAP Universal ID now! If you have multiple accounts, use the Consolidation Tool to merge your content.Get started with SAP Universal ID
+Home
+Community
+Ask a Question
+Write a Blog Post
+Login / Sign-up
+ 
+Technical Articles
+ 
+Sergiu Iatco
+January 9, 2023
+15 minute read
+SAP HANA Cloud Machine Learning Challenge “I quit!” – understanding metrics
+4        
+13        
+1,402        
+Author: Sergiu Iatco 
+I participated in the SAP HANA ML Challenge – Employee Churn 🤖 and I came in second place 🏆.
+I would like to thank the entire SAP expert team for the initiative and organization! 👏
+Presentation of the winners’ solutions on YouTube:
+How to prevent Employee Churn using SAP HANA Cloud​ | SAP Community Call
+My achievement post on LinkedIn.
+Table of content
+1. Getting started
+2. Understanding the challenge
+3. Exploratory data analysis and pre-processing
+4. Baseline model with initial data
+5. Understanding statistics
+6. Training model with additional data
+7. Reducing the number of features
+8. Balancing training data with SMOTE
+9. Balancing test data and increasing training data
+10. Finding top SMOTE
+11. Building top models
+12. Analyzing top models
+13. Visualizing statistics
+14. Further steps
+1. Getting started
+The challenge was an opportunity for me to get hands-on experience with SAP Python Machine Learning Client for SAP HANA. The participants had continuous support from SAP team experts during open office hours, discussions on SAP Community Groups, and tutorials on GitHub. I gained my previous experience from Kaggle and SAP open courses. Participants without SAP HANA Cloud instance, myself included, received credentials to execute Jupyter Notebooks in the cloud. The first step was to set up the environment. I installed Anaconda, created the environment, and installed SciPy and hana-ml.
+conda create --name ml_hana python=3.8
+conda install -c conda-forge scikit-learn
+conda install -c anaconda pandas
+conda install -c anaconda jupyter
+pip install hana-ml
+After successfully testing the connection, I was ready to dig deeper into the problem we needed to solve.
+2. Understanding the challenge
+The task is to build a model that predicts if an employee will stay or quit. The collected data were provided in a CSV file. To look into the data we can use python libraries locally for light tasks and hana_ml for resource-consuming tasks. For data processing locally I used Pandas DataFrame and for the cloud the HANA ML DataFrame, libraries are aligned in terms of methods, but the syntax is specific for each. I received all the required support from the expert team and I moved on with my exploratory data analysis. I focused on building a model with the best results and alternatives to it and providing a possibility to apply A/B testing on deployed models. The results of the final model I presented with visualization libraries. The machine learning problem of the challenge is a classification problem with two classes. One class is Stay labeled with No and another one is Quit labeled with Yes. I call them class No and class Yes. The class we have to predict is Yes. Counting the rows we can find that class No : Class Yes = 17015:2100 = 8:1. Looking at proportions I can see that data are highly imbalanced and I have a majority class No and a minority class Yes. Minority class Yes is the one I have to predict.
+The final code in Jupyter Notebook contains 270 cells. In the blog, I will only go through the main parts. The entire code is on GitHub, published with my last run. As with any code, it can be improved further if I had to maintain it in the long run.
+3. Exploratory data analysis and pre-processing
+Analyzing feature distributions.
+# In [26]
+# EDA features distributions
+col_exc = ['ID']
+for col in df_remote_add.columns:
+    if col not in col_exc:
+        print(df_remote_add.agg([('count', col, 'Count')], group_by=col).collect())
+Data contains Null values and I filled them with ‘-999’.
+# In [31]:
+df_remote = df_remote.fillna(-999)
+df_remote = df_remote.fillna("-999")
+Feature engineering.
+# In [34]
+# TIMEINPREVPOSITIONMONTH - feature engineering group in intervals
+# I will check by importance if this mattters
+    
+df_remote = df_remote.select \
+    ('*',("""CASE WHEN TIMEINPREVPOSITIONMONTH <=12 THEN 'PREV_POS (,12]'
+                  WHEN TIMEINPREVPOSITIONMONTH > 12 AND TIMEINPREVPOSITIONMONTH <=24 THEN 'PREV_POS (12,24]'
+                  WHEN TIMEINPREVPOSITIONMONTH > 24 AND TIMEINPREVPOSITIONMONTH <=36 THEN 'PREV_POS (24,36]'
+                  WHEN TIMEINPREVPOSITIONMONTH > 36 AND TIMEINPREVPOSITIONMONTH <=48 THEN 'PREV_POS (36,48]'
+                  WHEN TIMEINPREVPOSITIONMONTH > 48 AND TIMEINPREVPOSITIONMONTH <=60 THEN 'PREV_POS (48,60]'
+                  WHEN TIMEINPREVPOSITIONMONTH > 60 THEN 'TIMEPREV_POS (60,]'
+              END""",'TIMEINPREVPOS_INT'))
+df_remote = df_remote.to_tail('FLIGHT_RISK')
+df_remote.head(3).collect()
+4. Baseline model with initial data
+I split data into train data and test data and fit train data to build the first baseline model.
+# In [42]:
+from hana_ml.algorithms.pal.partition import train_test_val_split as split
+d_train, d_test, d_val = split( data=df_remote, partition_method='stratified', stratified_column=target, validation_percentage = 0)
+To build the model I used HybridGradientBoostingTree wrapped in a function.
+I didn’t have to encode features the model did it for me. The model did the magic, but I had to feed it with data in the most efficient way step by step.
+# In [47]:
+# Function to use repeatedly
+def model_fit(d_train):
+    HGBT_MODEL = UnifiedClassification('HybridGradientBoostingTree')
+ 
+# In [56]:
+HGBT_MODEL.statistics_.collect() # MODEL statistics
+Out [56]:
+1
+RECALL
+0.9959588537839824
+No
+2
+PRECISION
+0.9249402934152167
+No
+3
+F1_SCORE
+0.9591367415531578
+No
+4
+SUPPORT
+2722
+No
+5
+RECALL
+0.34523809523809523
+Yes
+6
+PRECISION
+0.9133858267716536
+Yes
+7
+F1_SCORE
+0.5010799136069115
+Yes
+8
+SUPPORT
+336
+Yes
+9
+ACCURACY
+0.9244604316546763
+None
+Looking into model statistics at first glance I can consider myself very lucky with ACCURACY = 0.92, but looking at SUPPORT No = 2722 and SUPPORT Yes = 336 I recognize that validation data used for models metrics calculations is imbalanced and this high ACCURACY is because of the majority class No with RECALL No = 0.99, while RECALL Yes = 0.34. Since I am interested in the class Yes I can see that the results are very poor. What is a RECALL? I spent some time breaking down the confusion matrix into basic elements. Because if I don’t feel confident with metrics I would not be able to improve the prediction model. Computers are fast and accurate at calculations, but the reasoning is a human task.
+5. Understanding statistics
+To calculate the metrics of the confusion matrix all we need is algebra, first, we count TP (true positive), FP (false positive), FN (false negative), and TN (true negative), then with these four elements we can calculate all the metrics. If classes are imbalanced I can rely only on RECALL because calculations are performed with the prediction from each class RECALL Positive = TP / TP + FP and RECALL Negative = TN / TN + FN. To calculate PRECISION I need true prediction (TP) from one class and false predictions (FP) from another class. To calculate ACCURACY I need all four elements TP, FP, FN, and TN, and with imbalanced classes, results are misleading because the extremely good results of the majority class and poor results of the minority class will make overall results look good. You can also read this blog Failure of Classification Accuracy for Imbalanced Class Distributions.
+Let’s deep into confusion matrix principles, best explained with an example.
+Predicted No
+Predicted Yes
+Actual No
+True No
+False Yes
+Actual Yes
+False No
+True Yes
+Assume one built a model with extremely good metrics for majority class No.
+Majority class No, Minority class Yes = 900, 100
+Assume confusion matrix results.
+Predicted No
+Predicted Yes
+Actual No
+900
+9
+Actual Yes
+82
+9
+Model statistics.
+RECALL No
+0.99
+extremely good
+PRECISION No
+0.92
+very good
+F1_SCORE No
+0.95
+very good
+SUPPORT No
+909
+RECALL Yes
+0.10
+very poor
+PRECISION Yes
+0.50
+poor
+F1_SCORE Yes
+0.17
+very poor
+SUPPORT Yes
+91
+ACCURACY
+0.91
+very good
+If I wanted to rely on all metrics I would force balancing classes in the confusion matrix dividing Actual No by 9.
+Predicted No
+Predicted Yes
+Actual No
+90
+1
+Actual Yes
+82
+9
+Model statistics adjusted.
+RECALL No
+0.99
+very good (same)
+PRECISION No
+0.52
+poor
+F1_SCORE No
+0.68
+good
+SUPPORT No
+91
+RECALL Yes
+0.10
+very poor (same)
+PRECISION Yes
+0.90
+very good
+F1_SCORE Yes
+0.18
+very poor
+SUPPORT Yes
+91
+ACCURACY
+0.54
+poor
+Now I can see that with balanced metrics RECALL No and RECALL Yes remain the same, PRECISON No drops significantly, PRECISION Yes increases significantly, but F1_SCORE Yes drops to very poor, and ACCURACY drops from 0.91 (very good) to 0.54 (poor).
+You can read more about balanced accuracy score here.
+Model statistics calculates metrics with validations data split from train data. Validation data is unseen data however used in fitting for iterative optimization.
+To see how the model performs we have to calculate metrics for absolutely unseen data the test data.
+Prediction statistics wrapped in a local function.
+# In [61]:
+f_score_res(HGBT_MODEL,d_test)[1].collect()
+Out [61]:
+STAT_NAME
+STAT_VALUE
+CLASS_NAME
+1
+RECALL
+0.9964747356051704
+No
+2
+PRECISION
+0.9247546346782988
+No
+3
+F1_SCORE
+0.9592760180995475
+No
+4
+SUPPORT
+1702
+No
+5
+RECALL
+0.34285714285714286
+Yes
+6
+PRECISION
+0.9230769230769231
+Yes
+7
+F1_SCORE
+0.5000000000000001
+Yes
+8
+SUPPORT
+210
+Yes
+9
+ACCURACY
+0.9246861924686193
+None
+RECALL Yes = 0.34 for predicted data is very poor and ACCURACY = 0.92 doesn’t tell the true story.
+In order to analyze the performance of subsequent approaches I will collect results in a local pandas DataFrame wrapped in a local function to add subsequent models results.
+# In [64]:
+def f_stat_all(p_model, p_d_test, p_col_name):
+df_model_stat_last # model metrics
+df_pred_stat_last  # prediction metrics
+ 
+I will store the initial baseline results in column INIT.
+# In [65]:
+df_model_stat_last, df_pred_stat_last = f_stat_all(HGBT_MODEL, d_test, 'INIT')
+I will take a look at the initial feature importance.
+# In [68]:
+# Feature importance
+HGBT_MODEL.importance_.sort('IMPORTANCE', desc=True).collect()
+Out [68]:
+The top feature by importance is  FUNCTIONALAREACHANGETYPE.
+6. Training model with additional data
+Meanwhile, additional data has been provided; the shape of the data is consistent.
+# In [19]:
+df_data_add.shape, df_remote.shape # check rows and columns
+Out [19]:
+((19115, 4), [19115, 43])
+Joining of initial data with additional data.
+# In [70]:
+df_remote_new = df_remote.set_index(tab_id).join(df_remote_add.set_index(tab_id)) 
+After fitting the model statistics are the following:
+Out [75]:
+1
+RECALL
+0.979059515062454
+No
+4
+SUPPORT
+2722
+No
+5
+RECALL
+0.6101190476190477
+Yes
+8
+SUPPORT
+336
+Yes
+I observe that the RECALL Yes of model statistics increased to a good one 0.61.
+Analyzing feature importance I observe that the top feature HRTRAINING comes from additional data.
+# Out [76]:
+df_imp = HGBT_MODEL.importance_.sort('IMPORTANCE', desc=True).collect()
+Prediction statistics.
+Out [78]:
+1
+RECALL
+0.9800235017626322
+No
+4
+SUPPORT
+1702
+No
+5
+RECALL
+0.5714285714285714
+Yes
+8
+SUPPORT
+210
+Yes
+RECALL Yes of prediction statistics is 0.57 is acceptable and less than model statistics 0.61.
+I conclude that predictions improve.
+7. Reducing the number of features
+Looking further into the data I notice dependent features by description and content.
+# In [87]:
+col_age_dep = ['AGE', 'AGE_GROUP5', 'AGE_GROUP10', 'GENERATION'] # age group
+# In [90]:
+col_imp_prev_loc = ['PREVIOUS_COUNTRY', 'PREVCOUNTRYLAT', 'PREVCOUNTRYLON', 'PREVIOUS_REGION'] # previous country group
+# In [92]:
+col_imp_curr_loc = ['CURRENT_REGION', 'CURRENT_COUNTRY', 'CURCOUNTRYLAT', 'CURCOUNTRYLON'] # current country group
+# In [94:]
+col_imp_tenure = ['TENURE_MONTHS','TENURE_INTERVAL_YEARS','TENURE_INTERVALL_DESC'] # tenure group
+ 
+From each group, I select the first top feature and fit again the model.
+RECALL Yes from prediction statistics improves to 0.61 from 0.57 which means that model performs better with only top features from groups.
+# In [104]:
+f_score_res(HGBT_MODEL, d_test[cols_imp])[1].collect()
+Out [104]:
+1
+RECALL
+0.9782608695652174
+No
+4
+SUPPORT
+1702
+No
+5
+RECALL
+0.6190476190476191
+Yes
+8
+SUPPORT
+210
+Yes
+For countries, I prefer adjusted selection with top PREVIOUS_COUNTRY, and CURRENT_COUNTRY.
+# In [110]:
+# Reducing features with meaning preference
+COL_IMP_PREVIOUS_COUNTRY_MEANING = ['PREVIOUS_COUNTRY','PREVCOUNTRYLAT', 'PREVCOUNTRYLON', 'PREVIOUS_REGION']
+COL_IMP_CURRENT_REGION_MEANING = ['CURRENT_COUNTRY','CURRENT_REGION', 'CURCOUNTRYLAT', 'CURCOUNTRYLON']
+Fitting with meaning preference.
+# In [114]:
+f_score_res(HGBT_MODEL, d_test[cols_imp_mn])[1].collect() # meaning preference
+Prediction statistics.
+Out [114]:
+1
+RECALL
+0.981198589894242
+No
+4
+SUPPORT
+1702
+No
+5
+RECALL
+0.6238095238095238
+Yes
+8
+SUPPORT
+210
+Yes
+I observe that RECALL Yes is almost the same 0.62.
+8. Balancing training data with SMOTE
+A quick introduction to imbalanced data you could find in the blog Data Yoga-It is all about finding the right balance. For oversampling of minority class Yes I will use SMOTE (Synthetic minority over-sampling technique).
+Checking class proportions from train data.
+# In [124]:
+f_class_count(d_train).collect()
+Out [124]:
+ 
+FLIGHT_RISK
+Count
+0
+No
+13612
+1
+Yes
+1680
+I know that classes are highly imbalanced and I want to find a way to fix this with SMOTE.
+I wrapped the calculation of max SMOTE into a local function.
+# In [126]:
+# return max smote amount
+def f_smote_nmax(dfh):
+The max SMOTE is 710.
+Generating train data with max SMOTE to get balanced classes.
+# In [129]:
+d_train_sm = f_smote(d_train,f_smote_nmax(d_train)) # generate smote with max amount
+Checking the proportions of the classes with max SMOTE.
+# In [130]:
+f_class_count(d_train_sm).collect() #check classes count for Majority No:Minority Yes = 1:1
+Out [130]:
+ 
+FLIGHT_RISK
+Count
+0
+No
+13612
+1
+Yes
+13608
+# In [134]:
+# Fit with smote balanced No:Yes with all features
+HGBT_MODEL=model_fit(d_train_sm)
+Prediction statistics.
+Out [137]:
+1
+RECALL
+0.945358401880141
+No
+3
+F1_SCORE
+0.9600238663484487
+No
+4
+SUPPORT
+1702
+No
+5
+RECALL
+0.8047619047619048
+Yes
+8
+SUPPORT
+210
+Yes
+RECALL Yes jumps from 0.62 to 0.80, which means SMOTE improves the model.
+The fitting of the model with max SMOTE and important features.
+# In [144]:
+# Fit with smote balanced No:Yes with important features
+HGBT_MODEL=model_fit(d_train_sm[cols_imp])
+Prediction statistics
+Out [146]:
+1
+RECALL
+0.9195064629847238
+No
+2
+PRECISION
+0.9726538222498446
+No
+4
+SUPPORT
+1702
+No
+5
+RECALL
+0.7904761904761904
+Yes
+8
+SUPPORT
+210
+Yes
+RECALL Yes with important features and max SMOTE almost same 0.79
+9. Balancing test data and increasing training data
+I notice that SUPPORT Yes  <  SUPPORT No. To fix it I will keep for test rows SUPPORT No = SUPPORT Yes. The rest of the SUPPORT No rows I will add to train data because I want to use precious data.
+Balanced test data.
+# In [164]:
+f_class_count(d_test_bl).collect() # check test classes are balanced
+Out [164]:
+FLIGHT_RISK
+Count
+0
+Yes
+210
+1
+No
+210
+Increased rows of train data.
+# In [166]:
+d_train_target_count = f_class_count(d_train_bl) # added No from d_test that are not used (unseen)
+d_train_target_count.collect()
+Out [166]:
+FLIGHT_RISK
+Count
+0
+No
+15104
+1
+Yes
+1680
+Applying SMOTE to train data.
+# In [168]:
+f_class_count(d_train_bl_sm).collect() # #check classes count for Majority No:Minority Yes = 1:1
+Out [168]:
+FLIGHT_RISK
+Count
+0
+No
+15104
+1
+Yes
+15103
+# In [171]:
+# Fit with balanced d_train_bl_sm important features
+HGBT_MODEL=model_fit(d_train_bl_sm[cols_imp])
+Prediction statistics.
+# In [173]:
+f_score_res(HGBT_MODEL, d_test_bl[cols_imp])[1].collect()
+Out [173]:
+STAT_NAME
+STAT_VALUE
+CLASS_NAME
+1
+RECALL
+0.919047619047619
+No
+2
+PRECISION
+0.8427947598253275
+No
+3
+F1_SCORE
+0.8792710706150342
+No
+4
+SUPPORT
+210
+No
+5
+RECALL
+0.8285714285714286
+Yes
+6
+PRECISION
+0.9109947643979057
+Yes
+7
+F1_SCORE
+0.8678304239401496
+Yes
+8
+SUPPORT
+210
+Yes
+9
+ACCURACY
+0.8738095238095238
+None
+RECALL Yes has a small improvement to 0.82.
+SUPPORT Yes = SUPPORT No that means I can rely on all statistics. I notice that ACCURACY is 0.87 and that is a very good one.
+10. Finding top SMOTE
+I want to execute SMOTE with the step of 100 and analyze ACCURACY from prediction statistics.
+# In [188]:
+# SMOTE with steps
+# fire on all cylinders
+dict_models_smote, df_model_statistics_sm, df_predicted_statistics_sm = \
+f_smote_models(d_train_bl, d_test_bl, cols_imp, 100)
+ls_smote: [0, 100, 200, 300, 400, 500, 600, 700, 799]
+This is an intensive processing in the HANA ML cloud with Wall time: 8min 34s.
+Model statistics are collected in local pandas DataFrame.
+# In [190]:
+df_model_statistics_sm
+Prediction statistics are collected in the local pandas DataFrame.
+# In [191]:
+df_predicted_statistics_sm
+Selecting SMOTE for best prediction ACCURACY with local function.
+# In [194]:
+# SUPPORT Yes = SUPPORT No - ACCURACY reliable
+f_accuracy_descending(df_predicted_statistics_sm)
+Out [194]:
+STAT_NAME                   ACCURACY
+STAT_VALUE_700    0.8738095238095238
+STAT_VALUE_200    0.8666666666666667
+STAT_VALUE_500    0.8666666666666667
+STAT_VALUE_400    0.8642857142857143
+STAT_VALUE_600    0.8642857142857143
+STAT_VALUE_799    0.8642857142857143
+STAT_VALUE_300    0.8547619047619047
+STAT_VALUE_100    0.8523809523809524
+STAT_VALUE_0        0.7928571428571428
+11. Building top models
+I fit models with smote_best_amount adding the features one by one in order of importance.
+# In [207]:
+# FEATURES IMPORTANCE TOP n
+# fire on all cylinders
+def f_smote_model_top_f(p_d_train, p_cols_imp, p_d_test, p_smote_best_amount, p_cols_imp_start, p_cols_imp_step, p_verbosity):
+# ...
+   return lc_dict_models_top_f, lc_df_model_statistics, lc_df_predicted_statistics
+ 
+# In [212]:
+%%time
+# FEATURES IMPORTANCE TOP n
+# fire on all cylinders
+dict_models_top_f, df_model_statistics_top_f, df_predicted_statistics_top_f = \
+f_smote_model_top_f(d_train_bl, sm_best_cols_imp, d_test_bl, smote_best_amount, 1, 1, True)
+This is very intensive processing in the HANA ML cloud with Wall time: 21min 6s.
+Relax and enjoy a cup of coffee or tea! 🙂
+Selecting top features with top prediction ACCURACY with a local function.
+# In [217]:
+# SUPPORT Yes = SUPPORT No ACCURACY is reliable
+f_accuracy_descending(df_predicted_statistics_top_f)[:10]
+Out[217]
+STAT_NAME               ACCURACY
+STAT_VALUE_top15  0.8928571428571429
+STAT_VALUE_top6    0.888095238095238
+STAT_VALUE_top29  0.8857142857142857
+STAT_VALUE_top7    0.8833333333333333
+STAT_VALUE_top18  0.8833333333333333
+STAT_VALUE_top8    0.8833333333333333
+STAT_VALUE_top19  0.8833333333333333
+STAT_VALUE_top25  0.8809523809523809
+STAT_VALUE_top23  0.8761904761904762
+Great surprise, with the best SMOTE and best top15 features prediction ACCURACY increases to 0.89!
+I stored all models and other dependencies in the dictionary dict_models_top_f to access them easily.
+# In [218]:
+def f_sel_top_pred_acc(p_df,p_n):
+    s =  f_accuracy_descending(p_df) # sorted series
+    ls_s = s[:p_n+1].index.to_list() # sorted list with last n+1
+    key = ls_s[-1] # last element
+    model = dict_models_top_f[key][0]
+    cols = dict_models_top_f[key][1]
+    cols_len = dict_models_top_f[key][2]
+    cols_name = dict_models_top_f[key][3]
+    return [key, model, cols, cols_len, cols_name]
+ 
+# In [219]:
+# key, model, cols, cols_len, cols_name Top 1
+top_1_imp_ls = f_sel_top_pred_acc(df_predicted_statistics_top_f,1)
+top_1_imp_ls[0], top_1_imp_ls[1], top_1_imp_ls[2], top_1_imp_ls[3], top_1_imp_ls[4]
+Out [219]:
+(‘STAT_VALUE_top15’,
+<hana_ml.algorithms.pal.unified_classification.UnifiedClassification at 0x25c02d19430>,
+[‘EMPLOYEE_ID’,
+‘HRTRAINING’,
+‘FUNCTIONALAREACHANGETYPE’,
+‘SICKDAYS’,
+‘PROMOTION_WITHIN_LAST_3_YEARS’,
+‘TIMEINPREVPOSITIONMONTH’,
+‘EMPLOYMENT_TYPE_2’,
+‘PREVIOUS_CAREER_PATH’,
+‘RISK_OF_LOSS’,
+‘CURRENT_COUNTRY’,
+‘SALARY’,
+‘JOBLEVELCHANGETYPE’,
+‘AGE’,
+‘CHANGE_IN_PERFORMANCE_RATING’,
+‘PREVIOUS_COUNTRY’,
+‘LINKEDIN’,
+‘FLIGHT_RISK’],
+17,
+‘top15’)
+Predictions statistics in Pandas DataFrame with results from subsequent steps.
+# In Out[230]:
+df_pred_stat_last
+Out[230]:
+STAT_NAME
+CLASS_NAME
+INIT
+ADD
+cols_imp
+cols_imp_mn
+sm_max_cols_all
+sm_max_cols_imp
+sm_max_bl_cols_imp
+sm_best_bl_cols_imp
+top15
+0
+AUC
+None
+0.9733
+0.9834
+0.9857
+0.9870
+0.9784
+0.9709
+0.9422
+0.9474
+0.9498
+1
+RECALL
+No
+0.9964
+0.9800
+0.9782
+0.9811
+0.9453
+0.9195
+0.9190
+0.9476
+0.9380
+2
+PRECISION
+No
+0.9247
+0.9488
+0.9541
+0.9548
+0.9751
+0.9726
+0.8427
+0.8257
+0.8602
+3
+F1_SCORE
+No
+0.9592
+0.9641
+0.9660
+0.9678
+0.9600
+0.9453
+0.8792
+0.8824
+0.8974
+4
+SUPPORT
+No
+1702
+1702
+1702
+1702
+1702
+1702
+210
+210
+210
+5
+RECALL
+Yes
+0.3428
+0.5714
+0.6190
+0.6238
+0.8047
+0.7904
+0.8285
+0.8
+0.8476
+6
+PRECISION
+Yes
+0.9230
+0.7792
+0.7784
+0.8036
+0.6450
+0.5478
+0.9109
+0.9385
+0.9319
+7
+F1_SCORE
+Yes
+0.5000
+0.6593
+0.6896
+0.7024
+0.7161
+0.6471
+0.8678
+0.8637
+0.8877
+8
+SUPPORT
+Yes
+210
+210
+210
+210
+210
+210
+210
+210
+210
+9
+ACCURACY
+None
+0.9246
+0.9351
+0.9388
+0.9419
+0.9299
+0.9053
+0.8738
+0.8738
+0.8928
+10
+KAPPA
+None
+0.4683
+0.6244
+0.6562
+0.6708
+0.6766
+0.5945
+0.7476
+0.7476
+0.7857
+11
+MCC
+None
+0.5363
+0.6336
+0.6615
+0.6774
+0.6820
+0.6079
+0.7506
+0.7559
+0.7889
+12. Analyzing top models
+First I analyze the top 1 reason for the top 1 model prediction.
+ 
+# In [233]:
+# Top 1 contribution feauture to prediction
+f_score_res(top_1_imp_ls[1], d_test_bl)[0].\
+    select('EMPLOYEE_ID', 'SCORE', 'CONFIDENCE', 'REASON_CODE', 
+                      ('json_query("REASON_CODE", \'$[0].attr\')', 'Top1'), 
+                      ('json_query("REASON_CODE", \'$[0].pct\')', 'PCT_1') ).head(5).collect()
+Out[233]:
+EMPLOYEE_ID
+SCORE
+CONFIDENCE
+REASON_CODE
+Top1
+PCT_1
+0
+10033
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+“SICKDAYS”
+28.49847521037374
+1
+10034
+No
+0.997572
+[{“attr”:”SICKDAYS”,”val”:-2.1461261874013997,…
+“SICKDAYS”
+28.604720941656255
+2
+10036
+Yes
+0.884731
+[{“attr”:”HRTRAINING”,”val”:1.2600622007181038…
+“HRTRAINING”
+17.883981590687534
+3
+10056
+Yes
+0.992384
+[{“attr”:”SICKDAYS”,”val”:3.2852997983870959,”…
+“SICKDAYS”
+30.97615277828276
+4
+10064
+No
+0.985765
+[{“attr”:”HRTRAINING”,”val”:-1.738132753015509…
+“HRTRAINING”
+27.416934166112573
+I can compare test data FLIGHT_RISK (actual) with prediction SCORE.
+# In [236]:
+print(f"Top 1 voting with features {top_1_imp_ls[4]}") # Top 1 voting
+f_actual_vs_score(top_1_imp_ls[1], d_test_bl).head(5).collect()
+Top 1 model (top15 features ) prediction and top 1 reason code.
+Out [236]:
+EMPLOYEE_ID
+FLIGHT_RISK
+SCORE
+CONFIDENCE
+REASON_CODE
+0
+10033
+No
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+1
+10034
+No
+No
+0.997572
+[{“attr”:”SICKDAYS”,”val”:-2.1461261874013997,…
+2
+10036
+Yes
+Yes
+0.884731
+[{“attr”:”HRTRAINING”,”val”:1.2600622007181038…
+3
+10056
+Yes
+Yes
+0.992384
+[{“attr”:”SICKDAYS”,”val”:3.2852997983870959,”…
+4
+10064
+No
+No
+0.985765
+[{“attr”:”HRTRAINING”,”val”:-1.738132753015509…
+I can analyze further top 5 REASON_CODE with code wrapped in a local function.
+# In [240]:
+# Top 5 contribution feauture to prediction for rows
+def f_contrib_top5f_head(p_model, p_d_test, p_rows):
+# In [241]:
+f_contrib_top5f_head(top_1_imp_ls[1], d_test_bl, 3)
+Out [241]:
+EMPLOYEE_ID
+SCORE
+CONFIDENCE
+REASON_CODE
+Top
+PCT
+0
+10033
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+“SICKDAYS”
+28.49847521037374
+3
+10033
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+“HRTRAINING”
+20.004226264298525
+6
+10033
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+“PREVIOUS_CAREER_PATH”
+13.468698519836725
+9
+10033
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+“LINKEDIN”
+6.355941761599763
+12
+10033
+No
+0.998697
+[{“attr”:”SICKDAYS”,”val”:-2.3005012586457966,…
+“FUNCTIONALAREACHANGETYPE”
+6.23681257187179
+13. Visualizing statistics
+Presenting model results with Visualizing Model Report as explained in the blog “ML in SAP Data Warehouse Cloud”.
+# In [243]:
+from hana_ml.visualizers.unified_report import UnifiedReport
+UnifiedReport(top_1_imp_ls[1]).build().display()
+ 
+Variable Importance
+ 
+I can analyze the contributions of features with shapely_explainer as presented in the library example.
+# In [257]:
+shapley_explainer = TreeModelDebriefing.shapley_explainer(feature_data=d_test_bl.head(500).select(features_shapely),
+reason_code_data=pred_res_shapely.head(500).select('REASON_CODE'))
+shapley_explainer.summary_plot()
+ 
+Shapley explainer
+Confusion matrix for validation data from model training as explained in the tutorial on GitHub.
+In [244]:
+import matplotlib.pyplot as plt
+from hana_ml.visualizers.metrics import MetricsVisualizer
+f, ax1 = plt.subplots(1,1)
+mv1 = MetricsVisualizer(ax1, title = 'Modedl confusion matrix')
+ax1 = mv1.plot_confusion_matrix(top_1_imp_ls[1].confusion_matrix_, normalize=False)
+ 
+Model confusion matrix
+Model confusion matrix
+# In [245]:
+f, ax1 = plt.subplots(1,1)
+mv1 = MetricsVisualizer(ax1, title = 'Model confusion matrix %')
+ax1 = mv1.plot_confusion_matrix(top_1_imp_ls[1].confusion_matrix_, normalize=True)
+Model confusion matrix
+Confusion matrix for predictions wrapped in local functions.
+# In [259]:
+def f_cf_mx_values(p_model, p_d_test):
+# In [267]:
+sns.heatmap(cf_matrix, annot=labels, fmt='', cmap='Blues')
+Prediction confusion matrix
+ 
+14. Further steps
+Regarding to further models exploring I could use as starting point Automated Predictive Libraries GradientBoostingBinaryClassifier, tutorial Fraud Detection Auto ML Script, blog Hands-On Tutorial: Automated Predictive (APL) in SAP HANA Cloud and blog SAP HANA Cloud Machine Learning Challenge. I would increase the test data percentage from split and use ensemble techniques for voting.
+Thinking in terms of transfer learning as in computer vision, what if we can collect data across different companies and industries, build specialized or generalized models, shake hands with developers, and integrate prediction in applications to use internally or externally as on demand service. Data required for monthly evaluation could be collected from internal sources and external sources with coded extractors or scraping tools.
+Since I am an end-to-end developer of Business Intelligence reports, I am looking forward to getting hands-on experience regarding how to integrate extraction of data from an SAP environment or other external sources to build models, consume machine learning models, and integrate prediction into the business apps.
+ 
+ 
+ 
+Follow Like 
+RSS Feed
+            
+ 
+Alert Moderator
+    
+Alerting is not available for unauthorized users
+Assigned TagsSimilar Blog PostsRelated Questions 
+/
+      4 Comments      
+                You must be Logged on to comment or reply to a post.
+        
+ 
+Farooq Azam  
+January 9, 2023 at 5:16 pm
+Hi Sergiu,
+ 
+Great work and write up. Very detailed and informative!
+Thanks for sharing.
+ 
+Regards,
+Farooq
+Like 2ShareRight click and copy the link to share this comment
+ 
+Sergiu Iatco Blog Post Author 
+January 26, 2023 at 5:18 pm
+Thanks a lot, Farooq!
+Like 0ShareRight click and copy the link to share this comment
+ 
+Mynyna Chau  
+January 11, 2023 at 8:59 am
+Congrats on the 2nd place, Sergiu Iatco !
+Like 1ShareRight click and copy the link to share this comment
+ 
+Sergiu Iatco Blog Post Author 
+January 26, 2023 at 5:20 pm
+Thanks a lot, Mynyna!
+Like 0ShareRight click and copy the link to share this comment
+ 
+ 
+Find us on
+Privacy
+Terms of Use
+Legal Disclosure
+Copyright
+Trademark
+Newsletter
+Support
+ 
+ 
+ Insert/edit link
+Close
+Enter the destination URL
+URL
+Link Text
+ Open link in a new tab
+Or link to existing content
+Search
+No search term specified. Showing recent items.

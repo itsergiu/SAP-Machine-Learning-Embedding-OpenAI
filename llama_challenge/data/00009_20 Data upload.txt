@@ -1,0 +1,56 @@
+
+Notebook
+Notebook - Data Upload¶This Notebooks transforms and uploads the  data to SAP HANA.
+Documentation¶
+SAP HANA Python Client API for Machine Learning Algorithms:
+https://pypi.org/project/hana-ml/
+SAP HANA Automated Predictive Library (APL):
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/hana_ml.algorithms.apl.html
+SAP HANA Predictive Analysis Library (PAL):
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/hana_ml.algorithms.pal.html
+Package Dependencies: 
+https://help.sap.com/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.06/en-US/Installation.html
+Examples: 
+https://github.com/SAP-samples/hana-ml-samples/tree/main/Python-API/pal/notebooks
+SAP HANA ML Library¶You will be using the 'SAP HANA Python Client API for Machine Learning Algorithm'. See the notebook "10 Connectivity Check" that you are using the approviate version of that package.
+In [ ]:
+import hana_ml
+print(hana_ml.__version__)
+Load the CSV file into a Python object (Pandas DataFrame)¶
+You must update the path to the file on your environment
+In [ ]:
+import pandas as pd
+df_data = pd.read_csv(r'<YourPath>\<YourCSVFile>.csv', sep = ',')
+df_data.head(5)
+Transform the data¶Before uploading the data to SAP HANA Cloud, carry out a few transformations. Turn the column headers into upper case.
+In [ ]:
+df_data.columns = map(str.upper, df_data.columns)
+df_data.head(5)
+Upload the data to SAP HANA¶We are happy with the data, so upload it to SAP HANA. Establish a connection with the hana_ml wrapper…
+You must update these logon credentials as provided to you by your workshop host.
+In [ ]:
+hana_address = '>YOURHORSTNAME>' 
+hana_port = 443 # Adjust if needed / as advised
+hana_user = 'YOURUSERNAME' 
+hana_password = 'YOURPASSWORD' 
+hana_encrypt = 'true' # Adjust if needed / as advised
+import hana_ml.dataframe as dataframe
+# Instantiate connection object
+conn = dataframe.ConnectionContext(address = hana_address,
+                                   port = 443, 
+                                   user = hana_user, 
+                                   password = hana_password, 
+                                   encrypt = hana_encrypt,
+                                   sslValidateCertificate = 'false' 
+                                  )
+# Control connection
+conn.connection.isconnected()
+...and upload the Pandas DataFrame into a table called after your Username.
+In [ ]:
+df_remote = dataframe.create_dataframe_from_pandas(connection_context = conn, 
+                                                   pandas_df = df_data, 
+                                                   table_name = '<YOURTABLENAME>',
+                                                   force = True,
+                                                   replace = False)
+Close the connection.
+In [ ]:

@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HybridGradientBoostingClassifier &mdash; hana-ml 2.16.230508 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LinearRegression" href="hana_ml.algorithms.pal.linear_model.LinearRegression.html" />
+    <link rel="prev" title="RDTClassifier" href="hana_ml.algorithms.pal.trees.RDTClassifier.html" /> 
+
+<script src="//assets.adobedtm.com/ccc66c06b30b/32c05409e1fd/launch-8b3c5ca29b9e.min.js"></script>
+<script src="https://cdn.schemaapp.com/javascript/highlight.js"></script><script src="https://cdn.schemaapp.com/javascript/schemaFunctions.min.js"></script><script>schemaLoad("Acronym/Helpsap", "325UM-NQRHZ-P7T97-M5SY8");</script>
+<meta name="semaphore_tech_ids" content="73554900100900001301,01200314690800001945">
+<meta name="product" content="SAP HANA Platform">
+<meta name="version" content="2.0 SPS 07">
+<meta name="language" content="en-US">
+<meta name="contenthash" content="810dc571738d80223165fff5ea041142f27f3522e270d16e658283505ef3ffd3f48e6e589d58d02063d2c2ba4169f1e5598db65ae2f19a2cae17dd5a197ecf2c">
+<meta name="contentloio" content="1d0ebfe5e8dd44d09606814d83308d4b">
+<meta name="created_timestamp" content="2023-05-12 09:13.24">
+<meta name="updated_timestamp" content="2023-05-12 09:01.42">
+<link rel="canonical" href="/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.07/en-US/pal/algorithms/hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.html">
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> hana-ml
+          </a>
+              <div class="version">
+                2.16.230508
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.html">Python Machine Learning Client for SAP HANA</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#sap-hana-dataframe">SAP HANA DataFrame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#machine-learning-api">Machine Learning API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#end-to-end-example-using-sap-hana-predictive-analysis-library-pal-module">End-to-End Example: Using SAP HANA Predictive Analysis Library (PAL) Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#end-to-end-example-using-sap-hana-automated-predictive-library-apl-module">End-to-End Example: Using SAP HANA Automated Predictive Library (APL) Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#visualizers-module">Visualizers Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#spatial-and-graph-features">Spatial and Graph Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.html#summary">Summary</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Tutorials.html">hana-ml Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../change_log.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.dataframe.html">hana_ml.dataframe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.algorithms.apl.html">hana_ml.algorithms.apl package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.algorithms.apl.html#module-hana_ml.algorithms.apl.gradient_boosting_classification">hana_ml.algorithms.apl.gradient_boosting_classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.algorithms.apl.html#module-hana_ml.algorithms.apl.gradient_boosting_regression">hana_ml.algorithms.apl.gradient_boosting_regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.algorithms.apl.html#module-hana_ml.algorithms.apl.time_series">hana_ml.algorithms.apl.time_series</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.algorithms.apl.html#module-hana_ml.algorithms.apl.classification">hana_ml.algorithms.apl.classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.algorithms.apl.html#module-hana_ml.algorithms.apl.regression">hana_ml.algorithms.apl.regression</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.algorithms.apl.html#module-hana_ml.algorithms.apl.clustering">hana_ml.algorithms.apl.clustering</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../hana_ml.algorithms.pal.html">hana_ml.algorithms.pal package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../algorithms.html">Algorithms</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#pal-base">PAL Base</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.pal_base.PALBase.html">PALBase</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#auto-ml">Auto ML</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.auto_ml.AutomaticClassification.html">AutomaticClassification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.auto_ml.AutomaticRegression.html">AutomaticRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.auto_ml.AutomaticTimeSeries.html">AutomaticTimeSeries</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.auto_ml.Preprocessing.html">Preprocessing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#unified-interface">Unified Interface</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.unified_classification.UnifiedClassification.html">UnifiedClassification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.unified_regression.UnifiedRegression.html">UnifiedRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.unified_clustering.UnifiedClustering.html">UnifiedClustering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.unified_exponentialsmoothing.UnifiedExponentialSmoothing.html">UnifiedExponentialSmoothing</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#clustering">Clustering</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.AffinityPropagation.html">AffinityPropagation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.AgglomerateHierarchicalClustering.html">AgglomerateHierarchicalClustering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.DBSCAN.html">DBSCAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.GeometryDBSCAN.html">GeometryDBSCAN</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.KMeans.html">KMeans</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.KMedians.html">KMedians</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.KMedoids.html">KMedoids</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.SpectralClustering.html">SpectralClustering</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.KMeansOutlier.html">KMeansOutlier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.mixture.GaussianMixture.html">GaussianMixture</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.som.SOM.html">SOM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.SlightSilhouette.html">SlightSilhouette</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.clustering.outlier_detection_kmeans.html">outlier_detection_kmeans</a></li>
+</ul>
+</li>
+<li class="toctree-l3 current"><a class="reference internal" href="../algorithms.html#classification">Classification</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.discriminant_analysis.LinearDiscriminantAnalysis.html">LinearDiscriminantAnalysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.linear_model.LogisticRegression.html">LogisticRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.linear_model.OnlineMultiLogisticRegression.html">OnlineMultiLogisticRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.naive_bayes.NaiveBayes.html">NaiveBayes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.neighbors.KNNClassifier.html">KNNClassifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.neural_network.MLPClassifier.html">MLPClassifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.svm.SVC.html">SVC</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.svm.OneClassSVM.html">OneClassSVM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.trees.DecisionTreeClassifier.html">DecisionTreeClassifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.trees.RDTClassifier.html">RDTClassifier</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">HybridGradientBoostingClassifier</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#regression">Regression</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.linear_model.LinearRegression.html">LinearRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.linear_model.OnlineLinearRegression.html">OnlineLinearRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.neighbors.KNNRegressor.html">KNNRegressor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.neural_network.MLPRegressor.html">MLPRegressor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.regression.PolynomialRegression.html">PolynomialRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.regression.GLM.html">GLM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.regression.ExponentialRegression.html">ExponentialRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.regression.BiVariateGeometricRegression.html">BiVariateGeometricRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.regression.BiVariateNaturalLogarithmicRegression.html">BiVariateNaturalLogarithmicRegression</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.regression.CoxProportionalHazardModel.html">CoxProportionalHazardModel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.svm.SVR.html">SVR</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.trees.DecisionTreeRegressor.html">DecisionTreeRegressor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.trees.RDTRegressor.html">RDTRegressor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.trees.HybridGradientBoostingRegressor.html">HybridGradientBoostingRegressor</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#prepocessing">Prepocessing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.FeatureNormalizer.html">FeatureNormalizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.FeatureSelection.html">FeatureSelection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.IsolationForest.html">IsolationForest</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.KBinsDiscretizer.html">KBinsDiscretizer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.Imputer.html">Imputer</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.Discretize.html">Discretize</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.MDS.html">MDS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.SMOTE.html">SMOTE</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.SMOTETomek.html">SMOTETomek</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.TomekLinks.html">TomekLinks</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.Sampling.html">Sampling</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.ImputeTS.html">ImputeTS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.decomposition.PCA.html">PCA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.decomposition.CATPCA.html">CATPCA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.partition.train_test_val_split.html">train_test_val_split</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.preprocessing.variance_test.html">variance_test</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#time-series">Time Series</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.additive_model_forecast.AdditiveModelForecast.html">AdditiveModelForecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.arima.ARIMA.html">ARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.auto_arima.AutoARIMA.html">AutoARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.changepoint.CPD.html">CPD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.changepoint.BCPD.html">BCPD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.classification.TimeSeriesClassification.html">TimeSeriesClassification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.SingleExponentialSmoothing.html">SingleExponentialSmoothing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.DoubleExponentialSmoothing.html">DoubleExponentialSmoothing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.TripleExponentialSmoothing.html">TripleExponentialSmoothing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.AutoExponentialSmoothing.html">AutoExponentialSmoothing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.BrownExponentialSmoothing.html">BrownExponentialSmoothing</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.Croston.html">Croston</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.exponential_smoothing.CrostonTSB.html">CrostonTSB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.garch.GARCH.html">GARCH</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.hierarchical_forecast.Hierarchical_Forecast.html">Hierarchical_Forecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.lr_seasonal_adjust.LR_seasonal_adjust.html">LR_seasonal_adjust</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.lstm.LSTM.html">LSTM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.ltsf.LTSF.html">LTSF</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.online_algorithms.OnlineARIMA.html">OnlineARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.outlier_detection.OutlierDetectionTS.html">OutlierDetectionTS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.rnn.GRUAttention.html">GRUAttention</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.rocket.ROCKET.html">ROCKET</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.vector_arima.VectorARIMA.html">VectorARIMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.wavelet.DWT.html">DWT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.accuracy_measure.accuracy_measure.html">accuracy_measure</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.bsts.BSTS.html">BSTS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.correlation_function.correlation.html">correlation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.fft.fft.html">fft</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.dtw.dtw.html">dtw</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.fast_dtw.fast_dtw.html">fast_dtw</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.intermittent_forecast.intermittent_forecast.html">intermittent_forecast</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.periodogram.periodogram.html">periodogram</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.stationarity_test.stationarity_test.html">stationarity_test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.seasonal_decompose.seasonal_decompose.html">seasonal_decompose</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.trend_test.trend_test.html">trend_test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.wavelet.wavedec.html">wavedec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.wavelet.waverec.html">waverec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.wavelet.wpdec.html">wpdec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.wavelet.wprec.html">wprec</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsa.white_noise_test.white_noise_test.html">white_noise_test</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#statistics">Statistics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.bernoulli.html">bernoulli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.beta.html">beta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.binomial.html">binomial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.cauchy.html">cauchy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.chi_squared.html">chi_squared</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.exponential.html">exponential</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.gumbel.html">gumbel</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.f.html">f</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.gamma.html">gamma</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.geometric.html">geometric</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.lognormal.html">lognormal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.negative_binomial.html">negative_binomial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.normal.html">normal</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.pert.html">pert</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.poisson.html">poisson</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.student_t.html">student_t</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.uniform.html">uniform</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.weibull.html">weibull</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.multinomial.html">multinomial</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.random.mcmc.html">mcmc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.chi_squared_goodness_of_fit.html">chi_squared_goodness_of_fit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.chi_squared_independence.html">chi_squared_independence</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.ttest_1samp.html">ttest_1samp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.ttest_ind.html">ttest_ind</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.ttest_paired.html">ttest_paired</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.f_oneway.html">f_oneway</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.f_oneway_repeated.html">f_oneway_repeated</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.univariate_analysis.html">univariate_analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.covariance_matrix.html">covariance_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.pearsonr_matrix.html">pearsonr_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.iqr.html">iqr</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.wilcoxon.html">wilcoxon</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.median_test_1samp.html">median_test_1samp</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.grubbs_test.html">grubbs_test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.entropy.html">entropy</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.condition_index.html">condition_index</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.cdf.html">cdf</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.ftest_equal_var.html">ftest_equal_var</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.factor_analysis.html">factor_analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.kaplan_meier_survival_analysis.html">kaplan_meier_survival_analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.quantile.html">quantile</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.distribution_fit.html">distribution_fit</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.stats.ks_test.html">ks_test</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.kernel_density.KDE.html">KDE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#association">Association</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.association.Apriori.html">Apriori</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.association.AprioriLite.html">AprioriLite</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.association.FPGrowth.html">FPGrowth</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.association.KORD.html">KORD</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.association.SPM.html">SPM</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#recommender-system">Recommender System</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.recommender.ALS.html">ALS</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.recommender.FRM.html">FRM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.recommender.FFMClassifier.html">FFMClassifier</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.recommender.FFMRegressor.html">FFMRegressor</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.recommender.FFMRanker.html">FFMRanker</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#social-network-analysis">Social Network Analysis</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.linkpred.LinkPrediction.html">LinkPrediction</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.pagerank.PageRank.html">PageRank</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#ranking">Ranking</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.svm.SVRanking.html">SVRanking</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#miscellaneous">Miscellaneous</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.abc_analysis.abc_analysis.html">abc_analysis</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.wst.weighted_score_table.html">weighted_score_table</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.tsne.TSNE.html">TSNE</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#metrics">Metrics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.metrics.accuracy_score.html">accuracy_score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.metrics.auc.html">auc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.metrics.confusion_matrix.html">confusion_matrix</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.metrics.multiclass_auc.html">multiclass_auc</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.metrics.r2_score.html">r2_score</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#model-and-pipeline">Model and Pipeline</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.model_selection.ParamSearchCV.html">ParamSearchCV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.model_selection.GridSearchCV.html">GridSearchCV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.model_selection.RandomSearchCV.html">RandomSearchCV</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.pipeline.Pipeline.html">Pipeline</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../algorithms.html#text-processing">Text Processing</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.crf.CRF.html">CRF</a></li>
+<li class="toctree-l4"><a class="reference internal" href="hana_ml.algorithms.pal.decomposition.LatentDirichletAllocation.html">LatentDirichletAllocation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../topics.html">Topics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../topics/model_evaluation_param_selection.html">Model Evaluation and Parameter Selection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/model_evaluation_param_selection.html#resampling-methods">Resampling Methods</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/model_evaluation_param_selection.html#search-strategies">Search Strategies</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/model_evaluation_param_selection.html#successive-halving-and-hyperband-for-parameter-selection">Successive Halving and Hyperband for Parameter Selection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/model_evaluation_param_selection.html#key-relevant-parameters">Key Relevant Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/biased_models.html">Biased Linear Models</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/model_state.html">Model State for Real-Time Scoring</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/local_interpretability.html">Local Interpretability of Models</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/local_interpretability.html#shap">SHAP</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/local_interpretability.html#surrogate">Surrogate</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/local_interpretability.html#direct-explanation">Direct Explanation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/local_interpretability.html#models-algorithms-in-hana-ml-algorithms-pal-packages-that-support-local-interpretability">Models/Algorithms in hana_ml.algorithms.pal Packages that Support Local Interpretability</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/local_interpretability.html#key-relevant-parameters-in-hana-ml-algorithms-pal-package">Key Relevant Parameters in hana-ml.algorithms.pal Package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/arima_explain.html">Explaining the Forecasts of ARIMA</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html">Methods for Residual Extraction in Time-Series Outlier Detection</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#residual-from-median-filter">1. Residual from Median Filter</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#residual-from-seasonal-decomposition">2. Residual from Seasonal Decomposition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#residual-extraction-from-median-filter-and-seasonal-decomposition">3. Residual Extraction from Median Filter and Seasonal Decomposition</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#meaningless-parameter-combination-to-be-avoided">4. Meaningless Parameter Combination to be Avoided</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#methods-of-outlier-detection-from-residual">Methods of Outlier Detection from Residual</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#z1-score">1. Z1 Score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#z2-score">2. Z2 Score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#iqr-score">3. IQR Score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#mad-score">4. MAD Score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#isolation-forest-score">5. Isolation Forest Score</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/residual_extraction_and_outlier_detection.html#dbscan">6. DBSCAN</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/genetic_optimization_automl.html">Genetic Optimization in AutoML</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/genetic_optimization_automl.html#individual-representation">Individual Representation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/genetic_optimization_automl.html#selection">Selection</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/genetic_optimization_automl.html#crossover">Crossover</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/genetic_optimization_automl.html#mutation">Mutation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/genetic_optimization_automl.html#evolutional-iteration-step">Evolutional Iteration Step</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/genetic_optimization_automl.html#control-parameters">Control Parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/mcmc_formula.html">Probability Density Functions for MCMC Sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/miscellaneous.html">Miscellaneous Topics</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../topics/miscellaneous.html#early-stop-in-hgbt">Early Stop in HGBT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/miscellaneous.html#feature-grouping-in-hgbt">Feature Grouping in HGBT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/miscellaneous.html#histogram-splitting-in-hgbt">Histogram Splitting in HGBT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/miscellaneous.html#model-compression-for-random-decision-trees">Model Compression for Random Decision Trees</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/miscellaneous.html#model-compression-for-support-vector-machine">Model Compression for Support Vector Machine</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../topics/miscellaneous.html#seasonalities-in-additive-model-forecast">Seasonalities in Additive Model Forecast</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/unifiedclustering_precomputed.html">Precomputed Distance Matrix as input data in UnifiedClustering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../topics/impute.html">Parameters for Misssing Value Handling in HANA DataFrame</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../parameter_mappings.html">Parameter Mappings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.visualizers.html">hana_ml.visualizers package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.eda">hana_ml.visualizers.eda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.metrics">hana_ml.visualizers.metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.m4_sampling">hana_ml.visualizers.m4_sampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.model_debriefing">hana_ml.visualizers.model_debriefing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#hana-ml-visualizers-dataset-report">hana_ml.visualizers.dataset_report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.shap">hana_ml.visualizers.shap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.unified_report">hana_ml.visualizers.unified_report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.visualizer_base">hana_ml.visualizers.visualizer_base</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.digraph">hana_ml.visualizers.digraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.word_cloud">hana_ml.visualizers.word_cloud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.automl_progress">hana_ml.visualizers.automl_progress</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.automl_report">hana_ml.visualizers.automl_report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.visualizers.html#module-hana_ml.visualizers.time_series_report">hana_ml.visualizers.time_series_report</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.ml_exceptions.html">hana_ml.ml_exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.model_storage.html">hana_ml.model_storage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.artifacts.html">hana_ml.artifacts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.artifacts.html#amdp-examples">AMDP Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.artifacts.html#module-hana_ml.artifacts.deployers.amdp">hana_ml.artifacts.deployers.amdp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.artifacts.html#module-hana_ml.artifacts.generators.abap">hana_ml.artifacts.generators.abap</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.artifacts.html#module-hana_ml.artifacts.generators.hana">hana_ml.artifacts.generators.hana</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.docstore.html">hana_ml.docstore package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.spatial.html">hana_ml.spatial package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.graph.html">hana_ml.graph package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.graph.algorithms.html">hana_ml.graph.algorithms package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.text.tm.html">hana_ml.text.tm package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../hana_ml.text.tm.html#module-hana_ml.text.tm">hana_ml.text.tm</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../hana_ml.faq.html">FAQs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">hana-ml</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../hana_ml.algorithms.pal.html">hana_ml.algorithms.pal package</a> &raquo;</li>
+          <li><a href="../algorithms.html">Algorithms</a> &raquo;</li>
+      <li>HybridGradientBoostingClassifier</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/pal/algorithms/hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul><div class="rst-breadcrumbs-buttons" role="navigation" aria-label="Sequential page navigation">
+        <a href="hana_ml.algorithms.pal.trees.RDTClassifier.html" class="btn btn-neutral float-left" title="RDTClassifier" accesskey="p"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hana_ml.algorithms.pal.linear_model.LinearRegression.html" class="btn btn-neutral float-right" title="LinearRegression" accesskey="n">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+  </div>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="hybridgradientboostingclassifier">
+<h1>HybridGradientBoostingClassifier<a class="headerlink" href="#hybridgradientboostingclassifier" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">hana_ml.algorithms.pal.trees.</span></span><span class="sig-name descname"><span class="pre">HybridGradientBoostingClassifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_estimators</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subsample</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_depth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sketch_eps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fold_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_sample_weight_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_samples_leaf</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_w_in_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_subsample_split</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col_subsample_tree</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lamb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_score</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adopt_prior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">evaluation_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_importance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calculate_cm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thread_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resampling_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_search_strategy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">repeat_times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress_indicator_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random_search_times</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cross_validation_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">param_values</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj_func</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replace_missing</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default_missing_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">feature_grouping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_bin_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_resource</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reduction_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">min_resource_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggressive_elimination</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validation_set_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stratified_validation_set</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerant_iter_num</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fg_min_zero_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier" title="Permalink to this definition"></a></dt>
+<dd><p>Hybrid Gradient Boosting trees model for classification.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>n_estimators</strong><span class="classifier">int, optional</span></dt><dd><p>Specifies the number of trees in Gradient Boosting.</p>
+<p>Defaults to 10.</p>
+</dd>
+<dt><strong>split_method</strong><span class="classifier">{'exact', 'sketch', 'sampling', 'histogram'}, optional</span></dt><dd><p>The method to finding split point for numerical features.</p>
+<ul class="simple">
+<li><p>'exact': the exact method, trying all possible points</p></li>
+<li><p>'sketch': the sketch method, accounting for the distribution of the sum of hessian</p></li>
+<li><p>'sampling': samples the split point randomly</p></li>
+<li><p>'histogram': builds histogram upon data and uses it as split point</p></li>
+</ul>
+<p>Defaults to 'exact'.</p>
+</dd>
+<dt><strong>random_state</strong><span class="classifier">int, optional</span></dt><dd><p>The seed for random number generating.</p>
+<ul class="simple">
+<li><p>0: current time as seed.</p></li>
+<li><p>Others : the seed.</p></li>
+</ul>
+</dd>
+<dt><strong>max_depth</strong><span class="classifier">int, optional</span></dt><dd><p>The maximum depth of a tree.</p>
+<p>Defaults to 6.</p>
+</dd>
+<dt><strong>split_threshold</strong><span class="classifier">float, optional</span></dt><dd><p>Specifies the stopping condition: if the improvement value of the best
+split is less than this value, then the tree stops growing.</p>
+</dd>
+<dt><strong>learning_rate</strong><span class="classifier">float, optional.</span></dt><dd><p>Learning rate of each iteration, must be within the range (0, 1].</p>
+<p>Defaults to 0.3.</p>
+</dd>
+<dt><strong>subsample</strong><span class="classifier">float, optional</span></dt><dd><p>The fraction of samples to be used for fitting each base learner.</p>
+<p>Defaults to 1.0.</p>
+</dd>
+<dt><strong>fold_num</strong><span class="classifier">int, optional</span></dt><dd><p>The k value for k-fold cross-validation.</p>
+<p>Mandatory and valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> is set as of one the following:
+'cv', 'cv_sha', 'cv_hyperband', 'stratified_cv', 'stratified_cv_sha',
+'stratified_cv_hyperband'.</p>
+</dd>
+<dt><strong>sketch_eps</strong><span class="classifier">float, optional</span></dt><dd><p>The value of the sketch method which sets up an upper limit for the sum of
+sample weights between two split points.</p>
+<p>Basically, the less this value is, the more number of split points are tried.</p>
+</dd>
+<dt><strong>min_sample_weight_leaf</strong><span class="classifier">float, optional</span></dt><dd><p>The minimum summation of ample weights in a leaf node.</p>
+<p>Defaults to 1.0.</p>
+</dd>
+<dt><strong>min_samples_leaf</strong><span class="classifier">int, optional</span></dt><dd><p>The minimum number of data in a leaf node.</p>
+<p>Defaults to 1.</p>
+</dd>
+<dt><strong>max_w_in_split</strong><span class="classifier">float, optional</span></dt><dd><p>The maximum weight constraint assigned to each tree node.</p>
+<p>Defaults to 0 (i.e. no constraint).</p>
+</dd>
+<dt><strong>col_subsample_split</strong><span class="classifier">float, optional</span></dt><dd><p>The fraction of features used for each split, should be within range (0, 1].</p>
+<p>Defaults to 1.0.</p>
+</dd>
+<dt><strong>col_subsample_tree</strong><span class="classifier">float, optional</span></dt><dd><p>The fraction of features used for each tree growth, should be within range (0, 1]</p>
+<p>Defaults to 1.0.</p>
+</dd>
+<dt><strong>lamb</strong><span class="classifier">float, optional</span></dt><dd><p>L2 regularization weight for the target loss function.
+Should be within range (0, 1].</p>
+<p>Defaults to 1.0.</p>
+</dd>
+<dt><strong>alpha</strong><span class="classifier">float, optional</span></dt><dd><p>Weight of L1 regularization for the target loss function.</p>
+<p>Defaults to 1.0.</p>
+</dd>
+<dt><strong>base_score</strong><span class="classifier">float, optional</span></dt><dd><p>Initial prediction score for all instances. Global bias for sufficient number
+of iterations(changing this value will not have too much effect).</p>
+<p>Defaults to 0.5.</p>
+</dd>
+<dt><strong>adopt_prior</strong><span class="classifier">bool, optional</span></dt><dd><p>Indicates whether to adopt the prior distribution as the initial point.</p>
+<p>Frequencies of class labels are used for classification problems.</p>
+<p><code class="docutils literal notranslate"><span class="pre">base_score</span></code> is ignored if this parameter is set to True.</p>
+<p>Defaults to False.</p>
+</dd>
+<dt><strong>evaluation_metric</strong><span class="classifier">{'rmse', 'mae', 'nll', 'error_rate', 'auc'}, optional</span></dt><dd><p>The metric used for model evaluation or parameter selection.</p>
+<p>Mandatory if <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> is set.</p>
+</dd>
+<dt><strong>cv_metric</strong><span class="classifier">{'rmse', 'mae', 'nll', 'error_rate', 'auc'}, optional (deprecated)</span></dt><dd><p>Same as <code class="docutils literal notranslate"><span class="pre">evaluation_metric</span></code>.</p>
+<p>Will be deprecated in future release.</p>
+</dd>
+<dt><strong>ref_metric</strong><span class="classifier">str or list of str, optional</span></dt><dd><p>Specifies a reference metric or a list of reference metrics.
+Any reference metric must be a valid option of <code class="docutils literal notranslate"><span class="pre">evaluation_metric</span></code>.</p>
+<p>Defaults to ['error_rate'].</p>
+</dd>
+<dt><strong>thread_ratio</strong><span class="classifier">float, optional</span></dt><dd><p>The ratio of available threads used for training.</p>
+<ul class="simple">
+<li><p>0: single thread;</p></li>
+<li><p>(0,1]: percentage of available threads;</p></li>
+<li><p>others : heuristically determined.</p></li>
+</ul>
+<p>Defaults to -1.</p>
+</dd>
+<dt><strong>calculate_importance</strong><span class="classifier">bool, optional</span></dt><dd><p>Determines whether to calculate variable importance.</p>
+<p>Defaults to True.</p>
+</dd>
+<dt><strong>calculate_cm</strong><span class="classifier">bool, optional</span></dt><dd><p>Determines whether to calculate confusion matrix.</p>
+<p>Defaults to True.</p>
+</dd>
+<dt><strong>resampling_method</strong><span class="classifier">str, optional</span></dt><dd><p>Specifies the resampling method for model evaluation or parameter selection.</p>
+<p>Valid options include: 'cv', 'stratified_cv', 'bootstrap', 'stratified_bootstrap',
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband',
+'stratified_bootstrap_hyperband'.</p>
+<p>If no value is specified for this parameter, neither model evaluation nor parameter selection is activated.</p>
+<p>No default value.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Resampling methods that end with 'sha' or 'hyperband' are used for
+parameter selection only, not for model evaluation.</p>
+</div>
+</dd>
+<dt><strong>param_search_strategy: {'grid', 'random'}, optional</strong></dt><dd><p>The search strategy for parameter selection.</p>
+<p>Mandatory if <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> is specified and ends with 'sha'.</p>
+<p>Defaults to 'random' and cannot be changed if <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> is specified and
+ends with 'hyperband'; otherwise no default value, and parameter selection
+cannot be carried out if not specified.</p>
+</dd>
+<dt><strong>repeat_times</strong><span class="classifier">int, optional</span></dt><dd><p>Specifies the repeat times for resampling.</p>
+<p>Defaults to 1.</p>
+</dd>
+<dt><strong>random_search_times</strong><span class="classifier">int, optional</span></dt><dd><p>Specify number of times to randomly select candidate parameters in parameter selection.</p>
+<p>Mandatory and valid only when <code class="docutils literal notranslate"><span class="pre">param_search_strategy</span></code> is set to 'random'.</p>
+</dd>
+<dt><strong>timeout</strong><span class="classifier">int, optional</span></dt><dd><p>Specify maximum running time for model evaluation/parameter selection in seconds.</p>
+<p>Defaults to 0, which means no timeout.</p>
+</dd>
+<dt><strong>progress_indicator_id</strong><span class="classifier">str, optional</span></dt><dd><p>Set an ID of progress indicator for model evaluation or parameter selection.</p>
+<p>No progress indicator will be active if no value is provided.</p>
+</dd>
+<dt><strong>param_range</strong><span class="classifier">dict or ListOfTuples, optional</span></dt><dd><p>Specifies the range of parameters involved for parameter selection.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> and <code class="docutils literal notranslate"><span class="pre">param_search_strategy</span></code> are both specified.</p>
+<p>If input is list of tuples, then each tuple must be a pair, with the first being parameter name of str type, and
+the second being the a list of numbers with the following structure:</p>
+<blockquote>
+<div><p>[&lt;begin-value&gt;, &lt;step-size&gt;, &lt;end-value&gt;].</p>
+<p>&lt;step-size&gt; can be omitted if <code class="docutils literal notranslate"><span class="pre">param_search_strategy</span></code> is 'random'.</p>
+</div></blockquote>
+<p>Otherwise, if input is dict, then the key of each element must specify a parameter name, while
+the value of each element specifies the range of that parameter.</p>
+<p>Supported parameters for range specification: <code class="docutils literal notranslate"><span class="pre">n_estimators</span></code>, <code class="docutils literal notranslate"><span class="pre">max_depth</span></code>, <code class="docutils literal notranslate"><span class="pre">learning_rate</span></code>,
+<code class="docutils literal notranslate"><span class="pre">min_sample_weight_leaf</span></code>, <code class="docutils literal notranslate"><span class="pre">max_w_in_split</span></code>, <code class="docutils literal notranslate"><span class="pre">col_subsample_split</span></code>, <code class="docutils literal notranslate"><span class="pre">col_subsample_tree</span></code>,
+<code class="docutils literal notranslate"><span class="pre">lamb</span></code>, <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">scale_pos_w</span></code>, <code class="docutils literal notranslate"><span class="pre">base_score</span></code>.</p>
+<p>A simple example for illustration:</p>
+<p>[('n_estimators', [4, 3, 10]), ('learning_rate', [0.1, 0.3, 1.0])],</p>
+<p>or</p>
+<p>{'n_estimators': [4, 3, 10], 'learning_rate' : [0.1, 0.3, 1.0]}.</p>
+<p>No default value.</p>
+</dd>
+<dt><strong>cross_validation_range</strong><span class="classifier">list of tuples, optional(deprecated)</span></dt><dd><p>Same as <code class="docutils literal notranslate"><span class="pre">param_range</span></code>.</p>
+<p>Will be deprecated in future release.</p>
+</dd>
+<dt><strong>param_values</strong><span class="classifier">dict or ListOfTuples, optional</span></dt><dd><p>Specifies the values of parameters involved for parameter selection.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> and <code class="docutils literal notranslate"><span class="pre">param_search_strategy</span></code> are both specified.</p>
+<p>If input is list of tuple, then each tuple must be a pair, with the first being parameter name of str type, and
+the second be a list values for that parameter.</p>
+<p>Otherwise, if input is dict, then the key of each element must specify a parameter name, while
+the value of each element specifies list of values of that parameter.</p>
+<p>Supported parameters for values specification are same as those valid for range specification, see <code class="docutils literal notranslate"><span class="pre">param_range</span></code>.</p>
+<p>A simple example for illustration:</p>
+<p>[('n_estimators', [4, 7, 10]), ('learning_rate', [0.1, 0.4, 0.7, 1.0])],</p>
+<p>or</p>
+<p>{'n_estimators' : [4, 7, 10], 'learning_rate' : [0.1, 0.4, 0.7, 1.0]}.</p>
+<p>No default value.</p>
+</dd>
+<dt><strong>obj_func</strong><span class="classifier">str, optional</span></dt><dd><p>Specifies the objective function to optimize, with valid options listed as follows:</p>
+<ul class="simple">
+<li><p>'logistic' : The objective function for logistic regression(for binary classification)</p></li>
+<li><p>'hinge' : The Hinge loss function(for binary classification)</p></li>
+<li><p>'softmax' : The softmax function for multi-class classification</p></li>
+</ul>
+<p>Defaults to 'logistic' for binary classification, and 'softmax' for multi-class classification.</p>
+</dd>
+<dt><strong>replace_missing</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether or not to replace missing value by another value in the feature.</p>
+<p>If True,  the replacement value is the mean value for a continuous feature,
+and the mode(i.e. most frequent value) for a categorical feature.</p>
+<p>Defaults to True.</p>
+</dd>
+<dt><strong>default_missing_direction</strong><span class="classifier">{'left', 'right'}, optional</span></dt><dd><p>Define the default direction where missing value will go to while tree splitting.</p>
+<p>Defaults to 'right'.</p>
+</dd>
+<dt><strong>feature_grouping</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether or not to group sparse features that contains only one significant value
+in each row.</p>
+<p>Defaults to False.</p>
+</dd>
+<dt><strong>tol_rate</strong><span class="classifier">float, optional</span></dt><dd><p>While feature grouping is enabled, still merging features when there are rows containing more than one significant value.
+This parameter specifies the rate of such rows allowed.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">feature_grouping</span></code> is set as True.</p>
+<p>Defaults to 0.0001.</p>
+</dd>
+<dt><strong>compression</strong><span class="classifier">bool, optional</span></dt><dd><p>Indicates whether or not the trained model should be compressed.</p>
+<p>Defaults to False.</p>
+</dd>
+<dt><strong>max_bits</strong><span class="classifier">int, optional</span></dt><dd><p>Specifies the maximum number of bits to quantize continuous features, which is equivalent to
+use <span class="math notranslate nohighlight">\(2^{max\_bits}\)</span> bins.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">compression</span></code> is set as True, and must be less than 31.</p>
+<p>Defaults to 12.</p>
+</dd>
+<dt><strong>max_bin_num</strong><span class="classifier">int, optional</span></dt><dd><p>Specifies the maximum bin number for histogram method.</p>
+<p>Decreasing this number gains better performance in terms of running time at a cost of accuracy degradation.</p>
+<p>Only valid when <code class="docutils literal notranslate"><span class="pre">split_method</span></code> is set to 'histogram'.</p>
+<p>Defaults to 256.</p>
+</dd>
+<dt><strong>resource</strong><span class="classifier">str, optional</span></dt><dd><p>Specifies the resource type used in successive-halving(SHA) and hyperband algorithm for parameter selection.</p>
+<p>Currently there are two valid options: 'n_estimators' and 'data_size'.</p>
+<p>Mandatory and valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> is set as one of the following values:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.</p>
+<p>Defaults to 'data_size'.</p>
+</dd>
+<dt><strong>max_resource</strong><span class="classifier">int, optional</span></dt><dd><p>Specifies the maximum number of estimators that should be used in SHA or Hyperband method.</p>
+<p>Mandatory when <code class="docutils literal notranslate"><span class="pre">resource</span></code> is set as 'n_estimators', and invalid if <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> does not take one
+of the following values: 'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.</p>
+</dd>
+<dt><strong>reduction_rate</strong><span class="classifier">float, optional</span></dt><dd><p>Specifies reduction rate in SHA or Hyperband method.</p>
+<p>For each round, the available parameter candidate size will be divided by value of this parameter.
+Thus valid value for this parameter must be greater than 1.0</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> takes one of the following values:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.</p>
+<p>Defaults to 3.0.</p>
+</dd>
+<dt><strong>min_resource_rate</strong><span class="classifier">float, optional</span></dt><dd><p>Specifies the minimum resource rate that should be used in SHA or Hyperband iteration.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> takes one of the following values:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.</p>
+<p>Defaults to:</p>
+<ul class="simple">
+<li><p>0.0 if <code class="docutils literal notranslate"><span class="pre">resource</span></code> is set as 'data_size'(i.e. the default value)</p></li>
+<li><p>1/<code class="docutils literal notranslate"><span class="pre">max_resource</span></code> if <code class="docutils literal notranslate"><span class="pre">resource</span></code> is set as 'n_estimators'.</p></li>
+</ul>
+</dd>
+<dt><strong>aggressive_elimination</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether to apply aggressive elimination while using SHA method.</p>
+<p>Aggressive elimination happens when the data size and parameters size to be searched does not match
+and there are still bunch of parameters to be searched while data size reaches its upper limits.
+If aggressive elimination is applied, lower bound of limit of data size will be used multiple times
+first to reduce number of parameters.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">resampling_method</span></code> is set as one of the following:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha'.</p>
+<p>Defaults to False.</p>
+</dd>
+<dt><strong>validation_set_rate</strong><span class="classifier">float, optional</span></dt><dd><p>Specifies the sampling rate of validation set for model evaluation in early stopping.</p>
+<p>Valid range is [0, 1).</p>
+<p>Need to specify a positive value to activate early stopping.</p>
+<p>Defaults to 0.</p>
+</dd>
+<dt><strong>stratified_validation_set</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether or not to apply stratified sampling for getting the validation set for early stopping.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">validation_set_rate</span></code> is specified with a positive value.</p>
+<p>Defaults to True.</p>
+</dd>
+<dt><strong>tolerant_iter_num</strong><span class="classifier">int, optional</span></dt><dd><p>Specifies the number of successive deteriorating iterations before early stopping.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">validation_set_rate</span></code> is specified with a positive value.</p>
+<p>Defaults to 5.</p>
+</dd>
+<dt><strong>fg_min_zero_rate</strong><span class="classifier">float, optional</span></dt><dd><p>Specifies the minimum zero rate that is used to indicate sparse columns for feature grouping.</p>
+<p>Valid only when <code class="docutils literal notranslate"><span class="pre">feature_grouping</span></code> is True.</p>
+<p>Defaults to 0.5.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">References</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../topics/miscellaneous.html#early-stop-label"><span class="std std-ref">Early Stop</span></a></p></li>
+<li><p><a class="reference internal" href="../topics/miscellaneous.html#feature-grouping-label"><span class="std std-ref">Feature Grouping</span></a></p></li>
+<li><p><a class="reference internal" href="../topics/miscellaneous.html#histogram-split-label"><span class="std std-ref">Histogram Split</span></a></p></li>
+<li><p><a class="reference internal" href="../topics/model_evaluation_param_selection.html#sha-hyperband-label"><span class="std std-ref">Successive Halving and Hyperband for Parameter Selection</span></a></p></li>
+</ul>
+<p class="rubric">Examples</p>
+<p>Input dataframe for training:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   ATT1  ATT2   ATT3  ATT4 LABEL</span>
+<span class="go">0   1.0  10.0  100.0   1.0     A</span>
+<span class="go">1   1.1  10.1  100.0   1.0     A</span>
+<span class="go">2   1.2  10.2  100.0   1.0     A</span>
+<span class="go">3   1.3  10.4  100.0   1.0     A</span>
+<span class="go">4   1.2  10.3  100.0   1.0     A</span>
+<span class="go">5   4.0  40.0  400.0   4.0     B</span>
+<span class="go">6   4.1  40.1  400.0   4.0     B</span>
+</pre></div>
+</div>
+<p>Creating an instance of Hybrid Gradient Boosting Classifier:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hgbc</span> <span class="o">=</span> <span class="n">HybridGradientBoostingClassifier</span><span class="p">(</span>
+<span class="gp">... </span>          <span class="n">n_estimators</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span> <span class="n">split_threshold</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">fold_num</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_depth</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+<span class="gp">... </span>          <span class="n">evaluation_metric</span> <span class="o">=</span> <span class="s1">&#39;error_rate&#39;</span><span class="p">,</span> <span class="n">ref_metric</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;auc&#39;</span><span class="p">],</span>
+<span class="gp">... </span>          <span class="n">param_range</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;learning_rate&#39;</span><span class="p">,[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">]),</span>
+<span class="gp">... </span>                       <span class="p">(</span><span class="s1">&#39;n_estimators&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">]),</span>
+<span class="gp">... </span>                       <span class="p">(</span><span class="s1">&#39;split_threshold&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">])])</span>
+</pre></div>
+</div>
+<p>Performing fit() on the given dataframe:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">hgbc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ATT1&#39;</span><span class="p">,</span> <span class="s1">&#39;ATT2&#39;</span><span class="p">,</span> <span class="s1">&#39;ATT3&#39;</span><span class="p">,</span> <span class="s1">&#39;ATT4&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;LABEL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">hgbc</span><span class="o">.</span><span class="n">stats_</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">         STAT_NAME STAT_VALUE</span>
+<span class="go">0  ERROR_RATE_MEAN   0.133333</span>
+<span class="go">1   ERROR_RATE_VAR  0.0266666</span>
+<span class="go">2         AUC_MEAN        0.9</span>
+</pre></div>
+</div>
+<p>Input dataframe for predict:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df_predict</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   ID  ATT1  ATT2   ATT3  ATT4</span>
+<span class="go">0   1   1.0  10.0  100.0   1.0</span>
+<span class="go">1   2   1.1  10.1  100.0   1.0</span>
+<span class="go">2   3   1.2  10.2  100.0   1.0</span>
+<span class="go">3   4   1.3  10.4  100.0   1.0</span>
+<span class="go">4   5   1.2  10.3  100.0   3.0</span>
+<span class="go">5   6   4.0  40.0  400.0   3.0</span>
+<span class="go">6   7   4.1  40.1  400.0   3.0</span>
+<span class="go">7   8   4.2  40.2  400.0   3.0</span>
+<span class="go">8   9   4.3  40.4  400.0   3.0</span>
+<span class="go">9  10   4.2  40.3  400.0   3.0</span>
+</pre></div>
+</div>
+<p>Performing predict() on given dataframe:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">hgbc</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df_predict</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="s1">&#39;ID&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   ID SCORE  CONFIDENCE</span>
+<span class="go">0   1     A    0.852674</span>
+<span class="go">1   2     A    0.852674</span>
+<span class="go">2   3     A    0.852674</span>
+<span class="go">3   4     A    0.852674</span>
+<span class="go">4   5     A    0.751394</span>
+<span class="go">5   6     B    0.703119</span>
+<span class="go">6   7     B    0.703119</span>
+<span class="go">7   8     B    0.703119</span>
+<span class="go">8   9     B    0.830549</span>
+<span class="go">9  10     B    0.703119</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>model_</strong><span class="classifier">DataFrame</span></dt><dd><p>Trained model content.</p>
+</dd>
+<dt><strong>feature_importances_</strong><span class="classifier">DataFrame</span></dt><dd><p>The feature importance (the higher, the more import the feature)</p>
+</dd>
+<dt><strong>confusion_matrix_</strong><span class="classifier">DataFrame</span></dt><dd><p>Confusion matrix used to evaluate the performance of classification algorithm.</p>
+</dd>
+<dt><strong>stats_</strong><span class="classifier">DataFrame</span></dt><dd><p>Statistics info.</p>
+</dd>
+<dt><strong>selected_param_</strong><span class="classifier">DataFrame</span></dt><dd><p>Best choice of parameter selected.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.create_model_state" title="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.create_model_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_model_state</span></code></a>([model, function, ...])</p></td>
+<td><p>Create PAL model state.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.delete_model_state" title="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.delete_model_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">delete_model_state</span></code></a>([state])</p></td>
+<td><p>Delete PAL model state.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.fit" title="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fit</span></code></a>(data[, key, features, label, ...])</p></td>
+<td><p>Train the model on input data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.predict" title="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.predict"><code class="xref py py-obj docutils literal notranslate"><span class="pre">predict</span></code></a>(data[, key, features, verbose, ...])</p></td>
+<td><p>Predict labels based on the trained HGBT classifier.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.score" title="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.score"><code class="xref py py-obj docutils literal notranslate"><span class="pre">score</span></code></a>(data[, key, features, label, ...])</p></td>
+<td><p>Returns the mean accuracy on the given test data and labels.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.set_model_state" title="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.set_model_state"><code class="xref py py-obj docutils literal notranslate"><span class="pre">set_model_state</span></code></a>(state)</p></td>
+<td><p>Set the model state by state information.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.fit">
+<span class="sig-name descname"><span class="pre">fit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">categorical_variable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warm_start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.fit" title="Permalink to this definition"></a></dt>
+<dd><p>Train the model on input data.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier">DataFrame</span></dt><dd><p>Training data.</p>
+</dd>
+<dt><strong>key</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the ID column.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">key</span></code> is not provided, then:</p>
+<ul class="simple">
+<li><p>if <code class="docutils literal notranslate"><span class="pre">data</span></code> is indexed by a single column, then <code class="docutils literal notranslate"><span class="pre">key</span></code> defaults
+to that index column;</p></li>
+<li><p>otherwise, it is assumed that <code class="docutils literal notranslate"><span class="pre">data</span></code> contains no ID column.</p></li>
+</ul>
+</dd>
+<dt><strong>features</strong><span class="classifier">list of str, optional</span></dt><dd><p>Names of the feature columns.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">features</span></code> is not provided, it defaults to all non-ID,
+non-label columns.</p>
+</dd>
+<dt><strong>label</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the dependent variable.</p>
+<p>Defaults to the name of the last non-ID column.</p>
+</dd>
+<dt><strong>categorical_variable</strong><span class="classifier">str or list of str, optional</span></dt><dd><p>Indicates INTEGER variable(s) that should be treated as categorical.</p>
+<p>Valid only for INTEGER variables, omitted otherwise.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>By default INTEGER variables are treated as numerical.</p>
+</div>
+</dd>
+<dt><strong>warm_start</strong><span class="classifier">bool, optional</span></dt><dd><p>When set to True, reuse the <code class="docutils literal notranslate"><span class="pre">model_</span></code> of current object to fit and add more trees to the existing model.
+Otherwise, just fit a new model.</p>
+<p>Defaults to False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>Fitted object.</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.predict">
+<span class="sig-name descname"><span class="pre">predict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thread_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.predict" title="Permalink to this definition"></a></dt>
+<dd><p>Predict labels based on the trained HGBT classifier.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier">DataFrame</span></dt><dd><p>Independent variable values to predict for.</p>
+</dd>
+<dt><strong>key</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the ID column.</p>
+<p>Mandatory if <code class="docutils literal notranslate"><span class="pre">data</span></code> is not indexed, or the index of <code class="docutils literal notranslate"><span class="pre">data</span></code> contains multiple columns.</p>
+<p>Defaults to the single index column of <code class="docutils literal notranslate"><span class="pre">data</span></code> if not provided.</p>
+</dd>
+<dt><strong>features</strong><span class="classifier">list of str, optional</span></dt><dd><p>Names of the feature columns.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">features</span></code> is not provided, it defaults to all non-ID columns.</p>
+</dd>
+<dt><strong>missing_replacement</strong><span class="classifier">str, optional</span></dt><dd><p>The missing replacement strategy:</p>
+<ul class="simple">
+<li><p>'feature_marginalized': marginalise each missing feature out               independently.</p></li>
+<li><p>'instance_marginalized': marginalise all missing features               in an instance as a whole corr</p></li>
+</ul>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, output all classes and the corresponding confidences             for each data point.</p>
+<p>Defaults to False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>DataFrame</dt><dd><p>DataFrame of score and confidence, structured as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>ID column, with same name and type as <code class="docutils literal notranslate"><span class="pre">data</span></code>'s ID column.</p></li>
+<li><p>SCORE, type DOUBLE, representing the predicted classes/values.</p></li>
+<li><p>CONFIDENCE, type DOUBLE, representing the confidence of
+a class label assignment.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.score">
+<span class="sig-name descname"><span class="pre">score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_replacement</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.score" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the mean accuracy on the given test data and labels.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>data</strong><span class="classifier">DataFrame</span></dt><dd><p>Data on which to assess model performance.</p>
+</dd>
+<dt><strong>key</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the ID column.</p>
+<p>Mandatory if <code class="docutils literal notranslate"><span class="pre">data</span></code> is not indexed, or the index of <code class="docutils literal notranslate"><span class="pre">data</span></code> contains multiple columns.</p>
+<p>Defaults to the single index column of <code class="docutils literal notranslate"><span class="pre">data</span></code> if not provided.</p>
+</dd>
+<dt><strong>features</strong><span class="classifier">list of str, optional</span></dt><dd><p>Names of the feature columns.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">features</span></code> is not provided, it defaults to all non-ID,
+non-label columns.</p>
+</dd>
+<dt><strong>label</strong><span class="classifier">str, optional</span></dt><dd><p>Name of the dependent variable.</p>
+<p>Defaults to the name of the last non-ID column.</p>
+</dd>
+<dt><strong>missing_replacement</strong><span class="classifier">str, optional</span></dt><dd><p>The missing replacement strategy:</p>
+<ul class="simple">
+<li><p>'feature_marginalized': marginalise each missing feature out
+independently.</p></li>
+<li><p>'instance_marginalized': marginalise all missing features
+in an instance as a whole corresponding to each category.</p></li>
+</ul>
+<p>Defaults to 'feature_marginalized'.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>float</dt><dd><p>Mean accuracy on the given test data and labels.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.create_model_state">
+<span class="sig-name descname"><span class="pre">create_model_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pal_funcname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PAL_HGBT'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_description</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.create_model_state" title="Permalink to this definition"></a></dt>
+<dd><p>Create PAL model state.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>model</strong><span class="classifier">DataFrame, optional</span></dt><dd><p>Specify the model for AFL state.</p>
+<p>Defaults to self.model_.</p>
+</dd>
+<dt><strong>function</strong><span class="classifier">str, optional</span></dt><dd><p>Specify the function in the unified API.</p>
+<p>A placeholder parameter, not effective for HGBT.</p>
+</dd>
+<dt><strong>pal_funcname</strong><span class="classifier">int or str, optional</span></dt><dd><p>PAL function name.</p>
+<p>Defaults to 'PAL_HGBT'.</p>
+</dd>
+<dt><strong>state_description</strong><span class="classifier">str, optional</span></dt><dd><p>Description of the state as model container.</p>
+<p>Defaults to None.</p>
+</dd>
+<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>If True it will delete the existing state.</p>
+<p>Defaults to False.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.delete_model_state">
+<span class="sig-name descname"><span class="pre">delete_model_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.delete_model_state" title="Permalink to this definition"></a></dt>
+<dd><p>Delete PAL model state.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>state</strong><span class="classifier">DataFrame, optional</span></dt><dd><p>Specified the state.</p>
+<p>Defaults to self.state.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.fit_hdbprocedure">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">fit_hdbprocedure</span></span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.fit_hdbprocedure" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the generated hdbprocedure for fit.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.predict_hdbprocedure">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">predict_hdbprocedure</span></span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.predict_hdbprocedure" title="Permalink to this definition"></a></dt>
+<dd><p>Returns the generated hdbprocedure for predict.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.set_model_state">
+<span class="sig-name descname"><span class="pre">set_model_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier.set_model_state" title="Permalink to this definition"></a></dt>
+<dd><p>Set the model state by state information.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>state: DataFrame or dict</strong></dt><dd><p>If state is DataFrame, it has the following structure:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>NAME: VARCHAR(100), it mush have STATE_ID, HINT, HOST and PORT.</p></li>
+<li><p>VALUE: VARCHAR(1000), the values according to NAME.</p></li>
+</ul>
+</div></blockquote>
+<p>If state is dict, the key must have STATE_ID, HINT, HOST and PORT.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<div class="section" id="inherited-methods-from-palbase">
+<h2>Inherited Methods from PALBase<a class="headerlink" href="#inherited-methods-from-palbase" title="Permalink to this headline"></a></h2>
+<p>Besides those methods mentioned above, the <strong>HybridGradientBoostingClassifier</strong> class also inherits methods from <strong>PALBase</strong> class, please refer to <a class="reference internal" href="hana_ml.algorithms.pal.pal_base.PALBase.html#palbase-label"><span class="std std-ref">PAL Base</span></a> for more details.</p>
+<div class="clearer"></div></div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, SAP.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+    <!-- Theme Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-XXXXXXX-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-XXXXXXX-1', {
+          'anonymize_ip': false,
+      });
+    </script> 
+
+
+<script>
+function trackPage() {
+try { 
+var trackingData = {};
+trackingData.pageUrl = location.href
+trackingData.pageName = "HybridGradientBoostingClassifier — hana-ml 2.16.230316 documentation"
+trackingData.eVar2 = "en-US"
+trackingData.eVar9 = "logN"
+trackingData.list2 = "73554900100900001301"
+trackingData.eVar131 = "sap_hana_platform|1d0ebfe5e8dd44d09606814d83308d4b|n/a|2.0.07"
+sap_s.trackData(trackingData); 
+}catch(e){console.log(e);}
+}
+var intervalCounter = 0;
+var waitForAA =  setInterval(function(){
+intervalCounter++;
+if(window.sap_s && window.sap_s.trackData) {
+clearInterval(waitForAA);
+trackPage();
+} else if(intervalCounter > 4){
+clearInterval(waitForAA);}
+}, 250)
+</script>
+<script>try{_satellite.pageBottom();}catch(e){console.log(e);} </script>
+</body>
+</html>

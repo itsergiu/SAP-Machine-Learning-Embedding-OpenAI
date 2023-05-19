@@ -1,0 +1,667 @@
+
+HybridGradientBoostingClassifier — hana-ml 2.16.230508 documentation
+ hana-ml
+          
+                2.16.230508
+              
+Python Machine Learning Client for SAP HANA
+Prerequisites
+SAP HANA DataFrame
+Machine Learning API
+End-to-End Example: Using SAP HANA Predictive Analysis Library (PAL) Module
+End-to-End Example: Using SAP HANA Automated Predictive Library (APL) Module
+Visualizers Module
+Spatial and Graph Features
+Summary
+Installation Guide
+hana-ml Tutorials
+Changelog
+hana_ml.dataframe
+hana_ml.algorithms.apl package
+hana_ml.algorithms.apl.gradient_boosting_classification
+hana_ml.algorithms.apl.gradient_boosting_regression
+hana_ml.algorithms.apl.time_series
+hana_ml.algorithms.apl.classification
+hana_ml.algorithms.apl.regression
+hana_ml.algorithms.apl.clustering
+hana_ml.algorithms.pal package
+Algorithms
+PAL Base
+PALBase
+Auto ML
+AutomaticClassification
+AutomaticRegression
+AutomaticTimeSeries
+Preprocessing
+Unified Interface
+UnifiedClassification
+UnifiedRegression
+UnifiedClustering
+UnifiedExponentialSmoothing
+Clustering
+AffinityPropagation
+AgglomerateHierarchicalClustering
+DBSCAN
+GeometryDBSCAN
+KMeans
+KMedians
+KMedoids
+SpectralClustering
+KMeansOutlier
+GaussianMixture
+SOM
+SlightSilhouette
+outlier_detection_kmeans
+Classification
+LinearDiscriminantAnalysis
+LogisticRegression
+OnlineMultiLogisticRegression
+NaiveBayes
+KNNClassifier
+MLPClassifier
+SVC
+OneClassSVM
+DecisionTreeClassifier
+RDTClassifier
+HybridGradientBoostingClassifier
+Regression
+LinearRegression
+OnlineLinearRegression
+KNNRegressor
+MLPRegressor
+PolynomialRegression
+GLM
+ExponentialRegression
+BiVariateGeometricRegression
+BiVariateNaturalLogarithmicRegression
+CoxProportionalHazardModel
+SVR
+DecisionTreeRegressor
+RDTRegressor
+HybridGradientBoostingRegressor
+Prepocessing
+FeatureNormalizer
+FeatureSelection
+IsolationForest
+KBinsDiscretizer
+Imputer
+Discretize
+MDS
+SMOTE
+SMOTETomek
+TomekLinks
+Sampling
+ImputeTS
+PCA
+CATPCA
+train_test_val_split
+variance_test
+Time Series
+AdditiveModelForecast
+ARIMA
+AutoARIMA
+CPD
+BCPD
+TimeSeriesClassification
+SingleExponentialSmoothing
+DoubleExponentialSmoothing
+TripleExponentialSmoothing
+AutoExponentialSmoothing
+BrownExponentialSmoothing
+Croston
+CrostonTSB
+GARCH
+Hierarchical_Forecast
+LR_seasonal_adjust
+LSTM
+LTSF
+OnlineARIMA
+OutlierDetectionTS
+GRUAttention
+ROCKET
+VectorARIMA
+DWT
+accuracy_measure
+BSTS
+correlation
+fft
+dtw
+fast_dtw
+intermittent_forecast
+periodogram
+stationarity_test
+seasonal_decompose
+trend_test
+wavedec
+waverec
+wpdec
+wprec
+white_noise_test
+Statistics
+bernoulli
+beta
+binomial
+cauchy
+chi_squared
+exponential
+gumbel
+f
+gamma
+geometric
+lognormal
+negative_binomial
+normal
+pert
+poisson
+student_t
+uniform
+weibull
+multinomial
+mcmc
+chi_squared_goodness_of_fit
+chi_squared_independence
+ttest_1samp
+ttest_ind
+ttest_paired
+f_oneway
+f_oneway_repeated
+univariate_analysis
+covariance_matrix
+pearsonr_matrix
+iqr
+wilcoxon
+median_test_1samp
+grubbs_test
+entropy
+condition_index
+cdf
+ftest_equal_var
+factor_analysis
+kaplan_meier_survival_analysis
+quantile
+distribution_fit
+ks_test
+KDE
+Association
+Apriori
+AprioriLite
+FPGrowth
+KORD
+SPM
+Recommender System
+ALS
+FRM
+FFMClassifier
+FFMRegressor
+FFMRanker
+Social Network Analysis
+LinkPrediction
+PageRank
+Ranking
+SVRanking
+Miscellaneous
+abc_analysis
+weighted_score_table
+TSNE
+Metrics
+accuracy_score
+auc
+confusion_matrix
+multiclass_auc
+r2_score
+Model and Pipeline
+ParamSearchCV
+GridSearchCV
+RandomSearchCV
+Pipeline
+Text Processing
+CRF
+LatentDirichletAllocation
+Topics
+Model Evaluation and Parameter Selection
+Resampling Methods
+Search Strategies
+Successive Halving and Hyperband for Parameter Selection
+Key Relevant Parameters
+Biased Linear Models
+Model State for Real-Time Scoring
+Local Interpretability of Models
+SHAP
+Surrogate
+Direct Explanation
+Models/Algorithms in hana_ml.algorithms.pal Packages that Support Local Interpretability
+Key Relevant Parameters in hana-ml.algorithms.pal Package
+Explaining the Forecasts of ARIMA
+Methods for Residual Extraction in Time-Series Outlier Detection
+1. Residual from Median Filter
+2. Residual from Seasonal Decomposition
+3. Residual Extraction from Median Filter and Seasonal Decomposition
+4. Meaningless Parameter Combination to be Avoided
+Methods of Outlier Detection from Residual
+1. Z1 Score
+2. Z2 Score
+3. IQR Score
+4. MAD Score
+5. Isolation Forest Score
+6. DBSCAN
+Genetic Optimization in AutoML
+Individual Representation
+Selection
+Crossover
+Mutation
+Evolutional Iteration Step
+Control Parameters
+Probability Density Functions for MCMC Sampling
+Miscellaneous Topics
+Early Stop in HGBT
+Feature Grouping in HGBT
+Histogram Splitting in HGBT
+Model Compression for Random Decision Trees
+Model Compression for Support Vector Machine
+Seasonalities in Additive Model Forecast
+Precomputed Distance Matrix as input data in UnifiedClustering
+Parameters for Misssing Value Handling in HANA DataFrame
+Parameter Mappings
+hana_ml.visualizers package
+hana_ml.visualizers.eda
+hana_ml.visualizers.metrics
+hana_ml.visualizers.m4_sampling
+hana_ml.visualizers.model_debriefing
+hana_ml.visualizers.dataset_report
+hana_ml.visualizers.shap
+hana_ml.visualizers.unified_report
+hana_ml.visualizers.visualizer_base
+hana_ml.visualizers.digraph
+hana_ml.visualizers.word_cloud
+hana_ml.visualizers.automl_progress
+hana_ml.visualizers.automl_report
+hana_ml.visualizers.time_series_report
+hana_ml.ml_exceptions
+hana_ml.model_storage
+hana_ml.artifacts package
+AMDP Examples
+hana_ml.artifacts.deployers.amdp
+hana_ml.artifacts.generators.abap
+hana_ml.artifacts.generators.hana
+hana_ml.docstore package
+hana_ml.spatial package
+hana_ml.graph package
+hana_ml.graph.algorithms package
+hana_ml.text.tm package
+hana_ml.text.tm
+FAQs
+hana-ml
+ »
+hana_ml.algorithms.pal package »
+Algorithms »
+HybridGradientBoostingClassifier
+ View page source
+ Previous
+Next 
+HybridGradientBoostingClassifier
+class hana_ml.algorithms.pal.trees.HybridGradientBoostingClassifier(n_estimators=None, random_state=None, subsample=None, max_depth=None, split_threshold=None, learning_rate=None, split_method=None, sketch_eps=None, fold_num=None, min_sample_weight_leaf=None, min_samples_leaf=None, max_w_in_split=None, col_subsample_split=None, col_subsample_tree=None, lamb=None, alpha=None, base_score=None, adopt_prior=None, evaluation_metric=None, cv_metric=None, ref_metric=None, calculate_importance=None, calculate_cm=None, thread_ratio=None, resampling_method=None, param_search_strategy=None, repeat_times=None, timeout=None, progress_indicator_id=None, random_search_times=None, param_range=None, cross_validation_range=None, param_values=None, obj_func=None, replace_missing=None, default_missing_direction=None, feature_grouping=None, tol_rate=None, compression=None, max_bits=None, max_bin_num=None, resource=None, max_resource=None, reduction_rate=None, min_resource_rate=None, aggressive_elimination=None, validation_set_rate=None, stratified_validation_set=None, tolerant_iter_num=None, fg_min_zero_rate=None)
+Hybrid Gradient Boosting trees model for classification.
+Parameters
+n_estimatorsint, optionalSpecifies the number of trees in Gradient Boosting.
+Defaults to 10.
+split_method{'exact', 'sketch', 'sampling', 'histogram'}, optionalThe method to finding split point for numerical features.
+'exact': the exact method, trying all possible points
+'sketch': the sketch method, accounting for the distribution of the sum of hessian
+'sampling': samples the split point randomly
+'histogram': builds histogram upon data and uses it as split point
+Defaults to 'exact'.
+random_stateint, optionalThe seed for random number generating.
+0: current time as seed.
+Others : the seed.
+max_depthint, optionalThe maximum depth of a tree.
+Defaults to 6.
+split_thresholdfloat, optionalSpecifies the stopping condition: if the improvement value of the best
+split is less than this value, then the tree stops growing.
+learning_ratefloat, optional.Learning rate of each iteration, must be within the range (0, 1].
+Defaults to 0.3.
+subsamplefloat, optionalThe fraction of samples to be used for fitting each base learner.
+Defaults to 1.0.
+fold_numint, optionalThe k value for k-fold cross-validation.
+Mandatory and valid only when resampling_method is set as of one the following:
+'cv', 'cv_sha', 'cv_hyperband', 'stratified_cv', 'stratified_cv_sha',
+'stratified_cv_hyperband'.
+sketch_epsfloat, optionalThe value of the sketch method which sets up an upper limit for the sum of
+sample weights between two split points.
+Basically, the less this value is, the more number of split points are tried.
+min_sample_weight_leaffloat, optionalThe minimum summation of ample weights in a leaf node.
+Defaults to 1.0.
+min_samples_leafint, optionalThe minimum number of data in a leaf node.
+Defaults to 1.
+max_w_in_splitfloat, optionalThe maximum weight constraint assigned to each tree node.
+Defaults to 0 (i.e. no constraint).
+col_subsample_splitfloat, optionalThe fraction of features used for each split, should be within range (0, 1].
+Defaults to 1.0.
+col_subsample_treefloat, optionalThe fraction of features used for each tree growth, should be within range (0, 1]
+Defaults to 1.0.
+lambfloat, optionalL2 regularization weight for the target loss function.
+Should be within range (0, 1].
+Defaults to 1.0.
+alphafloat, optionalWeight of L1 regularization for the target loss function.
+Defaults to 1.0.
+base_scorefloat, optionalInitial prediction score for all instances. Global bias for sufficient number
+of iterations(changing this value will not have too much effect).
+Defaults to 0.5.
+adopt_priorbool, optionalIndicates whether to adopt the prior distribution as the initial point.
+Frequencies of class labels are used for classification problems.
+base_score is ignored if this parameter is set to True.
+Defaults to False.
+evaluation_metric{'rmse', 'mae', 'nll', 'error_rate', 'auc'}, optionalThe metric used for model evaluation or parameter selection.
+Mandatory if resampling_method is set.
+cv_metric{'rmse', 'mae', 'nll', 'error_rate', 'auc'}, optional (deprecated)Same as evaluation_metric.
+Will be deprecated in future release.
+ref_metricstr or list of str, optionalSpecifies a reference metric or a list of reference metrics.
+Any reference metric must be a valid option of evaluation_metric.
+Defaults to ['error_rate'].
+thread_ratiofloat, optionalThe ratio of available threads used for training.
+0: single thread;
+(0,1]: percentage of available threads;
+others : heuristically determined.
+Defaults to -1.
+calculate_importancebool, optionalDetermines whether to calculate variable importance.
+Defaults to True.
+calculate_cmbool, optionalDetermines whether to calculate confusion matrix.
+Defaults to True.
+resampling_methodstr, optionalSpecifies the resampling method for model evaluation or parameter selection.
+Valid options include: 'cv', 'stratified_cv', 'bootstrap', 'stratified_bootstrap',
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband',
+'stratified_bootstrap_hyperband'.
+If no value is specified for this parameter, neither model evaluation nor parameter selection is activated.
+No default value.
+Note
+Resampling methods that end with 'sha' or 'hyperband' are used for
+parameter selection only, not for model evaluation.
+param_search_strategy: {'grid', 'random'}, optionalThe search strategy for parameter selection.
+Mandatory if resampling_method is specified and ends with 'sha'.
+Defaults to 'random' and cannot be changed if resampling_method is specified and
+ends with 'hyperband'; otherwise no default value, and parameter selection
+cannot be carried out if not specified.
+repeat_timesint, optionalSpecifies the repeat times for resampling.
+Defaults to 1.
+random_search_timesint, optionalSpecify number of times to randomly select candidate parameters in parameter selection.
+Mandatory and valid only when param_search_strategy is set to 'random'.
+timeoutint, optionalSpecify maximum running time for model evaluation/parameter selection in seconds.
+Defaults to 0, which means no timeout.
+progress_indicator_idstr, optionalSet an ID of progress indicator for model evaluation or parameter selection.
+No progress indicator will be active if no value is provided.
+param_rangedict or ListOfTuples, optionalSpecifies the range of parameters involved for parameter selection.
+Valid only when resampling_method and param_search_strategy are both specified.
+If input is list of tuples, then each tuple must be a pair, with the first being parameter name of str type, and
+the second being the a list of numbers with the following structure:
+[<begin-value>, <step-size>, <end-value>].
+<step-size> can be omitted if param_search_strategy is 'random'.
+Otherwise, if input is dict, then the key of each element must specify a parameter name, while
+the value of each element specifies the range of that parameter.
+Supported parameters for range specification: n_estimators, max_depth, learning_rate,
+min_sample_weight_leaf, max_w_in_split, col_subsample_split, col_subsample_tree,
+lamb, alpha, scale_pos_w, base_score.
+A simple example for illustration:
+[('n_estimators', [4, 3, 10]), ('learning_rate', [0.1, 0.3, 1.0])],
+or
+{'n_estimators': [4, 3, 10], 'learning_rate' : [0.1, 0.3, 1.0]}.
+No default value.
+cross_validation_rangelist of tuples, optional(deprecated)Same as param_range.
+Will be deprecated in future release.
+param_valuesdict or ListOfTuples, optionalSpecifies the values of parameters involved for parameter selection.
+Valid only when resampling_method and param_search_strategy are both specified.
+If input is list of tuple, then each tuple must be a pair, with the first being parameter name of str type, and
+the second be a list values for that parameter.
+Otherwise, if input is dict, then the key of each element must specify a parameter name, while
+the value of each element specifies list of values of that parameter.
+Supported parameters for values specification are same as those valid for range specification, see param_range.
+A simple example for illustration:
+[('n_estimators', [4, 7, 10]), ('learning_rate', [0.1, 0.4, 0.7, 1.0])],
+or
+{'n_estimators' : [4, 7, 10], 'learning_rate' : [0.1, 0.4, 0.7, 1.0]}.
+No default value.
+obj_funcstr, optionalSpecifies the objective function to optimize, with valid options listed as follows:
+'logistic' : The objective function for logistic regression(for binary classification)
+'hinge' : The Hinge loss function(for binary classification)
+'softmax' : The softmax function for multi-class classification
+Defaults to 'logistic' for binary classification, and 'softmax' for multi-class classification.
+replace_missingbool, optionalSpecifies whether or not to replace missing value by another value in the feature.
+If True,  the replacement value is the mean value for a continuous feature,
+and the mode(i.e. most frequent value) for a categorical feature.
+Defaults to True.
+default_missing_direction{'left', 'right'}, optionalDefine the default direction where missing value will go to while tree splitting.
+Defaults to 'right'.
+feature_groupingbool, optionalSpecifies whether or not to group sparse features that contains only one significant value
+in each row.
+Defaults to False.
+tol_ratefloat, optionalWhile feature grouping is enabled, still merging features when there are rows containing more than one significant value.
+This parameter specifies the rate of such rows allowed.
+Valid only when feature_grouping is set as True.
+Defaults to 0.0001.
+compressionbool, optionalIndicates whether or not the trained model should be compressed.
+Defaults to False.
+max_bitsint, optionalSpecifies the maximum number of bits to quantize continuous features, which is equivalent to
+use \(2^{max\_bits}\) bins.
+Valid only when compression is set as True, and must be less than 31.
+Defaults to 12.
+max_bin_numint, optionalSpecifies the maximum bin number for histogram method.
+Decreasing this number gains better performance in terms of running time at a cost of accuracy degradation.
+Only valid when split_method is set to 'histogram'.
+Defaults to 256.
+resourcestr, optionalSpecifies the resource type used in successive-halving(SHA) and hyperband algorithm for parameter selection.
+Currently there are two valid options: 'n_estimators' and 'data_size'.
+Mandatory and valid only when resampling_method is set as one of the following values:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.
+Defaults to 'data_size'.
+max_resourceint, optionalSpecifies the maximum number of estimators that should be used in SHA or Hyperband method.
+Mandatory when resource is set as 'n_estimators', and invalid if resampling_method does not take one
+of the following values: 'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.
+reduction_ratefloat, optionalSpecifies reduction rate in SHA or Hyperband method.
+For each round, the available parameter candidate size will be divided by value of this parameter.
+Thus valid value for this parameter must be greater than 1.0
+Valid only when resampling_method takes one of the following values:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.
+Defaults to 3.0.
+min_resource_ratefloat, optionalSpecifies the minimum resource rate that should be used in SHA or Hyperband iteration.
+Valid only when resampling_method takes one of the following values:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha',
+'cv_hyperband', 'stratified_cv_hyperband', 'bootstrap_hyperband', 'stratified_bootstrap_hyperband'.
+Defaults to:
+0.0 if resource is set as 'data_size'(i.e. the default value)
+1/max_resource if resource is set as 'n_estimators'.
+aggressive_eliminationbool, optionalSpecifies whether to apply aggressive elimination while using SHA method.
+Aggressive elimination happens when the data size and parameters size to be searched does not match
+and there are still bunch of parameters to be searched while data size reaches its upper limits.
+If aggressive elimination is applied, lower bound of limit of data size will be used multiple times
+first to reduce number of parameters.
+Valid only when resampling_method is set as one of the following:
+'cv_sha', 'stratified_cv_sha', 'bootstrap_sha', 'stratified_bootstrap_sha'.
+Defaults to False.
+validation_set_ratefloat, optionalSpecifies the sampling rate of validation set for model evaluation in early stopping.
+Valid range is [0, 1).
+Need to specify a positive value to activate early stopping.
+Defaults to 0.
+stratified_validation_setbool, optionalSpecifies whether or not to apply stratified sampling for getting the validation set for early stopping.
+Valid only when validation_set_rate is specified with a positive value.
+Defaults to True.
+tolerant_iter_numint, optionalSpecifies the number of successive deteriorating iterations before early stopping.
+Valid only when validation_set_rate is specified with a positive value.
+Defaults to 5.
+fg_min_zero_ratefloat, optionalSpecifies the minimum zero rate that is used to indicate sparse columns for feature grouping.
+Valid only when feature_grouping is True.
+Defaults to 0.5.
+References
+Early Stop
+Feature Grouping
+Histogram Split
+Successive Halving and Hyperband for Parameter Selection
+Examples
+Input dataframe for training:
+>>> df.head(7).collect()
+   ATT1  ATT2   ATT3  ATT4 LABEL
+0   1.0  10.0  100.0   1.0     A
+1   1.1  10.1  100.0   1.0     A
+2   1.2  10.2  100.0   1.0     A
+3   1.3  10.4  100.0   1.0     A
+4   1.2  10.3  100.0   1.0     A
+5   4.0  40.0  400.0   4.0     B
+6   4.1  40.1  400.0   4.0     B
+Creating an instance of Hybrid Gradient Boosting Classifier:
+>>> hgbc = HybridGradientBoostingClassifier(
+...           n_estimators = 4, split_threshold=0,
+...           learning_rate=0.5, fold_num=5, max_depth=6,
+...           evaluation_metric = 'error_rate', ref_metric=['auc'],
+...           param_range=[('learning_rate',[0.1, 0.45, 1.0]),
+...                        ('n_estimators', [4, 3, 10]),
+...                        ('split_threshold', [0.1, 0.45, 1.0])])
+Performing fit() on the given dataframe:
+>>> hgbc.fit(df, features=['ATT1', 'ATT2', 'ATT3', 'ATT4'], label='LABEL')
+>>> hgbc.stats_.collect()
+         STAT_NAME STAT_VALUE
+0  ERROR_RATE_MEAN   0.133333
+1   ERROR_RATE_VAR  0.0266666
+2         AUC_MEAN        0.9
+Input dataframe for predict:
+>>> df_predict.collect()
+   ID  ATT1  ATT2   ATT3  ATT4
+0   1   1.0  10.0  100.0   1.0
+1   2   1.1  10.1  100.0   1.0
+2   3   1.2  10.2  100.0   1.0
+3   4   1.3  10.4  100.0   1.0
+4   5   1.2  10.3  100.0   3.0
+5   6   4.0  40.0  400.0   3.0
+6   7   4.1  40.1  400.0   3.0
+7   8   4.2  40.2  400.0   3.0
+8   9   4.3  40.4  400.0   3.0
+9  10   4.2  40.3  400.0   3.0
+Performing predict() on given dataframe:
+>>> result = hgbc.fit(df_predict, key='ID', verbose=False)
+>>> result.collect()
+   ID SCORE  CONFIDENCE
+0   1     A    0.852674
+1   2     A    0.852674
+2   3     A    0.852674
+3   4     A    0.852674
+4   5     A    0.751394
+5   6     B    0.703119
+6   7     B    0.703119
+7   8     B    0.703119
+8   9     B    0.830549
+9  10     B    0.703119
+Attributes
+model_DataFrameTrained model content.
+feature_importances_DataFrameThe feature importance (the higher, the more import the feature)
+confusion_matrix_DataFrameConfusion matrix used to evaluate the performance of classification algorithm.
+stats_DataFrameStatistics info.
+selected_param_DataFrameBest choice of parameter selected.
+Methods
+create_model_state([model, function, ...])
+Create PAL model state.
+delete_model_state([state])
+Delete PAL model state.
+fit(data[, key, features, label, ...])
+Train the model on input data.
+predict(data[, key, features, verbose, ...])
+Predict labels based on the trained HGBT classifier.
+score(data[, key, features, label, ...])
+Returns the mean accuracy on the given test data and labels.
+set_model_state(state)
+Set the model state by state information.
+fit(data, key=None, features=None, label=None, categorical_variable=None, warm_start=None)
+Train the model on input data.
+Parameters
+dataDataFrameTraining data.
+keystr, optionalName of the ID column.
+If key is not provided, then:
+if data is indexed by a single column, then key defaults
+to that index column;
+otherwise, it is assumed that data contains no ID column.
+featureslist of str, optionalNames of the feature columns.
+If features is not provided, it defaults to all non-ID,
+non-label columns.
+labelstr, optionalName of the dependent variable.
+Defaults to the name of the last non-ID column.
+categorical_variablestr or list of str, optionalIndicates INTEGER variable(s) that should be treated as categorical.
+Valid only for INTEGER variables, omitted otherwise.
+Note
+By default INTEGER variables are treated as numerical.
+warm_startbool, optionalWhen set to True, reuse the model_ of current object to fit and add more trees to the existing model.
+Otherwise, just fit a new model.
+Defaults to False.
+Returns
+Fitted object.
+predict(data, key=None, features=None, verbose=None, thread_ratio=None, missing_replacement=None)
+Predict labels based on the trained HGBT classifier.
+Parameters
+dataDataFrameIndependent variable values to predict for.
+keystr, optionalName of the ID column.
+Mandatory if data is not indexed, or the index of data contains multiple columns.
+Defaults to the single index column of data if not provided.
+featureslist of str, optionalNames of the feature columns.
+If features is not provided, it defaults to all non-ID columns.
+missing_replacementstr, optionalThe missing replacement strategy:
+'feature_marginalized': marginalise each missing feature out               independently.
+'instance_marginalized': marginalise all missing features               in an instance as a whole corr
+verbosebool, optionalIf True, output all classes and the corresponding confidences             for each data point.
+Defaults to False.
+Returns
+DataFrameDataFrame of score and confidence, structured as follows:
+ID column, with same name and type as data's ID column.
+SCORE, type DOUBLE, representing the predicted classes/values.
+CONFIDENCE, type DOUBLE, representing the confidence of
+a class label assignment.
+score(data, key=None, features=None, label=None, missing_replacement=None)
+Returns the mean accuracy on the given test data and labels.
+Parameters
+dataDataFrameData on which to assess model performance.
+keystr, optionalName of the ID column.
+Mandatory if data is not indexed, or the index of data contains multiple columns.
+Defaults to the single index column of data if not provided.
+featureslist of str, optionalNames of the feature columns.
+If features is not provided, it defaults to all non-ID,
+non-label columns.
+labelstr, optionalName of the dependent variable.
+Defaults to the name of the last non-ID column.
+missing_replacementstr, optionalThe missing replacement strategy:
+'feature_marginalized': marginalise each missing feature out
+independently.
+'instance_marginalized': marginalise all missing features
+in an instance as a whole corresponding to each category.
+Defaults to 'feature_marginalized'.
+Returns
+floatMean accuracy on the given test data and labels.
+create_model_state(model=None, function=None, pal_funcname='PAL_HGBT', state_description=None, force=False)
+Create PAL model state.
+Parameters
+modelDataFrame, optionalSpecify the model for AFL state.
+Defaults to self.model_.
+functionstr, optionalSpecify the function in the unified API.
+A placeholder parameter, not effective for HGBT.
+pal_funcnameint or str, optionalPAL function name.
+Defaults to 'PAL_HGBT'.
+state_descriptionstr, optionalDescription of the state as model container.
+Defaults to None.
+forcebool, optionalIf True it will delete the existing state.
+Defaults to False.
+delete_model_state(state=None)
+Delete PAL model state.
+Parameters
+stateDataFrame, optionalSpecified the state.
+Defaults to self.state.
+property fit_hdbprocedure
+Returns the generated hdbprocedure for fit.
+property predict_hdbprocedure
+Returns the generated hdbprocedure for predict.
+set_model_state(state)
+Set the model state by state information.
+Parameters
+state: DataFrame or dictIf state is DataFrame, it has the following structure:
+NAME: VARCHAR(100), it mush have STATE_ID, HINT, HOST and PORT.
+VALUE: VARCHAR(1000), the values according to NAME.
+If state is dict, the key must have STATE_ID, HINT, HOST and PORT.
+Inherited Methods from PALBase
+Besides those methods mentioned above, the HybridGradientBoostingClassifier class also inherits methods from PALBase class, please refer to PAL Base for more details.
+© Copyright 2023, SAP.
+  Built with Sphinx using a

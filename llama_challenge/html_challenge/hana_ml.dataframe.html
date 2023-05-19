@@ -1,0 +1,1976 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>hana_ml.dataframe &#8212; hana_ml 1.0.8.post5 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphviz.css" />
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="hana_ml.algorithms.apl package" href="hana_ml.algorithms.apl.html" />
+    <link rel="prev" title="Change Log for the SAP HANA Python Client API" href="change_log.html" /> 
+  
+<script src="//assets.adobedtm.com/ccc66c06b30b/32c05409e1fd/launch-8b3c5ca29b9e.min.js"></script>
+<script src="https://cdn.schemaapp.com/javascript/highlight.js"></script><script src="https://cdn.schemaapp.com/javascript/schemaFunctions.min.js"></script><script>schemaLoad("Acronym/Helpsap", "325UM-NQRHZ-P7T97-M5SY8");</script>
+<meta name="semaphore_tech_ids" content="73554900100900001301,01200314690800001945">
+<meta name="product" content="SAP HANA Platform">
+<meta name="version" content="2.0 SPS 04">
+<meta name="language" content="en-US">
+<meta name="contenthash" content="07f6b3a03bc72502e872c278a256a2641d774c8576396dd884a430dbc0e87ca7e7d33415113abef68737d03c8b93e741ceacc03baa9679bccdb4c20ba19d849b">
+<meta name="contentloio" content="1d0ebfe5e8dd44d09606814d83308d4b">
+<meta name="created_timestamp" content="2020-06-16 12:00.25">
+<meta name="updated_timestamp" content="2020-01-23 16:12.08">
+<link rel="canonical" href="/doc/1d0ebfe5e8dd44d09606814d83308d4b/2.0.04/en-US/hana_ml.dataframe.html">
+</head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hana_ml.algorithms.apl.html" title="hana_ml.algorithms.apl package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="change_log.html" title="Change Log for the SAP HANA Python Client API"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">hana_ml 1.0.8.post5 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-hana_ml.dataframe">
+<span id="hana-ml-dataframe"></span><h1>hana_ml.dataframe<a class="headerlink" href="#module-hana_ml.dataframe" title="Permalink to this headline">¶</a></h1>
+<p>This module represents a database query as a dataframe.
+Most operations are designed to not bring data back from the database
+unless explicitly requested.</p>
+<p>The following classes and functions are available:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><a class="reference internal" href="#hana_ml.dataframe.ConnectionContext" title="hana_ml.dataframe.ConnectionContext"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionContext</span></code></a></p></li>
+<li><p><a class="reference internal" href="#hana_ml.dataframe.DataFrame" title="hana_ml.dataframe.DataFrame"><code class="xref py py-class docutils literal notranslate"><span class="pre">DataFrame</span></code></a></p></li>
+<li><p><a class="reference internal" href="#hana_ml.dataframe.quotename" title="hana_ml.dataframe.quotename"><code class="xref py py-func docutils literal notranslate"><span class="pre">quotename()</span></code></a></p></li>
+<li><p><a class="reference internal" href="#hana_ml.dataframe.create_dataframe_from_pandas" title="hana_ml.dataframe.create_dataframe_from_pandas"><code class="xref py py-func docutils literal notranslate"><span class="pre">create_dataframe_from_pandas()</span></code></a></p></li>
+</ul>
+</div></blockquote>
+<dl class="function">
+<dt id="hana_ml.dataframe.quotename">
+<code class="descclassname">hana_ml.dataframe.</code><code class="descname">quotename</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.quotename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Escapes a schema, table, or column name for use in SQL. hana_ml functions and methods that take schema, table, or column names
+already escape their input by default, but those that take SQL don’t (and can’t) perform escaping automatically.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>name</strong><span class="classifier">str</span></dt><dd><p>The schema, table, or column name.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The escaped name. The string is surrounded in quotation marks,
+and existing quotation marks are escaped by doubling them.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="class">
+<dt id="hana_ml.dataframe.ConnectionContext">
+<em class="property">class </em><code class="descclassname">hana_ml.dataframe.</code><code class="descname">ConnectionContext</code><span class="sig-paren">(</span><em>address=''</em>, <em>port=0</em>, <em>user=''</em>, <em>password=''</em>, <em>autocommit=True</em>, <em>packetsize=None</em>, <em>userkey=None</em>, <em>**properties</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a connection to an SAP HANA system.</p>
+<p>ConnectionContext includes methods for creating DataFrames from data
+on SAP HANA. DataFrames are tied to a ConnectionContext, and are unusable
+once their ConnectionContext is closed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Same as hdbcli.dbapi.connect. Please see the following online docs for hdbcli.dbapi.connect:</strong></dt><dd></dd>
+<dt><strong>https://help.sap.com/viewer/0eec0d68141541d1b07893a39944924e/latest/en-US/ee592e89dcce4480a99571a4ae7a702f.html</strong></dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Querying data from SAP HANA into a Pandas DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ConnectionContext</span><span class="p">(</span><span class="s1">&#39;address&#39;</span><span class="p">,</span> <span class="n">port</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;password&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cc</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">df</span> <span class="o">=</span> <span class="p">(</span><span class="n">cc</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s1">&#39;MY_TABLE&#39;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">&#39;MY_SCHEMA&#39;</span><span class="p">)</span>
+<span class="gp">... </span>            <span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;COL3 &gt; 5&#39;</span><span class="p">)</span>
+<span class="gp">... </span>            <span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;COL1&#39;</span><span class="p">,</span> <span class="s1">&#39;COL2&#39;</span><span class="p">))</span>
+<span class="gp">... </span>    <span class="n">pandas_df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The underlying hdbcli.dbapi.connect can be accessed if necessary:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">ConnectionContext</span><span class="p">(</span><span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">30215</span><span class="p">,</span> <span class="s1">&#39;MLGUY&#39;</span><span class="p">,</span> <span class="s1">&#39;manager&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cc</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">cc</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">setclientinfo</span><span class="p">(</span><span class="s1">&#39;SOMEKEY&#39;</span><span class="p">,</span> <span class="s1">&#39;somevalue&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">df</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s1">&#39;some sql that needs that session variable&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="o">...</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Attributes</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>connection</strong><span class="classifier">hdbcli.dbapi.connect</span></dt><dd><p>The underlying dbapi connection. Use this connection to run SQL directly,
+or to access connection methods like getclientinfo/setclientinfo.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="method">
+<dt id="hana_ml.dataframe.ConnectionContext.close">
+<code class="descname">close</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Closes the existing connection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.ConnectionContext.hana_version">
+<code class="descname">hana_version</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext.hana_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the version of SAP HANA.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The SAP HANA version.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.ConnectionContext.get_current_schema">
+<code class="descname">get_current_schema</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext.get_current_schema" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the current schema name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>str</dt><dd><p>The current schema name.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.ConnectionContext.hana_major_version">
+<code class="descname">hana_major_version</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext.hana_major_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the major number of HANA version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>The major number of HANA version.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.ConnectionContext.sql">
+<code class="descname">sql</code><span class="sig-paren">(</span><em>self</em>, <em>sql</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext.sql" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame representing a query.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>sql</strong><span class="classifier">str</span></dt><dd><p>SQL query.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The DataFrame for the query.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s1">&#39;SELECT T.A, T2.B FROM T, T2 WHERE T.C=T2.C&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.ConnectionContext.table">
+<code class="descname">table</code><span class="sig-paren">(</span><em>table</em>, <em>*</em>, <em>schema=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.ConnectionContext.table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame that represents the specified table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>table</strong><span class="classifier">str</span></dt><dd><p>The table name.</p>
+</dd>
+<dt><strong>schema</strong><span class="classifier">str, optional, keyword-only</span></dt><dd><p>The schema name. If this value is not provided or set to None, then the value defaults to the
+ConnectionContext’s current schema.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The DataFrame that is selecting data from the specified table.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s1">&#39;MY_TABLE&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s1">&#39;MY_OTHER_TABLE&#39;</span><span class="p">,</span> <span class="n">schema</span><span class="o">=</span><span class="s1">&#39;MY_SCHEMA&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hana_ml.dataframe.DataFrame">
+<em class="property">class </em><code class="descclassname">hana_ml.dataframe.</code><code class="descname">DataFrame</code><span class="sig-paren">(</span><em>connection_context</em>, <em>select_statement</em>, <em>_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Represents a frame that is backed by a database SQL statement.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>connection_context</strong><span class="classifier">ConnectionContext</span></dt><dd><p>The connection to the SAP HANA system.</p>
+</dd>
+<dt><strong>select_statement</strong><span class="classifier">str</span></dt><dd><p>The SQL query backing the dataframe.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Parameters beyond <code class="docutils literal notranslate"><span class="pre">connection_context</span></code> and <code class="docutils literal notranslate"><span class="pre">select_statement</span></code> are intended for internal use. Do not rely on them; they may change without notice.</p>
+</div>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="hana_ml.dataframe.DataFrame.columns">
+<code class="descname">columns</code><a class="headerlink" href="#hana_ml.dataframe.DataFrame.columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Lists the current DataFrame’s column names. Computed lazily and cached.
+Each access to this property creates a new copy; mutating the list does not alter or corrupt the DataFrame.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hana_ml.dataframe.DataFrame.name">
+<code class="descname">name</code><a class="headerlink" href="#hana_ml.dataframe.DataFrame.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the name of the DataFrame. This value does not correspond to an SAP HANA table name.
+This value is useful for joining predicates when the joining DataFrames have columns with the same name.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hana_ml.dataframe.DataFrame.quoted_name">
+<code class="descname">quoted_name</code><a class="headerlink" href="#hana_ml.dataframe.DataFrame.quoted_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the escaped name of the original DataFrame.
+Default-generated DataFrame names are safe to use in SQL without escaping, but names set with DataFrame.alias may require escaping.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.declare_lttab_usage">
+<code class="descname">declare_lttab_usage</code><span class="sig-paren">(</span><em>self</em>, <em>usage</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.declare_lttab_usage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Declares whether this DataFrame makes use of local temporary tables.</p>
+<p>Some PAL execution routines can execute more efficiently if they know up front whether a DataFrame’s SELECT statement requires
+access to local temporary tables.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>usage</strong><span class="classifier">bool, optional</span></dt><dd><p>Specifies whether this DataFrame uses local temporary tables.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.add_id">
+<code class="descname">add_id</code><span class="sig-paren">(</span><em>self</em>, <em>id_col</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.add_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new DataFrame with &lt;id_col&gt;.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>id</strong><span class="classifier">str</span></dt><dd><p>The name of ID column.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The DataFrame with &lt;id_col&gt;.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.alias">
+<code class="descname">alias</code><span class="sig-paren">(</span><em>self</em>, <em>alias</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.alias" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame with an alias set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>alias</strong><span class="classifier">str</span></dt><dd><p>The name of the DataFrame.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The DataFrame with an alias set.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#hana_ml.dataframe.DataFrame.rename_columns" title="hana_ml.dataframe.DataFrame.rename_columns"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrame.rename_columns</span></code></a></dt><dd><p>For renaming individual columns.</p>
+</dd>
+</dl>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.count">
+<code class="descname">count</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the number of rows in the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>int</dt><dd><p>The number of rows in the DataFrame.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.diff">
+<code class="descname">diff</code><span class="sig-paren">(</span><em>self</em>, <em>index</em>, <em>periods=1</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.diff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame with differenced values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>index</strong><span class="classifier">int or str</span></dt><dd><p>Index of the HANA DataFrame.</p>
+</dd>
+<dt><strong>periods</strong><span class="classifier">int, default 1</span></dt><dd><p>Periods to shift for calculating difference, accepts negative values.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>DataFrame with differenced values. No calculation happens if it contains string.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.drop">
+<code class="descname">drop</code><span class="sig-paren">(</span><em>self</em>, <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.drop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame without the specified columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">list of str</span></dt><dd><p>The list of column names to drop.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The new DataFrame that retains only the columns not listed in <code class="docutils literal notranslate"><span class="pre">cols</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  3</span>
+<span class="go">1  2  4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;B&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A</span>
+<span class="go">0  1</span>
+<span class="go">1  2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.distinct">
+<code class="descname">distinct</code><span class="sig-paren">(</span><em>self</em>, <em>cols=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.distinct" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame with distinct values for the specified columns.
+If no columns are specified, then the distinct row values from all columns are returned.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or list of str, optional</span></dt><dd><p>A column or list of columns to consider when getting distinct
+values. Defaults to use all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The DataFrame with distinct values for cols.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B    C</span>
+<span class="go">0  1  A  100</span>
+<span class="go">1  1  A  101</span>
+<span class="go">2  1  A  102</span>
+<span class="go">3  1  B  100</span>
+<span class="go">4  1  B  101</span>
+<span class="go">5  1  B  102</span>
+<span class="go">6  1  B  103</span>
+<span class="go">7  2  A  100</span>
+<span class="go">8  2  A  100</span>
+</pre></div>
+</div>
+<p>Distinct values in a column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   B</span>
+<span class="go">0  A</span>
+<span class="go">1  B</span>
+</pre></div>
+</div>
+<p>Distinct values of a subset of columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">distinct</span><span class="p">([</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  B</span>
+<span class="go">1  2  A</span>
+<span class="go">2  1  A</span>
+</pre></div>
+</div>
+<p>Distinct values of the entire data set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B    C</span>
+<span class="go">0  1  A  102</span>
+<span class="go">1  1  B  103</span>
+<span class="go">2  1  A  101</span>
+<span class="go">3  2  A  100</span>
+<span class="go">4  1  B  101</span>
+<span class="go">5  1  A  100</span>
+<span class="go">6  1  B  100</span>
+<span class="go">7  1  B  102</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.drop_duplicates">
+<code class="descname">drop_duplicates</code><span class="sig-paren">(</span><em>self</em>, <em>subset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.drop_duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame with duplicate rows removed. All columns in the
+DataFrame are returned. There is no way to keep specific duplicate rows.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Specifying a non-None value of <code class="docutils literal notranslate"><span class="pre">subset</span></code> may produce an unstable            DataFrame, the contents of which may be different every time you            look at it. Specifically, if two rows are duplicates in their            <code class="docutils literal notranslate"><span class="pre">subset</span></code> columns and have different values in other columns,            Then a different row could be picked every time you look at the result.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>subset</strong><span class="classifier">list of str, optional</span></dt><dd><p>A list of columns to consider when deciding whether rows are             duplicates of each other. Defaults to use all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A DataFrame with only one copy of duplicate rows.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B    C</span>
+<span class="go">0  1  A  100</span>
+<span class="go">1  1  A  101</span>
+<span class="go">2  1  A  102</span>
+<span class="go">3  1  B  100</span>
+<span class="go">4  1  B  101</span>
+<span class="go">5  1  B  102</span>
+<span class="go">6  1  B  103</span>
+<span class="go">7  2  A  100</span>
+<span class="go">8  2  A  100</span>
+</pre></div>
+</div>
+<p>Drop duplicates based on the values of a subset of columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">([</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B    C</span>
+<span class="go">0  1  A  100</span>
+<span class="go">1  1  B  100</span>
+<span class="go">2  2  A  100</span>
+</pre></div>
+</div>
+<p>Distinct values on the entire data set:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B    C</span>
+<span class="go">0  1  A  102</span>
+<span class="go">1  1  B  103</span>
+<span class="go">2  1  A  101</span>
+<span class="go">3  2  A  100</span>
+<span class="go">4  1  B  101</span>
+<span class="go">5  1  A  100</span>
+<span class="go">6  1  B  100</span>
+<span class="go">7  1  B  102</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.dropna">
+<code class="descname">dropna</code><span class="sig-paren">(</span><em>self</em>, <em>how=None</em>, <em>thresh=None</em>, <em>subset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.dropna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame with NULLs removed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>how</strong><span class="classifier">{‘any’, ‘all’}, optional</span></dt><dd><p>If provided, ‘any’ eliminates rows with any NULLs,             and ‘all’ eliminates rows that are entirely NULLs.             If neither <code class="docutils literal notranslate"><span class="pre">how</span></code> nor <code class="docutils literal notranslate"><span class="pre">thresh</span></code> are provided, <code class="docutils literal notranslate"><span class="pre">how</span></code>             defaults to ‘any’.</p>
+</dd>
+<dt><strong>thresh</strong><span class="classifier">int, optional</span></dt><dd><p>If provided, rows with fewer than <code class="docutils literal notranslate"><span class="pre">thresh</span></code> non-NULL values             are dropped.             You cannot specify both <code class="docutils literal notranslate"><span class="pre">how</span></code> and <code class="docutils literal notranslate"><span class="pre">thresh</span></code>.</p>
+</dd>
+<dt><strong>subset</strong><span class="classifier">list of str, optional</span></dt><dd><p>The columns to consider when looking for NULLs. Values in
+other columns are ignored, whether they are NULL or not.
+Defaults to all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A new DataFrame with a SELECT statement that removes NULLs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Dropping rows with any nulls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">     A    B    C</span>
+<span class="go">0  1.0  3.0  5.0</span>
+<span class="go">1  2.0  4.0  NaN</span>
+<span class="go">2  3.0  NaN  NaN</span>
+<span class="go">3  NaN  NaN  NaN</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">     A    B    C</span>
+<span class="go">0  1.0  3.0  5.0</span>
+</pre></div>
+</div>
+<p>Dropping rows that are entirely nulls:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">how</span><span class="o">=</span><span class="s1">&#39;all&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">     A    B    C</span>
+<span class="go">0  1.0  3.0  5.0</span>
+<span class="go">1  2.0  4.0  NaN</span>
+<span class="go">2  3.0  NaN  NaN</span>
+</pre></div>
+</div>
+<p>Dropping rows with less than 2 non-null values:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">thresh</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">     A    B    C</span>
+<span class="go">0  1.0  3.0  5.0</span>
+<span class="go">1  2.0  4.0  NaN</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.dtypes">
+<code class="descname">dtypes</code><span class="sig-paren">(</span><em>self</em>, <em>subset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.dtypes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a sequence of tuples describing the DataFrame’s SQL types.</p>
+<p>The tuples list the name, SQL type name, and display size
+corresponding to the DataFrame’s columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>subset</strong><span class="classifier">list of str, optional</span></dt><dd><p>The columns that the information is generated from.
+Defaults to all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>dtypes</strong><span class="classifier">list of tuples</span></dt><dd><p>Each tuple consists of the name, SQL type name, and display size
+for one of the DataFrame’s columns. The list is in the order
+specified by the <code class="docutils literal notranslate"><span class="pre">subset</span></code>, or in the DataFrame’s original column
+order if a <code class="docutils literal notranslate"><span class="pre">subset</span></code> is not provided.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.empty">
+<code class="descname">empty</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.empty" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if this DataFrame has 0 rows.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>none</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>empty</strong><span class="classifier">bool</span></dt><dd><p>True if the DataFrame is empty.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>If a DataFrame contains only NULLs, it is not considered empty.</p>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">Empty DataFrame</span>
+<span class="go">Columns: [ACTUAL, PREDICT]</span>
+<span class="go">Index: []</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">  ACTUAL PREDICT</span>
+<span class="go">0   None    None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">empty</span><span class="p">()</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.filter">
+<code class="descname">filter</code><span class="sig-paren">(</span><em>self</em>, <em>condition</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selects rows that match the given condition.</p>
+<p>Very little checking is done on the condition string.
+Use only with trusted inputs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>condition</strong><span class="classifier">str</span></dt><dd><p>A filter condition. Format as SQL &lt;condition&gt;.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A DataFrame with rows that match the given condition.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>hana_ml.ml_exceptions.BadSQLError</dt><dd><p>If comments or malformed tokens are detected in <code class="docutils literal notranslate"><span class="pre">condition</span></code>.
+May have false positives and false negatives.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  3</span>
+<span class="go">1  2  4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="s1">&#39;B &lt; 4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  3</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.has">
+<code class="descname">has</code><span class="sig-paren">(</span><em>self</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.has" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if a column is in the DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>col</strong><span class="classifier">str</span></dt><dd><p>The name of column to search in the projection list of this DataFrame.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>Returns True if the column exists in the DataFrame’s projection list.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;A&#39;, &#39;B&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">has</span><span class="p">(</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.head">
+<code class="descname">head</code><span class="sig-paren">(</span><em>self</em>, <em>n=1</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame of the first <code class="docutils literal notranslate"><span class="pre">n</span></code> rows in the current DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n</strong><span class="classifier">int, optional</span></dt><dd><p>The number of rows returned. Default value: 1.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A new DataFrame of the first <code class="docutils literal notranslate"><span class="pre">n</span></code> rows of the current DataFrame.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.hasna">
+<code class="descname">hasna</code><span class="sig-paren">(</span><em>self</em>, <em>cols=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.hasna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if a DataFrame contains NULLs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or list of str, optional</span></dt><dd><p>A column or list of columns to be checked for NULL values.
+Defaults to all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if this DataFrame contains NULLs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">  ACTUAL PREDICT</span>
+<span class="go">0   1.0    None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">hasna</span><span class="p">()</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.fillna">
+<code class="descname">fillna</code><span class="sig-paren">(</span><em>self</em>, <em>value</em>, <em>subset=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.fillna" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with NULLs replaced with a specified value.</p>
+<p>You can only fill a DataFrame with numeric columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>value</strong><span class="classifier">int or float</span></dt><dd><p>The value that replaces NULL. <code class="docutils literal notranslate"><span class="pre">value</span></code> should have a type that is
+appropriate for the selected columns.</p>
+</dd>
+<dt><strong>subset</strong><span class="classifier">list of str, optional</span></dt><dd><p>A list of columns whose NULL values will be replaced.
+Defaults to all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A new DataFrame with the NULL values replaced.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.join">
+<code class="descname">join</code><span class="sig-paren">(</span><em>self</em>, <em>other</em>, <em>condition</em>, <em>how='inner'</em>, <em>select=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.join" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame that is a join of the current DataFrame with
+another specified DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>other</strong><span class="classifier">DataFrame</span></dt><dd><p>The DataFrame to join with.</p>
+</dd>
+<dt><strong>condition</strong><span class="classifier">str</span></dt><dd><p>The join predicate.</p>
+</dd>
+<dt><strong>how</strong><span class="classifier">{‘inner’, ‘left’, ‘right’, ‘outer’}, optional</span></dt><dd><p>The type of join. Defaults to ‘inner’.</p>
+</dd>
+<dt><strong>select</strong><span class="classifier">list, optional</span></dt><dd><p>If provided, each element specifies a column in the result.
+A string in the <code class="docutils literal notranslate"><span class="pre">select</span></code> list should be the name of a column in
+one of the input DataFrames. A (expression, name) tuple creates
+a new column with the given name, computed from the given
+expression.
+If this value is not provided, defaults to selecting all columns from both
+DataFrames, with the left DataFrame’s columns first.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A new DataFrame object made from the join of the current DataFrame
+with another DataFrame.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>hana_ml.ml_exceptions.BadSQLError</dt><dd><p>If comments or malformed tokens are detected in <code class="docutils literal notranslate"><span class="pre">condition</span></code>
+or in a column expression.
+May have false positives and false negatives.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Use the expression selection functionality to disambiguate duplicate
+column names in a join:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B    C</span>
+<span class="go">0  1  2  3.5</span>
+<span class="go">1  2  4  5.6</span>
+<span class="go">2  3  3  1.1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B     D</span>
+<span class="go">0  2  1  14.0</span>
+<span class="go">1  3  4   5.6</span>
+<span class="go">2  4  3   0.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;L&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">alias</span><span class="p">(</span><span class="s1">&#39;R&#39;</span><span class="p">),</span> <span class="s1">&#39;L.A = R.A&#39;</span><span class="p">,</span> <span class="n">select</span><span class="o">=</span><span class="p">[</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;L.A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;L.B&#39;</span><span class="p">,</span> <span class="s1">&#39;B_LEFT&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="p">(</span><span class="s1">&#39;R.B&#39;</span><span class="p">,</span> <span class="s1">&#39;B_RIGHT&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="s1">&#39;C&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="s1">&#39;D&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B_LEFT  B_RIGHT    C     D</span>
+<span class="go">0  2       4        1  5.6  14.0</span>
+<span class="go">1  3       3        4  1.1   5.6</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>self</em>, <em>where</em>, <em>table_type=None</em>, <em>force=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a table or view holding the current DataFrame’s data.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>where</strong><span class="classifier">str or (str, str) tuple</span></dt><dd><p>The table name or (schema name, table name) tuple. If no schema
+is provided, then the table or view is created in the current
+schema.</p>
+</dd>
+<dt><strong>table_type</strong><span class="classifier">str, optional</span></dt><dd><p>The type of table to create. The value is case insensitive.</p>
+<dl class="simple">
+<dt>Permanent table options:</dt><dd><ul class="simple">
+<li><p>“ROW”</p></li>
+<li><p>“COLUMN”</p></li>
+<li><p>“HISTORY COLUMN”</p></li>
+</ul>
+</dd>
+<dt>Temporary table options:</dt><dd><ul class="simple">
+<li><p>“GLOBAL TEMPORARY”</p></li>
+<li><p>“GLOBAL TEMPORARY COLUMN”</p></li>
+<li><p>“LOCAL TEMPORARY”</p></li>
+<li><p>“LOCAL TEMPORARY COLUMN”</p></li>
+</ul>
+</dd>
+<dt>Not a table:</dt><dd><ul class="simple">
+<li><p>“VIEW”</p></li>
+</ul>
+</dd>
+</dl>
+<p>Defaults to ‘LOCAL TEMPORARY COLUMN’ if <code class="docutils literal notranslate"><span class="pre">where</span></code> starts
+with ‘#’. Otherwise, the default is ‘COLUMN’.</p>
+</dd>
+<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>If force is True, it will replace the existing table.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A DataFrame that represents the new table or view.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>For this operation to succeed, the table name must not be in
+use, the schema must exist, and the user must have permission
+to create tables (or views) in the target schema.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.sort">
+<code class="descname">sort</code><span class="sig-paren">(</span><em>self</em>, <em>cols</em>, <em>desc=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame sorted by the specified columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or list of str</span></dt><dd><p>A column or list of columns to sort by.
+If a list is specified, then the sort order in parameter desc is used
+for all columns.</p>
+</dd>
+<dt><strong>desc</strong><span class="classifier">bool, optional</span></dt><dd><p>Set to True to sort in descending order. Defaults to False,
+for ascending order. Default value is False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>New DataFrame object with rows sorted as specified.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.select">
+<code class="descname">select</code><span class="sig-paren">(</span><em>self</em>, <em>*cols</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a new DataFrame with columns derived from the current DataFrame.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>There is no check that inputs interpreted as SQL expressions are
+actually valid expressions; an “expression” like
+“A FROM TAB; DROP TABLE IMPORTANT_THINGS; SELECT A” can cause
+a lot of damage.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or (str, str) tuple.</span></dt><dd><p>The columns in the new DataFrame. A string is treated as the name
+of a column to select; a (str, str) tuple is treated as
+(SQL expression, alias). As a special case, ‘*’ is expanded
+to all columns of the original DataFrame.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A new DataFrame object with the specified columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><dl class="simple">
+<dt>hana_ml.ml_exceptions.BadSQLError</dt><dd><p>If comments or malformed tokens are detected in a column
+expression. May have false positives and false negatives.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B  C</span>
+<span class="go">0  1  2  3</span>
+</pre></div>
+</div>
+<p>Selecting a subset of existing columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  2</span>
+</pre></div>
+</div>
+<p>Computing a new column based on existing columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;B * 4&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B  C  D</span>
+<span class="go">0  1  2  3  8</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.union">
+<code class="descname">union</code><span class="sig-paren">(</span><em>self</em>, <em>other</em>, <em>all=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.union" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combines this DataFrame’s rows and another DataFrame’s rows into
+one DataFrame. This operation is equivalent to a SQL UNION ALL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>other</strong><span class="classifier">DataFrame</span></dt><dd><p>The right side of the union.</p>
+</dd>
+<dt><strong>all</strong><span class="classifier">bool, optional</span></dt><dd><p>If True, keep duplicate rows; equivalent to UNION ALL in SQL.
+If False, keep only one copy of duplicate rows (even if they
+come from the same side of the union); equivalent to a UNION
+or a UNION ALL followed by DISTINCT in SQL.
+Defaults to True.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The combined data from <code class="docutils literal notranslate"><span class="pre">self</span></code> and <code class="docutils literal notranslate"><span class="pre">other</span></code>.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>We have two DataFrames we want to union, with some duplicate rows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  2</span>
+<span class="go">1  1  2</span>
+<span class="go">2  2  3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  2  3</span>
+<span class="go">1  3  4</span>
+</pre></div>
+</div>
+<p>union() produces a DataFrame that contains all rows of both df1
+and df2, like a UNION ALL:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  2</span>
+<span class="go">1  1  2</span>
+<span class="go">2  2  3</span>
+<span class="go">3  2  3</span>
+<span class="go">4  3  4</span>
+</pre></div>
+</div>
+<p>To get the deduplication effect of a UNION DISTINCT, pass
+all=False or call distinct() after union():</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="nb">all</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  2</span>
+<span class="go">1  2  3</span>
+<span class="go">2  3  4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span><span class="o">.</span><span class="n">distinct</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  2</span>
+<span class="go">1  2  3</span>
+<span class="go">2  3  4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.collect">
+<code class="descname">collect</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.collect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Copies the current DataFrame to a new Pandas DataFrame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>pandas.DataFrame</dt><dd><p>A Pandas DataFrame that contains the current DataFrame’s data.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Viewing a hana_ml DataFrame doesn’t execute the underlying SQL or fetch the data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span>
+<span class="go">&lt;hana_ml.dataframe.DataFrame object at 0x7f2b7f24ddd8&gt;</span>
+</pre></div>
+</div>
+<p>Using collect() executes the SQL and fetchs the results into a Pandas DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  3</span>
+<span class="go">1  2  4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">type</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">())</span>
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.rename_columns">
+<code class="descname">rename_columns</code><span class="sig-paren">(</span><em>self</em>, <em>names</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.rename_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with renamed columns.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>names</strong><span class="classifier">list or dict</span></dt><dd><p>If a list, specifies new names for every column in this DataFrame.
+If a dict, each dict entry maps an existing name to a new name,
+and not all columns need to be renamed.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The same data as the original DataFrame with new column names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<dl class="simple">
+<dt><a class="reference internal" href="#hana_ml.dataframe.DataFrame.alias" title="hana_ml.dataframe.DataFrame.alias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataFrame.alias</span></code></a></dt><dd><p>For renaming the DataFrame itself.</p>
+</dd>
+</dl>
+</div>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  B</span>
+<span class="go">0  1  3</span>
+<span class="go">1  2  4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">([</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C  D</span>
+<span class="go">0  1  3</span>
+<span class="go">1  2  4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">rename_columns</span><span class="p">({</span><span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="s1">&#39;D&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   A  D</span>
+<span class="go">0  1  3</span>
+<span class="go">1  2  4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.cast">
+<code class="descname">cast</code><span class="sig-paren">(</span><em>self</em>, <em>cols</em>, <em>new_type</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.cast" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with columns cast to a new type.</p>
+<dl>
+<dt>The name of the column in the returned DataFrame is the same as the original column.</dt><dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Type compatibility between the existing column type and the new type is not checked.
+An incompatibility results in an error.</p>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or list</span></dt><dd><p>The column(s) to be cast to a different type.</p>
+</dd>
+<dt><strong>new_type</strong><span class="classifier">str</span></dt><dd><p>The database datatype to cast the column(s) to.
+No checks are performed to see if the new type is valid.
+An invalid type can lead to SQL errors or even SQL injection vulnerabilities.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The same data as this DataFrame, but with columns cast to the specified type.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s1">&#39;SELECT &quot;AGE&quot;, &quot;PDAYS&quot;, &quot;HOUSING&quot; FROM DBM_TRAINING_TBL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">dtypes</span><span class="p">()</span>
+<span class="go">[(&#39;AGE&#39;, &#39;INT&#39;, 10), (&#39;PDAYS&#39;, &#39;INT&#39;, 10), (&#39;HOUSING&#39;, &#39;VARCHAR&#39;, 100)]</span>
+</pre></div>
+</div>
+<p>Casting a column to NVARCHAR(20):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;NVARCHAR(20)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span><span class="o">.</span><span class="n">dtypes</span><span class="p">()</span>
+<span class="go">[(&#39;AGE&#39;, &#39;NVARCHAR&#39;, 20), (&#39;PDAYS&#39;, &#39;INT&#39;, 10), (&#39;HOUSING&#39;, &#39;VARCHAR&#39;, 100)]</span>
+</pre></div>
+</div>
+<p>Casting a list of columns to NVARCHAR(50):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df3</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">cast</span><span class="p">([</span><span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;PDAYS&#39;</span><span class="p">],</span> <span class="s1">&#39;NVARCHAR(50)&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df3</span><span class="o">.</span><span class="n">dtypes</span><span class="p">()</span>
+<span class="go">[(&#39;AGE&#39;, &#39;NVARCHAR&#39;, 50), (&#39;PDAYS&#39;, &#39;NVARCHAR&#39;, 50), (&#39;HOUSING&#39;, &#39;VARCHAR&#39;, 100)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.to_head">
+<code class="descname">to_head</code><span class="sig-paren">(</span><em>self</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.to_head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with specified column as the first item in the projection.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>col</strong><span class="classifier">str</span></dt><dd><p>The column to move to the first position.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>The same data as this DataFrame but with the specified column in the first position.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;DBM_TRAINING&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="go">[&#39;ID&#39;,</span>
+<span class="go"> &#39;AGE&#39;,</span>
+<span class="go"> &#39;JOB&#39;,</span>
+<span class="go"> &#39;MARITAL&#39;,</span>
+<span class="go"> &#39;EDUCATION&#39;,</span>
+<span class="go"> &#39;DBM_DEFAULT&#39;,</span>
+<span class="go"> &#39;HOUSING&#39;,</span>
+<span class="go"> &#39;LOAN&#39;,</span>
+<span class="go"> &#39;CONTACT&#39;,</span>
+<span class="go"> &#39;DBM_MONTH&#39;,</span>
+<span class="go"> &#39;DAY_OF_WEEK&#39;,</span>
+<span class="go"> &#39;DURATION&#39;,</span>
+<span class="go"> &#39;CAMPAIGN&#39;,</span>
+<span class="go"> &#39;PDAYS&#39;,</span>
+<span class="go"> &#39;PREVIOUS&#39;,</span>
+<span class="go"> &#39;POUTCOME&#39;,</span>
+<span class="go"> &#39;EMP_VAR_RATE&#39;,</span>
+<span class="go"> &#39;CONS_PRICE_IDX&#39;,</span>
+<span class="go"> &#39;CONS_CONF_IDX&#39;,</span>
+<span class="go"> &#39;EURIBOR3M&#39;,</span>
+<span class="go"> &#39;NREMPLOYED&#39;,</span>
+<span class="go"> &#39;LABEL&#39;]</span>
+</pre></div>
+</div>
+<p>Moving the column ‘LABEL’ to head:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df2</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">to_head</span><span class="p">(</span><span class="s1">&#39;LABEL&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="go">[&#39;LABEL&#39;,</span>
+<span class="go"> &#39;ID&#39;,</span>
+<span class="go"> &#39;AGE&#39;,</span>
+<span class="go"> &#39;JOB&#39;,</span>
+<span class="go"> &#39;MARITAL&#39;,</span>
+<span class="go"> &#39;EDUCATION&#39;,</span>
+<span class="go"> &#39;DBM_DEFAULT&#39;,</span>
+<span class="go"> &#39;HOUSING&#39;,</span>
+<span class="go"> &#39;LOAN&#39;,</span>
+<span class="go"> &#39;CONTACT&#39;,</span>
+<span class="go"> &#39;DBM_MONTH&#39;,</span>
+<span class="go"> &#39;DAY_OF_WEEK&#39;,</span>
+<span class="go"> &#39;DURATION&#39;,</span>
+<span class="go"> &#39;CAMPAIGN&#39;,</span>
+<span class="go"> &#39;PDAYS&#39;,</span>
+<span class="go"> &#39;PREVIOUS&#39;,</span>
+<span class="go"> &#39;POUTCOME&#39;,</span>
+<span class="go"> &#39;EMP_VAR_RATE&#39;,</span>
+<span class="go"> &#39;CONS_PRICE_IDX&#39;,</span>
+<span class="go"> &#39;CONS_CONF_IDX&#39;,</span>
+<span class="go"> &#39;EURIBOR3M&#39;,</span>
+<span class="go"> &#39;NREMPLOYED&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.describe">
+<code class="descname">describe</code><span class="sig-paren">(</span><em>self</em>, <em>cols=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.describe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame that contains various statistics for the requested column(s).</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or list, optional</span></dt><dd><p>The column(s) to be described. Defaults to all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl>
+<dt>DataFrame</dt><dd><p>A DataFrame that contains statistics for the specified column(s)
+in the current DataFrame.</p>
+<p>The statistics included are the count of rows (“count”),</p>
+<p>number of distinct values (“unique”),</p>
+<p>number of nulls (“nulls”),</p>
+<p>average (“mean”),</p>
+<p>standard deviation(“std”)</p>
+<p>median (“median”),</p>
+<p>minimum value (“min”),</p>
+<p>maximum value (“max”),</p>
+<p>25% percentile when treated as continuous variable (“25_percent_cont”),</p>
+<p>25% percentile when treated as discrete variable (“25_percent_disc”),</p>
+<p>50% percentile when treated as continuous variable (“50_percent_cont”),</p>
+<p>50% percentile when treated as discrete variable (“50_percent_disc”),</p>
+<p>75% percentile when treated as continuous variable (“75_percent_cont”),</p>
+<p>75% percentile when treated as discrete variable (“75_percent_disc”).</p>
+<p>For columns that are strings, statistics such as average (“mean”),
+standard deviation (“std”), median (“median”), and the various percentiles
+are NULLs.</p>
+<p>If the list of columns contain both string and numeric data types,
+minimum and maximum values become NULLs.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span> <span class="o">=</span> <span class="n">cc</span><span class="o">.</span><span class="n">table</span><span class="p">(</span><span class="s2">&quot;DBM_TRAINING&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pprint</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="go">[&#39;LABEL&#39;,</span>
+<span class="go"> &#39;ID&#39;,</span>
+<span class="go"> &#39;AGE&#39;,</span>
+<span class="go"> &#39;JOB&#39;,</span>
+<span class="go"> &#39;MARITAL&#39;,</span>
+<span class="go"> &#39;EDUCATION&#39;,</span>
+<span class="go"> &#39;DBM_DEFAULT&#39;,</span>
+<span class="go"> &#39;HOUSING&#39;,</span>
+<span class="go"> &#39;LOAN&#39;,</span>
+<span class="go"> &#39;CONTACT&#39;,</span>
+<span class="go"> &#39;DBM_MONTH&#39;,</span>
+<span class="go"> &#39;DAY_OF_WEEK&#39;,</span>
+<span class="go"> &#39;DURATION&#39;,</span>
+<span class="go"> &#39;CAMPAIGN&#39;,</span>
+<span class="go"> &#39;PDAYS&#39;,</span>
+<span class="go"> &#39;PREVIOUS&#39;,</span>
+<span class="go"> &#39;POUTCOME&#39;,</span>
+<span class="go"> &#39;EMP_VAR_RATE&#39;,</span>
+<span class="go"> &#39;CONS_PRICE_IDX&#39;,</span>
+<span class="go"> &#39;CONS_CONF_IDX&#39;,</span>
+<span class="go"> &#39;EURIBOR3M&#39;,</span>
+<span class="go"> &#39;NREMPLOYED&#39;]</span>
+</pre></div>
+</div>
+<p>Describe a few numeric columns and collect them to return a Pandas DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">describe</span><span class="p">([</span><span class="s1">&#39;AGE&#39;</span><span class="p">,</span> <span class="s1">&#39;PDAYS&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">  column  count  unique  nulls        mean         std  min  max  median</span>
+<span class="go">0    AGE  16895      78      0   40.051376   10.716907   17   98      38</span>
+<span class="go">1  PDAYS  16895      24      0  944.406688  226.331944    0  999     999</span>
+<span class="go">   25_percent_cont  25_percent_disc  50_percent_cont  50_percent_disc</span>
+<span class="go">0             32.0               32             38.0               38</span>
+<span class="go">1            999.0              999            999.0              999</span>
+<span class="go">   75_percent_cont  75_percent_disc</span>
+<span class="go">0             47.0               47</span>
+<span class="go">1            999.0              999</span>
+</pre></div>
+</div>
+<p>Describe some non-numeric columns and collect them to return a Pandas DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">describe</span><span class="p">([</span><span class="s1">&#39;JOB&#39;</span><span class="p">,</span> <span class="s1">&#39;MARITAL&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">    column  count  unique  nulls  mean   std       min      max median</span>
+<span class="go">0      JOB  16895      12      0  None  None    admin.  unknown   None</span>
+<span class="go">1  MARITAL  16895       4      0  None  None  divorced  unknown   None</span>
+<span class="go">  25_percent_cont 25_percent_disc 50_percent_cont 50_percent_disc</span>
+<span class="go">0            None            None            None            None</span>
+<span class="go">1            None            None            None            None</span>
+<span class="go">  75_percent_cont 75_percent_disc</span>
+<span class="go">0            None            None</span>
+<span class="go">1            None            None</span>
+</pre></div>
+</div>
+<p>Describe all columns in a DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df1</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">            column  count  unique  nulls          mean           std</span>
+<span class="go">0               ID  16895   16895      0  21282.286652  12209.759725</span>
+<span class="go">1              AGE  16895      78      0     40.051376     10.716907</span>
+<span class="go">2         DURATION  16895    1267      0    263.965670    264.331384</span>
+<span class="go">3         CAMPAIGN  16895      35      0      2.344658      2.428449</span>
+<span class="go">4            PDAYS  16895      24      0    944.406688    226.331944</span>
+<span class="go">5         PREVIOUS  16895       7      0      0.209529      0.539450</span>
+<span class="go">6     EMP_VAR_RATE  16895      10      0     -0.038798      1.621945</span>
+<span class="go">7   CONS_PRICE_IDX  16895      26      0     93.538844      0.579189</span>
+<span class="go">8    CONS_CONF_IDX  16895      26      0    -40.334123      4.865720</span>
+<span class="go">9        EURIBOR3M  16895     283      0      3.499297      1.777986</span>
+<span class="go">10      NREMPLOYED  16895      11      0   5160.371885     75.320580</span>
+<span class="go">11             JOB  16895      12      0           NaN           NaN</span>
+<span class="go">12         MARITAL  16895       4      0           NaN           NaN</span>
+<span class="go">13       EDUCATION  16895       8      0           NaN           NaN</span>
+<span class="go">14     DBM_DEFAULT  16895       2      0           NaN           NaN</span>
+<span class="go">15         HOUSING  16895       3      0           NaN           NaN</span>
+<span class="go">16            LOAN  16895       3      0           NaN           NaN</span>
+<span class="go">17         CONTACT  16895       2      0           NaN           NaN</span>
+<span class="go">18       DBM_MONTH  16895      10      0           NaN           NaN</span>
+<span class="go">19     DAY_OF_WEEK  16895       5      0           NaN           NaN</span>
+<span class="go">20        POUTCOME  16895       3      0           NaN           NaN</span>
+<span class="go">21           LABEL  16895       2      0           NaN           NaN</span>
+<span class="go">         min        max     median  25_percent_cont  25_percent_disc</span>
+<span class="go">0      5.000  41187.000  21786.000        10583.500        10583.000</span>
+<span class="go">1     17.000     98.000     38.000           32.000           32.000</span>
+<span class="go">2      0.000   4918.000    184.000          107.000          107.000</span>
+<span class="go">3      1.000     43.000      2.000            1.000            1.000</span>
+<span class="go">4      0.000    999.000    999.000          999.000          999.000</span>
+<span class="go">5      0.000      6.000      0.000            0.000            0.000</span>
+<span class="go">6     -3.400      1.400      1.100           -1.800           -1.800</span>
+<span class="go">7     92.201     94.767     93.444           93.075           93.075</span>
+<span class="go">8    -50.800    -26.900    -41.800          -42.700          -42.700</span>
+<span class="go">9      0.634      5.045      4.856            1.313            1.313</span>
+<span class="go">10  4963.000   5228.000   5191.000         5099.000         5099.000</span>
+<span class="go">11       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">12       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">13       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">14       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">15       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">16       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">17       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">18       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">19       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">20       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">21       NaN        NaN        NaN              NaN              NaN</span>
+<span class="go">    50_percent_cont  50_percent_disc  75_percent_cont  75_percent_disc</span>
+<span class="go">0         21786.000        21786.000        32067.500        32068.000</span>
+<span class="go">1            38.000           38.000           47.000           47.000</span>
+<span class="go">2           184.000          184.000          324.000          324.000</span>
+<span class="go">3             2.000            2.000            3.000            3.000</span>
+<span class="go">4           999.000          999.000          999.000          999.000</span>
+<span class="go">5             0.000            0.000            0.000            0.000</span>
+<span class="go">6             1.100            1.100            1.400            1.400</span>
+<span class="go">7            93.444           93.444           93.994           93.994</span>
+<span class="go">8           -41.800          -41.800          -36.400          -36.400</span>
+<span class="go">9             4.856            4.856            4.961            4.961</span>
+<span class="go">10         5191.000         5191.000         5228.000         5228.000</span>
+<span class="go">11              NaN              NaN              NaN              NaN</span>
+<span class="go">12              NaN              NaN              NaN              NaN</span>
+<span class="go">13              NaN              NaN              NaN              NaN</span>
+<span class="go">14              NaN              NaN              NaN              NaN</span>
+<span class="go">15              NaN              NaN              NaN              NaN</span>
+<span class="go">16              NaN              NaN              NaN              NaN</span>
+<span class="go">17              NaN              NaN              NaN              NaN</span>
+<span class="go">18              NaN              NaN              NaN              NaN</span>
+<span class="go">19              NaN              NaN              NaN              NaN</span>
+<span class="go">20              NaN              NaN              NaN              NaN</span>
+<span class="go">21              NaN              NaN              NaN              NaN</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.bin">
+<code class="descname">bin</code><span class="sig-paren">(</span><em>self</em>, <em>col</em>, <em>strategy='uniform_number'</em>, <em>bins=None</em>, <em>bin_width=None</em>, <em>bin_column='BIN_NUMBER'</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with the original columns as well as bin assignments.</p>
+<p>The name of the columns in the returned DataFrame is the same as the
+original column. Column “BIN_NUMBER” or the specified value in
+<code class="docutils literal notranslate"><span class="pre">bin_column</span></code> is added and corresponds to the bin assigned.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>col</strong><span class="classifier">str</span></dt><dd><p>The column on which binning is performed.
+The column must be numeric.</p>
+</dd>
+<dt><strong>strategy</strong><span class="classifier">{‘uniform_number’, ‘uniform_size’}, optional</span></dt><dd><p>Binning methods:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>‘uniform_number’: Equal widths based on the number of bins.</p></li>
+<li><p>‘uniform_size’: Equal widths based on the bin size.</p></li>
+</ul>
+</div></blockquote>
+<p>Default value is ‘uniform_number’.</p>
+</dd>
+<dt><strong>bins</strong><span class="classifier">int, optional</span></dt><dd><p>The number of equal-width bins.
+Only valid when <code class="docutils literal notranslate"><span class="pre">strategy</span></code> is ‘uniform_number’.</p>
+<p>Defaults to 10.</p>
+</dd>
+<dt><strong>bin_width</strong><span class="classifier">int, optional</span></dt><dd><p>The interval width of each bin.
+Only valid when <code class="docutils literal notranslate"><span class="pre">strategy</span></code> is ‘uniform_size’.</p>
+</dd>
+<dt><strong>bin_column</strong><span class="classifier">str, optional</span></dt><dd><p>The name of the output column that contains the bin number.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A binned dataset with the same data as this DataFrame,
+as well as an additional column “BIN_NUMBER” or the value specified
+in <code class="docutils literal notranslate"><span class="pre">bin_column</span></code>. This additional column contains the
+assigned bin for each row.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C1   C2    C3       C4</span>
+<span class="go">0   1  1.2   2.0      1.0</span>
+<span class="go">1   2  1.4   4.0      3.0</span>
+<span class="go">2   3  1.6   6.0      9.0</span>
+<span class="go">3   4  1.8   8.0     27.0</span>
+<span class="go">4   5  2.0  10.0     81.0</span>
+<span class="go">5   6  2.2  12.0    243.0</span>
+<span class="go">6   7  2.4  14.0    729.0</span>
+<span class="go">7   8  2.6  16.0   2187.0</span>
+<span class="go">8   9  2.8  18.0   6561.0</span>
+<span class="go">9  10  3.0  20.0  19683.0</span>
+</pre></div>
+</div>
+<p>Create five bins of equal widths on C1:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">bin</span><span class="p">(</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;uniform_number&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C1   C2    C3       C4  BIN_NUMBER</span>
+<span class="go">0   1  1.2   2.0      1.0           1</span>
+<span class="go">1   2  1.4   4.0      3.0           1</span>
+<span class="go">2   3  1.6   6.0      9.0           2</span>
+<span class="go">3   4  1.8   8.0     27.0           2</span>
+<span class="go">4   5  2.0  10.0     81.0           3</span>
+<span class="go">5   6  2.2  12.0    243.0           3</span>
+<span class="go">6   7  2.4  14.0    729.0           4</span>
+<span class="go">7   8  2.6  16.0   2187.0           4</span>
+<span class="go">8   9  2.8  18.0   6561.0           5</span>
+<span class="go">9  10  3.0  20.0  19683.0           5</span>
+</pre></div>
+</div>
+<p>Create five bins of equal widths on C2:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">bin</span><span class="p">(</span><span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;uniform_number&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C1   C2    C3       C4  BIN_NUMBER</span>
+<span class="go">0   1  1.2   2.0      1.0           1</span>
+<span class="go">1   2  1.4   4.0      3.0           1</span>
+<span class="go">2   3  1.6   6.0      9.0           2</span>
+<span class="go">3   4  1.8   8.0     27.0           2</span>
+<span class="go">4   5  2.0  10.0     81.0           3</span>
+<span class="go">5   6  2.2  12.0    243.0           3</span>
+<span class="go">6   7  2.4  14.0    729.0           4</span>
+<span class="go">7   8  2.6  16.0   2187.0           4</span>
+<span class="go">8   9  2.8  18.0   6561.0           5</span>
+<span class="go">9  10  3.0  20.0  19683.0           5</span>
+</pre></div>
+</div>
+<p>Create five bins of equal widths on a column that varies significantly:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">bin</span><span class="p">(</span><span class="s1">&#39;C4&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;uniform_number&#39;</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C1   C2    C3       C4  BIN_NUMBER</span>
+<span class="go">0   1  1.2   2.0      1.0           1</span>
+<span class="go">1   2  1.4   4.0      3.0           1</span>
+<span class="go">2   3  1.6   6.0      9.0           1</span>
+<span class="go">3   4  1.8   8.0     27.0           1</span>
+<span class="go">4   5  2.0  10.0     81.0           1</span>
+<span class="go">5   6  2.2  12.0    243.0           1</span>
+<span class="go">6   7  2.4  14.0    729.0           1</span>
+<span class="go">7   8  2.6  16.0   2187.0           1</span>
+<span class="go">8   9  2.8  18.0   6561.0           2</span>
+<span class="go">9  10  3.0  20.0  19683.0           5</span>
+</pre></div>
+</div>
+<p>Create bins of equal width:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">bin</span><span class="p">(</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;uniform_size&#39;</span><span class="p">,</span> <span class="n">bin_width</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C1   C2    C3       C4  BIN_NUMBER</span>
+<span class="go">0   1  1.2   2.0      1.0           1</span>
+<span class="go">1   2  1.4   4.0      3.0           1</span>
+<span class="go">2   3  1.6   6.0      9.0           2</span>
+<span class="go">3   4  1.8   8.0     27.0           2</span>
+<span class="go">4   5  2.0  10.0     81.0           2</span>
+<span class="go">5   6  2.2  12.0    243.0           3</span>
+<span class="go">6   7  2.4  14.0    729.0           3</span>
+<span class="go">7   8  2.6  16.0   2187.0           3</span>
+<span class="go">8   9  2.8  18.0   6561.0           4</span>
+<span class="go">9  10  3.0  20.0  19683.0           4</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.agg">
+<code class="descname">agg</code><span class="sig-paren">(</span><em>self</em>, <em>agg_list</em>, <em>group_by=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.agg" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame with the group_by column along with the aggregates.</p>
+<p>The name of the column in the returned DataFrame is the same as the
+original column.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>agg_list</strong><span class="classifier">A list of tuples</span></dt><dd><p>A list of tuples. Each tuple is a triplet.
+The triplet consists of (aggregate_operator, expression, name) where:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>aggregate_operator is one of [‘max’, ‘min’, ‘count’, ‘avg’]</p></li>
+<li><p>expression is a str that is a column or column expression
+name that is the name of this aggregate in the project list.</p></li>
+</ul>
+</div></blockquote>
+</dd>
+<dt><strong>group_by</strong><span class="classifier">str or list of str, optional</span></dt><dd><p>The group by column. Only a column is allowed although
+expressions are allowed in SQL. To group by an expression, create a
+DataFrame  by providing the entire SQL.
+So, if you have a table T with columns C1, C2, and C3 that are all
+integers, to calculate the max(C1) grouped by (C2+C3) a DataFrame
+would need to be created as below:</p>
+<blockquote>
+<div><p>cc.sql(‘SELECT “C2”+”C3”, max(“C1”) FROM “T” GROUP BY “C2”+”C3”’)</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A DataFrame containing the group_by column (if it exists), as well as
+the aggregate expressions that are aliased with the specified names.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">    ID  SEPALLENGTHCM  SEPALWIDTHCM  PETALLENGTHCM  PETALWIDTHCM          SPECIES</span>
+<span class="go">0    1            5.1           3.5            1.4           0.2      Iris-setosa</span>
+<span class="go">1    2            4.9           3.0            1.4           0.2      Iris-setosa</span>
+<span class="go">2    3            4.7           3.2            1.3           0.2      Iris-setosa</span>
+<span class="go">3   51            7.0           3.2            4.7           1.4  Iris-versicolor</span>
+<span class="go">4   52            6.4           3.2            4.5           1.5  Iris-versicolor</span>
+<span class="go">5  101            6.3           3.3            6.0           2.5   Iris-virginica</span>
+<span class="go">6  102            5.8           2.7            5.1           1.9   Iris-virginica</span>
+<span class="go">7  103            7.1           3.0            5.9           2.1   Iris-virginica</span>
+<span class="go">8  104            6.3           2.9            5.6           1.8   Iris-virginica</span>
+</pre></div>
+</div>
+<p>Another way to do a count:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">agg</span><span class="p">([(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;SPECIES&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNT&#39;</span><span class="p">)])</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">    COUNT</span>
+<span class="go">0      9</span>
+</pre></div>
+</div>
+<p>Get counts by SPECIES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">agg</span><span class="p">([(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;SPECIES&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNT&#39;</span><span class="p">)],</span> <span class="n">group_by</span><span class="o">=</span><span class="s1">&#39;SPECIES&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">           SPECIES  COUNT</span>
+<span class="go">0  Iris-versicolor      2</span>
+<span class="go">1   Iris-virginica      4</span>
+<span class="go">2      Iris-setosa      3</span>
+</pre></div>
+</div>
+<p>Get max values of SEPALLENGTHCM by SPECIES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">agg</span><span class="p">([(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;SEPALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;MAX_SEPAL_LENGTH&#39;</span><span class="p">)],</span> <span class="n">group_by</span><span class="o">=</span><span class="s1">&#39;SPECIES&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">           SPECIES  MAX_SEPAL_LENGTH</span>
+<span class="go">0  Iris-versicolor               7.0</span>
+<span class="go">1   Iris-virginica               7.1</span>
+<span class="go">2      Iris-setosa               5.1</span>
+</pre></div>
+</div>
+<p>Get max and min values of SEPALLENGTHCM by SPECIES:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">agg</span><span class="p">([(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;SEPALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;MAX_SEPAL_LENGTH&#39;</span><span class="p">),</span>
+<span class="go">    (&#39;min&#39;, &#39;SEPALLENGTHCM&#39;, &#39;MIN_SEPAL_LENGTH&#39;)], group_by=[&#39;SPECIES&#39;]).collect()</span>
+<span class="go">           SPECIES  MAX_SEPAL_LENGTH  MIN_SEPAL_LENGTH</span>
+<span class="go">0  Iris-versicolor               7.0               6.4</span>
+<span class="go">1   Iris-virginica               7.1               5.8</span>
+<span class="go">2      Iris-setosa               5.1               4.7</span>
+</pre></div>
+</div>
+<p>Get aggregate grouping by multiple columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">agg</span><span class="p">([(</span><span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;SEPALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;COUNT_SEPAL_LENGTH&#39;</span><span class="p">)],</span>
+<span class="go">            group_by=[&#39;SPECIES&#39;, &#39;PETALLENGTHCM&#39;]).collect()</span>
+<span class="go">           SPECIES  PETALLENGTHCM  COUNT_SEPAL_LENGTH</span>
+<span class="go">0   Iris-virginica            6.0                   1</span>
+<span class="go">1      Iris-setosa            1.3                   1</span>
+<span class="go">2   Iris-virginica            5.9                   1</span>
+<span class="go">3   Iris-virginica            5.6                   1</span>
+<span class="go">4      Iris-setosa            1.4                   2</span>
+<span class="go">5  Iris-versicolor            4.7                   1</span>
+<span class="go">6  Iris-versicolor            4.5                   1</span>
+<span class="go">7   Iris-virginica            5.1                   1</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.is_numeric">
+<code class="descname">is_numeric</code><span class="sig-paren">(</span><em>self</em>, <em>cols=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.is_numeric" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if the column(s) in the DataFrame are numeric.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>cols</strong><span class="classifier">str or list, optional</span></dt><dd><p>The column(s) to be tested for being numeric. Defaults to all columns.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>True if all the columns are numeric.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">ID  SEPALLENGTHCM  SEPALWIDTHCM  PETALLENGTHCM  PETALWIDTHCM      SPECIES</span>
+<span class="go">0   1            5.1           3.5            1.4           0.2  Iris-setosa</span>
+<span class="go">1   2            4.9           3.0            1.4           0.2  Iris-setosa</span>
+<span class="go">2   3            4.7           3.2            1.3           0.2  Iris-setosa</span>
+<span class="go">3   4            4.6           3.1            1.5           0.2  Iris-setosa</span>
+<span class="go">4   5            5.0           3.6            1.4           0.2  Iris-setosa</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">dtypes</span><span class="p">())</span>
+<span class="go">[(&#39;ID&#39;, &#39;INT&#39;, 10),</span>
+<span class="go"> (&#39;SEPALLENGTHCM&#39;, &#39;DOUBLE&#39;, 15),</span>
+<span class="go"> (&#39;SEPALWIDTHCM&#39;, &#39;DOUBLE&#39;, 15),</span>
+<span class="go"> (&#39;PETALLENGTHCM&#39;, &#39;DOUBLE&#39;, 15),</span>
+<span class="go"> (&#39;PETALWIDTHCM&#39;, &#39;DOUBLE&#39;, 15),</span>
+<span class="go"> (&#39;SPECIES&#39;, &#39;NVARCHAR&#39;, 15)]</span>
+</pre></div>
+</div>
+<p>Test a single column:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">is_numeric</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">is_numeric</span><span class="p">(</span><span class="s1">&#39;SEPALLENGTHCM&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">is_numeric</span><span class="p">([</span><span class="s1">&#39;SPECIES&#39;</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+<p>Test a list of columns:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">is_numeric</span><span class="p">([</span><span class="s1">&#39;SEPALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;PETALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;PETALWIDTHCM&#39;</span><span class="p">])</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">is_numeric</span><span class="p">([</span><span class="s1">&#39;SEPALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;PETALLENGTHCM&#39;</span><span class="p">,</span> <span class="s1">&#39;SPECIES&#39;</span><span class="p">])</span>
+<span class="go">False</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.corr">
+<code class="descname">corr</code><span class="sig-paren">(</span><em>self</em>, <em>first_col</em>, <em>second_col</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.corr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame that gives the correlation coefficient between two
+numeric columns.</p>
+<p>All rows with NULL values for first_col or second_col are removed
+prior to calculating the correlation coefficient.</p>
+<dl class="simple">
+<dt>The correlation coefficient is:</dt><dd><p>1/(n-1) * sum((col1_value - avg(col1)) * (col2 - avg(col2))) /
+(stddev(col1) * stddev(col2))</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>first_col</strong><span class="classifier">str</span></dt><dd><p>The first column for calculating the correlation coefficient.</p>
+</dd>
+<dt><strong>second_col</strong><span class="classifier">str</span></dt><dd><p>The second column for calculating the correlation coefficient.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A DataFrame with one value that contains the correlation coefficient.
+The name of the column is CORR_COEFF.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Input:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">columns</span>
+<span class="go">[&#39;C1&#39;, &#39;C2&#39;, &#39;C3&#39;, &#39;C4&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">   C1   C2      C3       C4</span>
+<span class="go">0   1  1.2     2.0      1.0</span>
+<span class="go">1   2  1.4     4.0      3.0</span>
+<span class="go">2   3  1.6     8.0      9.0</span>
+<span class="go">3   4  1.8    16.0     27.0</span>
+<span class="go">4   5  2.0    32.0     81.0</span>
+<span class="go">5   6  2.2    64.0    243.0</span>
+<span class="go">6   7  2.4   128.0    729.0</span>
+<span class="go">7   8  2.6   256.0   2187.0</span>
+<span class="go">8   9  2.8   512.0   6561.0</span>
+<span class="go">9  10  3.0  1024.0  19683.0</span>
+</pre></div>
+</div>
+<p>Correlation with columns that are well correlated:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C2&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">      CORR_COEFF</span>
+<span class="go">0         1.0</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C3&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">    CORR_COEFF</span>
+<span class="go">0         1.0</span>
+</pre></div>
+</div>
+<p>Correlation with a column whose value is three times its previous value:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">corr</span><span class="p">(</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="s1">&#39;C4&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+<span class="go">    CORR_COEFF</span>
+<span class="go">0    0.696325</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.pivot_table">
+<code class="descname">pivot_table</code><span class="sig-paren">(</span><em>self</em>, <em>values</em>, <em>index</em>, <em>columns</em>, <em>aggfunc='avg'</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.pivot_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a DataFrame that gives the pivoted table.</p>
+<p>aggfunc is identical to SAP HANA aggregate functions.
+<a class="reference external" href="https://help.sap.com/viewer/7c78579ce9b14a669c1f3295b0d8ca16/Cloud/en-US/6fff7f0ae9184d1db47a25791545a1b6.html">https://help.sap.com/viewer/7c78579ce9b14a669c1f3295b0d8ca16/Cloud/en-US/6fff7f0ae9184d1db47a25791545a1b6.html</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>values</strong><span class="classifier">str or list of str</span></dt><dd><p>The targeted values for pivoting.</p>
+</dd>
+<dt><strong>index</strong><span class="classifier">str or list of str</span></dt><dd><p>The index of the DataFrame.</p>
+</dd>
+<dt><strong>columns</strong><span class="classifier">str or list of str</span></dt><dd><p>The pivoting columns.</p>
+</dd>
+<dt><strong>aggfunc</strong><span class="classifier">{‘avg’, ‘max’, ‘min’,… }, optional</span></dt><dd><p>aggfunc is identical to SAP HANA aggregate functions.
+Defaults to ‘avg’.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>A pivoted DataFrame.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">values</span><span class="o">=</span><span class="s1">&#39;C2&#39;</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="s1">&#39;C1&#39;</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="s1">&#39;C3&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="hana_ml.dataframe.DataFrame.generate_table_type">
+<code class="descname">generate_table_type</code><span class="sig-paren">(</span><em>self</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.DataFrame.generate_table_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates an SAP HANA table type based on the dtypes function of the DataFrame. This is a convenience method for SQL tracing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>Table Type</strong><span class="classifier">str</span></dt><dd><p>The table type in string form.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="hana_ml.dataframe.create_dataframe_from_pandas">
+<code class="descclassname">hana_ml.dataframe.</code><code class="descname">create_dataframe_from_pandas</code><span class="sig-paren">(</span><em>connection_context</em>, <em>pandas_df</em>, <em>table_name</em>, <em>schema=None</em>, <em>force=False</em>, <em>replace=True</em>, <em>object_type_as_bin=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hana_ml.dataframe.create_dataframe_from_pandas" title="Permalink to this definition">¶</a></dt>
+<dd><p>Uploads data from a Pandas DataFrame to an SAP HANA database and returns an SAP HANA DataFrame.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl>
+<dt><strong>connection_context</strong><span class="classifier">ConnectionContext</span></dt><dd><p>A connection to the SAP HANA system.</p>
+</dd>
+<dt><strong>pandas_df</strong><span class="classifier">pandas.DataFrame</span></dt><dd><p>A Pandas DataFrame for uploading to the HANA database.</p>
+</dd>
+<dt><strong>table_name</strong><span class="classifier">str</span></dt><dd><p>The table name in the SAP HANA database.</p>
+</dd>
+<dt><strong>schema</strong><span class="classifier">str, optional, keyword-only</span></dt><dd><p>The schema name. If this value is not provided or set to None, then the value defaults to the
+ConnectionContext’s current schema.</p>
+<p>Defaults to the current schema.</p>
+</dd>
+<dt><strong>force</strong><span class="classifier">bool, optional</span></dt><dd><p>If force is True, then the Sap HANA table with table_name is dropped.</p>
+<p>Defaults to False.</p>
+</dd>
+<dt><strong>replace</strong><span class="classifier">bool, optional</span></dt><dd><p>If replace is True, then the SAP HANA table performs the missing value handling.</p>
+<p>Defaults to True.</p>
+</dd>
+<dt><strong>object_type_as_bin</strong><span class="classifier">bool, optional</span></dt><dd><p>If true, the object type will be considered CLOB in HANA.</p>
+<p>Defaults to False.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>DataFrame</dt><dd><p>An SAP HANA DataFrame that contains the data in the pandas_df.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">create_dataframe_from_pandas</span><span class="p">(</span><span class="n">connection_context</span><span class="p">,</span> <span class="n">p_df</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">&lt;hana_ml.dataframe.DataFrame at 0x7efbcb26fbe0&gt;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hana_ml.html">SAP HANA Python Client API for Machine Learning Algorithms</a></li>
+<li class="toctree-l1"><a class="reference internal" href="change_log.html">Change Log for the SAP HANA Python Client API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">hana_ml.dataframe</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hana_ml.algorithms.apl.html">hana_ml.algorithms.apl package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hana_ml.algorithms.pal.html">hana_ml.algorithms.pal package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hana_ml.visualizers.html">hana_ml.visualizers package</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hana_ml.ml_exceptions.html">hana_ml.ml_exceptions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hana_ml.model_storage.html">hana_ml.model_storage</a></li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="change_log.html"
+                        title="previous chapter">Change Log for the SAP HANA Python Client API</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="hana_ml.algorithms.apl.html"
+                        title="next chapter">hana_ml.algorithms.apl package</a></p>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="hana_ml.algorithms.apl.html" title="hana_ml.algorithms.apl package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="change_log.html" title="Change Log for the SAP HANA Python Client API"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">hana_ml 1.0.8.post5 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, SAP.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.0.0.
+    </div>
+  
+<script>
+function trackPage() {
+try { 
+var trackingData = {};
+trackingData.pageUrl = location.href
+trackingData.pageName = ""
+trackingData.eVar2 = "en-US"
+trackingData.eVar9 = "logN"
+trackingData.list2 = "73554900100900001301"
+trackingData.eVar131 = "sap_hana_platform|1d0ebfe5e8dd44d09606814d83308d4b|n/a|2.0.04"
+sap_s.trackData(trackingData); 
+}catch(e){console.log(e);}
+}
+var intervalCounter = 0;
+var waitForAA =  setInterval(function(){
+intervalCounter++;
+if(window.sap_s && window.sap_s.trackData) {
+clearInterval(waitForAA);
+trackPage();
+} else if(intervalCounter > 4){
+clearInterval(waitForAA);}
+}, 250)
+</script>
+<script>try{_satellite.pageBottom();}catch(e){console.log(e);} </script>
+</body>
+</html>

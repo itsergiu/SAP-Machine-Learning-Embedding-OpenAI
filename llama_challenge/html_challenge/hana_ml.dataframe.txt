@@ -1,0 +1,1076 @@
+
+hana_ml.dataframe — hana_ml 1.0.8.post5 documentation
+Navigation
+index
+modules |
+next |
+previous |
+hana_ml 1.0.8.post5 documentation »
+hana_ml.dataframe¶
+This module represents a database query as a dataframe.
+Most operations are designed to not bring data back from the database
+unless explicitly requested.
+The following classes and functions are available:
+ConnectionContext
+DataFrame
+quotename()
+create_dataframe_from_pandas()
+hana_ml.dataframe.quotename(name)¶
+Escapes a schema, table, or column name for use in SQL. hana_ml functions and methods that take schema, table, or column names
+already escape their input by default, but those that take SQL don’t (and can’t) perform escaping automatically.
+Parameters
+namestrThe schema, table, or column name.
+Returns
+strThe escaped name. The string is surrounded in quotation marks,
+and existing quotation marks are escaped by doubling them.
+class hana_ml.dataframe.ConnectionContext(address='', port=0, user='', password='', autocommit=True, packetsize=None, userkey=None, **properties)¶
+Bases: object
+Represents a connection to an SAP HANA system.
+ConnectionContext includes methods for creating DataFrames from data
+on SAP HANA. DataFrames are tied to a ConnectionContext, and are unusable
+once their ConnectionContext is closed.
+Parameters
+Same as hdbcli.dbapi.connect. Please see the following online docs for hdbcli.dbapi.connect:
+https://help.sap.com/viewer/0eec0d68141541d1b07893a39944924e/latest/en-US/ee592e89dcce4480a99571a4ae7a702f.html
+Examples
+Querying data from SAP HANA into a Pandas DataFrame:
+>>> with ConnectionContext('address', port, 'user', 'password') as cc:
+...     df = (cc.table('MY_TABLE', schema='MY_SCHEMA')
+...             .filter('COL3 > 5')
+...             .select('COL1', 'COL2'))
+...     pandas_df = df.collect()
+The underlying hdbcli.dbapi.connect can be accessed if necessary:
+>>> with ConnectionContext('127.0.0.1', 30215, 'MLGUY', 'manager') as cc:
+...     cc.connection.setclientinfo('SOMEKEY', 'somevalue')
+...     df = cc.sql('some sql that needs that session variable')
+...     ...
+Attributes
+connectionhdbcli.dbapi.connectThe underlying dbapi connection. Use this connection to run SQL directly,
+or to access connection methods like getclientinfo/setclientinfo.
+close(self)¶
+Closes the existing connection.
+Parameters
+None
+Returns
+None
+hana_version(self)¶
+Returns the version of SAP HANA.
+Parameters
+None
+Returns
+strThe SAP HANA version.
+get_current_schema(self)¶
+Returns the current schema name.
+Returns
+strThe current schema name.
+hana_major_version(self)¶
+Returns the major number of HANA version.
+Parameters
+None
+Returns
+strThe major number of HANA version.
+sql(self, sql)¶
+Returns a DataFrame representing a query.
+Parameters
+sqlstrSQL query.
+Returns
+DataFrameThe DataFrame for the query.
+Examples
+>>> df = cc.sql('SELECT T.A, T2.B FROM T, T2 WHERE T.C=T2.C')
+table(table, *, schema=None)¶
+Returns a DataFrame that represents the specified table.
+Parameters
+tablestrThe table name.
+schemastr, optional, keyword-onlyThe schema name. If this value is not provided or set to None, then the value defaults to the
+ConnectionContext’s current schema.
+Returns
+DataFrameThe DataFrame that is selecting data from the specified table.
+Examples
+>>> df1 = cc.table('MY_TABLE')
+>>> df2 = cc.table('MY_OTHER_TABLE', schema='MY_SCHEMA')
+class hana_ml.dataframe.DataFrame(connection_context, select_statement, _name=None)¶
+Bases: object
+Represents a frame that is backed by a database SQL statement.
+Parameters
+connection_contextConnectionContextThe connection to the SAP HANA system.
+select_statementstrThe SQL query backing the dataframe.
+Note
+Parameters beyond connection_context and select_statement are intended for internal use. Do not rely on them; they may change without notice.
+columns¶
+Lists the current DataFrame’s column names. Computed lazily and cached.
+Each access to this property creates a new copy; mutating the list does not alter or corrupt the DataFrame.
+name¶
+Returns the name of the DataFrame. This value does not correspond to an SAP HANA table name.
+This value is useful for joining predicates when the joining DataFrames have columns with the same name.
+quoted_name¶
+Specifies the escaped name of the original DataFrame.
+Default-generated DataFrame names are safe to use in SQL without escaping, but names set with DataFrame.alias may require escaping.
+declare_lttab_usage(self, usage)¶
+Declares whether this DataFrame makes use of local temporary tables.
+Some PAL execution routines can execute more efficiently if they know up front whether a DataFrame’s SELECT statement requires
+access to local temporary tables.
+Parameters
+usagebool, optionalSpecifies whether this DataFrame uses local temporary tables.
+add_id(self, id_col)¶
+Return a new DataFrame with <id_col>.
+Parameters
+idstrThe name of ID column.
+Returns
+DataFrameThe DataFrame with <id_col>.
+alias(self, alias)¶
+Returns a new DataFrame with an alias set.
+Parameters
+aliasstrThe name of the DataFrame.
+Returns
+DataFrameThe DataFrame with an alias set.
+See also
+DataFrame.rename_columnsFor renaming individual columns.
+count(self)¶
+Computes the number of rows in the DataFrame.
+Parameters
+None
+Returns
+intThe number of rows in the DataFrame.
+diff(self, index, periods=1)¶
+Returns a new DataFrame with differenced values.
+Parameters
+indexint or strIndex of the HANA DataFrame.
+periodsint, default 1Periods to shift for calculating difference, accepts negative values.
+Returns
+DataFrameDataFrame with differenced values. No calculation happens if it contains string.
+drop(self, cols)¶
+Returns a new DataFrame without the specified columns.
+Parameters
+colslist of strThe list of column names to drop.
+Returns
+DataFrameThe new DataFrame that retains only the columns not listed in cols.
+Examples
+>>> df.collect()
+   A  B
+0  1  3
+1  2  4
+>>> df.drop(['B']).collect()
+   A
+0  1
+1  2
+distinct(self, cols=None)¶
+Returns a new DataFrame with distinct values for the specified columns.
+If no columns are specified, then the distinct row values from all columns are returned.
+Parameters
+colsstr or list of str, optionalA column or list of columns to consider when getting distinct
+values. Defaults to use all columns.
+Returns
+DataFrameThe DataFrame with distinct values for cols.
+Examples
+Input:
+>>> df.collect()
+   A  B    C
+0  1  A  100
+1  1  A  101
+2  1  A  102
+3  1  B  100
+4  1  B  101
+5  1  B  102
+6  1  B  103
+7  2  A  100
+8  2  A  100
+Distinct values in a column:
+>>> df.distinct("B").collect()
+   B
+0  A
+1  B
+Distinct values of a subset of columns:
+>>> df.distinct(["A", "B"]).collect()
+   A  B
+0  1  B
+1  2  A
+2  1  A
+Distinct values of the entire data set:
+>>> df.distinct().collect()
+   A  B    C
+0  1  A  102
+1  1  B  103
+2  1  A  101
+3  2  A  100
+4  1  B  101
+5  1  A  100
+6  1  B  100
+7  1  B  102
+drop_duplicates(self, subset=None)¶
+Returns a new DataFrame with duplicate rows removed. All columns in the
+DataFrame are returned. There is no way to keep specific duplicate rows.
+Warning
+Specifying a non-None value of subset may produce an unstable            DataFrame, the contents of which may be different every time you            look at it. Specifically, if two rows are duplicates in their            subset columns and have different values in other columns,            Then a different row could be picked every time you look at the result.
+Parameters
+subsetlist of str, optionalA list of columns to consider when deciding whether rows are             duplicates of each other. Defaults to use all columns.
+Returns
+DataFrameA DataFrame with only one copy of duplicate rows.
+Examples
+Input:
+>>> df.collect()
+   A  B    C
+0  1  A  100
+1  1  A  101
+2  1  A  102
+3  1  B  100
+4  1  B  101
+5  1  B  102
+6  1  B  103
+7  2  A  100
+8  2  A  100
+Drop duplicates based on the values of a subset of columns:
+>>> df.drop_duplicates(["A", "B"]).collect()
+   A  B    C
+0  1  A  100
+1  1  B  100
+2  2  A  100
+Distinct values on the entire data set:
+>>> df.drop_duplicates().collect()
+   A  B    C
+0  1  A  102
+1  1  B  103
+2  1  A  101
+3  2  A  100
+4  1  B  101
+5  1  A  100
+6  1  B  100
+7  1  B  102
+dropna(self, how=None, thresh=None, subset=None)¶
+Returns a new DataFrame with NULLs removed.
+Parameters
+how{‘any’, ‘all’}, optionalIf provided, ‘any’ eliminates rows with any NULLs,             and ‘all’ eliminates rows that are entirely NULLs.             If neither how nor thresh are provided, how             defaults to ‘any’.
+threshint, optionalIf provided, rows with fewer than thresh non-NULL values             are dropped.             You cannot specify both how and thresh.
+subsetlist of str, optionalThe columns to consider when looking for NULLs. Values in
+other columns are ignored, whether they are NULL or not.
+Defaults to all columns.
+Returns
+DataFrameA new DataFrame with a SELECT statement that removes NULLs.
+Examples
+Dropping rows with any nulls:
+>>> df.collect()
+     A    B    C
+0  1.0  3.0  5.0
+1  2.0  4.0  NaN
+2  3.0  NaN  NaN
+3  NaN  NaN  NaN
+>>> df.dropna().collect()
+     A    B    C
+0  1.0  3.0  5.0
+Dropping rows that are entirely nulls:
+>>> df.dropna(how='all').collect()
+     A    B    C
+0  1.0  3.0  5.0
+1  2.0  4.0  NaN
+2  3.0  NaN  NaN
+Dropping rows with less than 2 non-null values:
+>>> df.dropna(thresh=2).collect()
+     A    B    C
+0  1.0  3.0  5.0
+1  2.0  4.0  NaN
+dtypes(self, subset=None)¶
+Returns a sequence of tuples describing the DataFrame’s SQL types.
+The tuples list the name, SQL type name, and display size
+corresponding to the DataFrame’s columns.
+Parameters
+subsetlist of str, optionalThe columns that the information is generated from.
+Defaults to all columns.
+Returns
+dtypeslist of tuplesEach tuple consists of the name, SQL type name, and display size
+for one of the DataFrame’s columns. The list is in the order
+specified by the subset, or in the DataFrame’s original column
+order if a subset is not provided.
+empty(self)¶
+Returns True if this DataFrame has 0 rows.
+Parameters
+none
+Returns
+emptyboolTrue if the DataFrame is empty.
+Notes
+If a DataFrame contains only NULLs, it is not considered empty.
+Examples
+>>> df1.collect()
+Empty DataFrame
+Columns: [ACTUAL, PREDICT]
+Index: []
+>>> df1.empty()
+True
+>>> df2.collect()
+  ACTUAL PREDICT
+0   None    None
+>>> df2.empty()
+False
+filter(self, condition)¶
+Selects rows that match the given condition.
+Very little checking is done on the condition string.
+Use only with trusted inputs.
+Parameters
+conditionstrA filter condition. Format as SQL <condition>.
+Returns
+DataFrameA DataFrame with rows that match the given condition.
+Raises
+hana_ml.ml_exceptions.BadSQLErrorIf comments or malformed tokens are detected in condition.
+May have false positives and false negatives.
+Examples
+>>> df.collect()
+   A  B
+0  1  3
+1  2  4
+>>> df.filter('B < 4').collect()
+   A  B
+0  1  3
+has(self, col)¶
+Returns True if a column is in the DataFrame.
+Parameters
+colstrThe name of column to search in the projection list of this DataFrame.
+Returns
+boolReturns True if the column exists in the DataFrame’s projection list.
+Examples
+>>> df.columns
+['A', 'B']
+>>> df.has('A')
+True
+>>> df.has('C')
+False
+head(self, n=1)¶
+Returns a DataFrame of the first n rows in the current DataFrame.
+Parameters
+nint, optionalThe number of rows returned. Default value: 1.
+Returns
+DataFrameA new DataFrame of the first n rows of the current DataFrame.
+hasna(self, cols=None)¶
+Returns True if a DataFrame contains NULLs.
+Parameters
+colsstr or list of str, optionalA column or list of columns to be checked for NULL values.
+Defaults to all columns.
+Returns
+boolTrue if this DataFrame contains NULLs.
+Examples
+>>> df1.collect()
+  ACTUAL PREDICT
+0   1.0    None
+>>> df1.hasna()
+True
+fillna(self, value, subset=None)¶
+Returns a DataFrame with NULLs replaced with a specified value.
+You can only fill a DataFrame with numeric columns.
+Parameters
+valueint or floatThe value that replaces NULL. value should have a type that is
+appropriate for the selected columns.
+subsetlist of str, optionalA list of columns whose NULL values will be replaced.
+Defaults to all columns.
+Returns
+DataFrameA new DataFrame with the NULL values replaced.
+join(self, other, condition, how='inner', select=None)¶
+Returns a new DataFrame that is a join of the current DataFrame with
+another specified DataFrame.
+Parameters
+otherDataFrameThe DataFrame to join with.
+conditionstrThe join predicate.
+how{‘inner’, ‘left’, ‘right’, ‘outer’}, optionalThe type of join. Defaults to ‘inner’.
+selectlist, optionalIf provided, each element specifies a column in the result.
+A string in the select list should be the name of a column in
+one of the input DataFrames. A (expression, name) tuple creates
+a new column with the given name, computed from the given
+expression.
+If this value is not provided, defaults to selecting all columns from both
+DataFrames, with the left DataFrame’s columns first.
+Returns
+DataFrameA new DataFrame object made from the join of the current DataFrame
+with another DataFrame.
+Raises
+hana_ml.ml_exceptions.BadSQLErrorIf comments or malformed tokens are detected in condition
+or in a column expression.
+May have false positives and false negatives.
+Examples
+Use the expression selection functionality to disambiguate duplicate
+column names in a join:
+>>> df1.collect()
+   A  B    C
+0  1  2  3.5
+1  2  4  5.6
+2  3  3  1.1
+>>> df2.collect()
+   A  B     D
+0  2  1  14.0
+1  3  4   5.6
+2  4  3   0.0
+>>> df1.alias('L').join(df2.alias('R'), 'L.A = R.A', select=[
+...     ('L.A', 'A'),
+...     ('L.B', 'B_LEFT'),
+...     ('R.B', 'B_RIGHT'),
+...     'C',
+...     'D']).collect()
+   A  B_LEFT  B_RIGHT    C     D
+0  2       4        1  5.6  14.0
+1  3       3        4  1.1   5.6
+save(self, where, table_type=None, force=False)¶
+Creates a table or view holding the current DataFrame’s data.
+Parameters
+wherestr or (str, str) tupleThe table name or (schema name, table name) tuple. If no schema
+is provided, then the table or view is created in the current
+schema.
+table_typestr, optionalThe type of table to create. The value is case insensitive.
+Permanent table options:
+“ROW”
+“COLUMN”
+“HISTORY COLUMN”
+Temporary table options:
+“GLOBAL TEMPORARY”
+“GLOBAL TEMPORARY COLUMN”
+“LOCAL TEMPORARY”
+“LOCAL TEMPORARY COLUMN”
+Not a table:
+“VIEW”
+Defaults to ‘LOCAL TEMPORARY COLUMN’ if where starts
+with ‘#’. Otherwise, the default is ‘COLUMN’.
+forcebool, optionalIf force is True, it will replace the existing table.
+Returns
+DataFrameA DataFrame that represents the new table or view.
+Notes
+For this operation to succeed, the table name must not be in
+use, the schema must exist, and the user must have permission
+to create tables (or views) in the target schema.
+sort(self, cols, desc=False)¶
+Returns a new DataFrame sorted by the specified columns.
+Parameters
+colsstr or list of strA column or list of columns to sort by.
+If a list is specified, then the sort order in parameter desc is used
+for all columns.
+descbool, optionalSet to True to sort in descending order. Defaults to False,
+for ascending order. Default value is False.
+Returns
+DataFrameNew DataFrame object with rows sorted as specified.
+select(self, *cols)¶
+Returns a new DataFrame with columns derived from the current DataFrame.
+Warning
+There is no check that inputs interpreted as SQL expressions are
+actually valid expressions; an “expression” like
+“A FROM TAB; DROP TABLE IMPORTANT_THINGS; SELECT A” can cause
+a lot of damage.
+Parameters
+colsstr or (str, str) tuple.The columns in the new DataFrame. A string is treated as the name
+of a column to select; a (str, str) tuple is treated as
+(SQL expression, alias). As a special case, ‘*’ is expanded
+to all columns of the original DataFrame.
+Returns
+DataFrameA new DataFrame object with the specified columns.
+Raises
+hana_ml.ml_exceptions.BadSQLErrorIf comments or malformed tokens are detected in a column
+expression. May have false positives and false negatives.
+Examples
+Input:
+>>> df.collect()
+   A  B  C
+0  1  2  3
+Selecting a subset of existing columns:
+>>> df.select('A', 'B').collect()
+   A  B
+0  1  2
+Computing a new column based on existing columns:
+>>> df.select('*', ('B * 4', 'D')).collect()
+   A  B  C  D
+0  1  2  3  8
+union(self, other, all=True)¶
+Combines this DataFrame’s rows and another DataFrame’s rows into
+one DataFrame. This operation is equivalent to a SQL UNION ALL.
+Parameters
+otherDataFrameThe right side of the union.
+allbool, optionalIf True, keep duplicate rows; equivalent to UNION ALL in SQL.
+If False, keep only one copy of duplicate rows (even if they
+come from the same side of the union); equivalent to a UNION
+or a UNION ALL followed by DISTINCT in SQL.
+Defaults to True.
+Returns
+DataFrameThe combined data from self and other.
+Examples
+We have two DataFrames we want to union, with some duplicate rows:
+>>> df1.collect()
+   A  B
+0  1  2
+1  1  2
+2  2  3
+>>> df2.collect()
+   A  B
+0  2  3
+1  3  4
+union() produces a DataFrame that contains all rows of both df1
+and df2, like a UNION ALL:
+>>> df1.union(df2).collect()
+   A  B
+0  1  2
+1  1  2
+2  2  3
+3  2  3
+4  3  4
+To get the deduplication effect of a UNION DISTINCT, pass
+all=False or call distinct() after union():
+>>> df1.union(df2, all=False).collect()
+   A  B
+0  1  2
+1  2  3
+2  3  4
+>>> df1.union(df2).distinct().collect()
+   A  B
+0  1  2
+1  2  3
+2  3  4
+collect(self)¶
+Copies the current DataFrame to a new Pandas DataFrame.
+Parameters
+None
+Returns
+pandas.DataFrameA Pandas DataFrame that contains the current DataFrame’s data.
+Examples
+Viewing a hana_ml DataFrame doesn’t execute the underlying SQL or fetch the data:
+>>> df = cc.table('T')
+>>> df
+<hana_ml.dataframe.DataFrame object at 0x7f2b7f24ddd8>
+Using collect() executes the SQL and fetchs the results into a Pandas DataFrame:
+>>> df.collect()
+   A  B
+0  1  3
+1  2  4
+>>> type(df.collect())
+<class 'pandas.core.frame.DataFrame'>
+rename_columns(self, names)¶
+Returns a DataFrame with renamed columns.
+Parameters
+nameslist or dictIf a list, specifies new names for every column in this DataFrame.
+If a dict, each dict entry maps an existing name to a new name,
+and not all columns need to be renamed.
+Returns
+DataFrameThe same data as the original DataFrame with new column names.
+See also
+DataFrame.aliasFor renaming the DataFrame itself.
+Examples
+>>> df.collect()
+   A  B
+0  1  3
+1  2  4
+>>> df.rename_columns(['C', 'D']).collect()
+   C  D
+0  1  3
+1  2  4
+>>> df.rename_columns({'B': 'D'}).collect()
+   A  D
+0  1  3
+1  2  4
+cast(self, cols, new_type)¶
+Returns a DataFrame with columns cast to a new type.
+The name of the column in the returned DataFrame is the same as the original column.
+Warning
+Type compatibility between the existing column type and the new type is not checked.
+An incompatibility results in an error.
+Parameters
+colsstr or listThe column(s) to be cast to a different type.
+new_typestrThe database datatype to cast the column(s) to.
+No checks are performed to see if the new type is valid.
+An invalid type can lead to SQL errors or even SQL injection vulnerabilities.
+Returns
+DataFrameThe same data as this DataFrame, but with columns cast to the specified type.
+Examples
+Input:
+>>> df1 = cc.sql('SELECT "AGE", "PDAYS", "HOUSING" FROM DBM_TRAINING_TBL')
+>>> df1.dtypes()
+[('AGE', 'INT', 10), ('PDAYS', 'INT', 10), ('HOUSING', 'VARCHAR', 100)]
+Casting a column to NVARCHAR(20):
+>>> df2 = df1.cast('AGE', 'NVARCHAR(20)')
+>>> df2.dtypes()
+[('AGE', 'NVARCHAR', 20), ('PDAYS', 'INT', 10), ('HOUSING', 'VARCHAR', 100)]
+Casting a list of columns to NVARCHAR(50):
+>>> df3 = df1.cast(['AGE', 'PDAYS'], 'NVARCHAR(50)')
+>>> df3.dtypes()
+[('AGE', 'NVARCHAR', 50), ('PDAYS', 'NVARCHAR', 50), ('HOUSING', 'VARCHAR', 100)]
+to_head(self, col)¶
+Returns a DataFrame with specified column as the first item in the projection.
+Parameters
+colstrThe column to move to the first position.
+Returns
+DataFrameThe same data as this DataFrame but with the specified column in the first position.
+Examples
+Input:
+>>> df1 = cc.table("DBM_TRAINING")
+>>> import pprint
+>>> pprint.pprint(df1.columns)
+['ID',
+ 'AGE',
+ 'JOB',
+ 'MARITAL',
+ 'EDUCATION',
+ 'DBM_DEFAULT',
+ 'HOUSING',
+ 'LOAN',
+ 'CONTACT',
+ 'DBM_MONTH',
+ 'DAY_OF_WEEK',
+ 'DURATION',
+ 'CAMPAIGN',
+ 'PDAYS',
+ 'PREVIOUS',
+ 'POUTCOME',
+ 'EMP_VAR_RATE',
+ 'CONS_PRICE_IDX',
+ 'CONS_CONF_IDX',
+ 'EURIBOR3M',
+ 'NREMPLOYED',
+ 'LABEL']
+Moving the column ‘LABEL’ to head:
+>>> df2 = df1.to_head('LABEL')
+>>> pprint.pprint(df2.columns)
+['LABEL',
+ 'ID',
+ 'AGE',
+ 'JOB',
+ 'MARITAL',
+ 'EDUCATION',
+ 'DBM_DEFAULT',
+ 'HOUSING',
+ 'LOAN',
+ 'CONTACT',
+ 'DBM_MONTH',
+ 'DAY_OF_WEEK',
+ 'DURATION',
+ 'CAMPAIGN',
+ 'PDAYS',
+ 'PREVIOUS',
+ 'POUTCOME',
+ 'EMP_VAR_RATE',
+ 'CONS_PRICE_IDX',
+ 'CONS_CONF_IDX',
+ 'EURIBOR3M',
+ 'NREMPLOYED']
+describe(self, cols=None)¶
+Returns a DataFrame that contains various statistics for the requested column(s).
+Parameters
+colsstr or list, optionalThe column(s) to be described. Defaults to all columns.
+Returns
+DataFrameA DataFrame that contains statistics for the specified column(s)
+in the current DataFrame.
+The statistics included are the count of rows (“count”),
+number of distinct values (“unique”),
+number of nulls (“nulls”),
+average (“mean”),
+standard deviation(“std”)
+median (“median”),
+minimum value (“min”),
+maximum value (“max”),
+25% percentile when treated as continuous variable (“25_percent_cont”),
+25% percentile when treated as discrete variable (“25_percent_disc”),
+50% percentile when treated as continuous variable (“50_percent_cont”),
+50% percentile when treated as discrete variable (“50_percent_disc”),
+75% percentile when treated as continuous variable (“75_percent_cont”),
+75% percentile when treated as discrete variable (“75_percent_disc”).
+For columns that are strings, statistics such as average (“mean”),
+standard deviation (“std”), median (“median”), and the various percentiles
+are NULLs.
+If the list of columns contain both string and numeric data types,
+minimum and maximum values become NULLs.
+Examples
+Input:
+>>> df1 = cc.table("DBM_TRAINING")
+>>> import pprint
+>>> pprint.pprint(df2.columns)
+['LABEL',
+ 'ID',
+ 'AGE',
+ 'JOB',
+ 'MARITAL',
+ 'EDUCATION',
+ 'DBM_DEFAULT',
+ 'HOUSING',
+ 'LOAN',
+ 'CONTACT',
+ 'DBM_MONTH',
+ 'DAY_OF_WEEK',
+ 'DURATION',
+ 'CAMPAIGN',
+ 'PDAYS',
+ 'PREVIOUS',
+ 'POUTCOME',
+ 'EMP_VAR_RATE',
+ 'CONS_PRICE_IDX',
+ 'CONS_CONF_IDX',
+ 'EURIBOR3M',
+ 'NREMPLOYED']
+Describe a few numeric columns and collect them to return a Pandas DataFrame:
+>>> df1.describe(['AGE', 'PDAYS']).collect()
+  column  count  unique  nulls        mean         std  min  max  median
+0    AGE  16895      78      0   40.051376   10.716907   17   98      38
+1  PDAYS  16895      24      0  944.406688  226.331944    0  999     999
+   25_percent_cont  25_percent_disc  50_percent_cont  50_percent_disc
+0             32.0               32             38.0               38
+1            999.0              999            999.0              999
+   75_percent_cont  75_percent_disc
+0             47.0               47
+1            999.0              999
+Describe some non-numeric columns and collect them to return a Pandas DataFrame:
+>>> df1.describe(['JOB', 'MARITAL']).collect()
+    column  count  unique  nulls  mean   std       min      max median
+0      JOB  16895      12      0  None  None    admin.  unknown   None
+1  MARITAL  16895       4      0  None  None  divorced  unknown   None
+  25_percent_cont 25_percent_disc 50_percent_cont 50_percent_disc
+0            None            None            None            None
+1            None            None            None            None
+  75_percent_cont 75_percent_disc
+0            None            None
+1            None            None
+Describe all columns in a DataFrame:
+>>> df1.describe().collect()
+            column  count  unique  nulls          mean           std
+0               ID  16895   16895      0  21282.286652  12209.759725
+1              AGE  16895      78      0     40.051376     10.716907
+2         DURATION  16895    1267      0    263.965670    264.331384
+3         CAMPAIGN  16895      35      0      2.344658      2.428449
+4            PDAYS  16895      24      0    944.406688    226.331944
+5         PREVIOUS  16895       7      0      0.209529      0.539450
+6     EMP_VAR_RATE  16895      10      0     -0.038798      1.621945
+7   CONS_PRICE_IDX  16895      26      0     93.538844      0.579189
+8    CONS_CONF_IDX  16895      26      0    -40.334123      4.865720
+9        EURIBOR3M  16895     283      0      3.499297      1.777986
+10      NREMPLOYED  16895      11      0   5160.371885     75.320580
+11             JOB  16895      12      0           NaN           NaN
+12         MARITAL  16895       4      0           NaN           NaN
+13       EDUCATION  16895       8      0           NaN           NaN
+14     DBM_DEFAULT  16895       2      0           NaN           NaN
+15         HOUSING  16895       3      0           NaN           NaN
+16            LOAN  16895       3      0           NaN           NaN
+17         CONTACT  16895       2      0           NaN           NaN
+18       DBM_MONTH  16895      10      0           NaN           NaN
+19     DAY_OF_WEEK  16895       5      0           NaN           NaN
+20        POUTCOME  16895       3      0           NaN           NaN
+21           LABEL  16895       2      0           NaN           NaN
+         min        max     median  25_percent_cont  25_percent_disc
+0      5.000  41187.000  21786.000        10583.500        10583.000
+1     17.000     98.000     38.000           32.000           32.000
+2      0.000   4918.000    184.000          107.000          107.000
+3      1.000     43.000      2.000            1.000            1.000
+4      0.000    999.000    999.000          999.000          999.000
+5      0.000      6.000      0.000            0.000            0.000
+6     -3.400      1.400      1.100           -1.800           -1.800
+7     92.201     94.767     93.444           93.075           93.075
+8    -50.800    -26.900    -41.800          -42.700          -42.700
+9      0.634      5.045      4.856            1.313            1.313
+10  4963.000   5228.000   5191.000         5099.000         5099.000
+11       NaN        NaN        NaN              NaN              NaN
+12       NaN        NaN        NaN              NaN              NaN
+13       NaN        NaN        NaN              NaN              NaN
+14       NaN        NaN        NaN              NaN              NaN
+15       NaN        NaN        NaN              NaN              NaN
+16       NaN        NaN        NaN              NaN              NaN
+17       NaN        NaN        NaN              NaN              NaN
+18       NaN        NaN        NaN              NaN              NaN
+19       NaN        NaN        NaN              NaN              NaN
+20       NaN        NaN        NaN              NaN              NaN
+21       NaN        NaN        NaN              NaN              NaN
+    50_percent_cont  50_percent_disc  75_percent_cont  75_percent_disc
+0         21786.000        21786.000        32067.500        32068.000
+1            38.000           38.000           47.000           47.000
+2           184.000          184.000          324.000          324.000
+3             2.000            2.000            3.000            3.000
+4           999.000          999.000          999.000          999.000
+5             0.000            0.000            0.000            0.000
+6             1.100            1.100            1.400            1.400
+7            93.444           93.444           93.994           93.994
+8           -41.800          -41.800          -36.400          -36.400
+9             4.856            4.856            4.961            4.961
+10         5191.000         5191.000         5228.000         5228.000
+11              NaN              NaN              NaN              NaN
+12              NaN              NaN              NaN              NaN
+13              NaN              NaN              NaN              NaN
+14              NaN              NaN              NaN              NaN
+15              NaN              NaN              NaN              NaN
+16              NaN              NaN              NaN              NaN
+17              NaN              NaN              NaN              NaN
+18              NaN              NaN              NaN              NaN
+19              NaN              NaN              NaN              NaN
+20              NaN              NaN              NaN              NaN
+21              NaN              NaN              NaN              NaN
+bin(self, col, strategy='uniform_number', bins=None, bin_width=None, bin_column='BIN_NUMBER')¶
+Returns a DataFrame with the original columns as well as bin assignments.
+The name of the columns in the returned DataFrame is the same as the
+original column. Column “BIN_NUMBER” or the specified value in
+bin_column is added and corresponds to the bin assigned.
+Parameters
+colstrThe column on which binning is performed.
+The column must be numeric.
+strategy{‘uniform_number’, ‘uniform_size’}, optionalBinning methods:
+‘uniform_number’: Equal widths based on the number of bins.
+‘uniform_size’: Equal widths based on the bin size.
+Default value is ‘uniform_number’.
+binsint, optionalThe number of equal-width bins.
+Only valid when strategy is ‘uniform_number’.
+Defaults to 10.
+bin_widthint, optionalThe interval width of each bin.
+Only valid when strategy is ‘uniform_size’.
+bin_columnstr, optionalThe name of the output column that contains the bin number.
+Returns
+DataFrameA binned dataset with the same data as this DataFrame,
+as well as an additional column “BIN_NUMBER” or the value specified
+in bin_column. This additional column contains the
+assigned bin for each row.
+Examples
+Input:
+>>> df.collect()
+   C1   C2    C3       C4
+0   1  1.2   2.0      1.0
+1   2  1.4   4.0      3.0
+2   3  1.6   6.0      9.0
+3   4  1.8   8.0     27.0
+4   5  2.0  10.0     81.0
+5   6  2.2  12.0    243.0
+6   7  2.4  14.0    729.0
+7   8  2.6  16.0   2187.0
+8   9  2.8  18.0   6561.0
+9  10  3.0  20.0  19683.0
+Create five bins of equal widths on C1:
+>>> df.bin('C1', strategy='uniform_number', bins=5).collect()
+   C1   C2    C3       C4  BIN_NUMBER
+0   1  1.2   2.0      1.0           1
+1   2  1.4   4.0      3.0           1
+2   3  1.6   6.0      9.0           2
+3   4  1.8   8.0     27.0           2
+4   5  2.0  10.0     81.0           3
+5   6  2.2  12.0    243.0           3
+6   7  2.4  14.0    729.0           4
+7   8  2.6  16.0   2187.0           4
+8   9  2.8  18.0   6561.0           5
+9  10  3.0  20.0  19683.0           5
+Create five bins of equal widths on C2:
+>>> df.bin('C3', strategy='uniform_number', bins=5).collect()
+   C1   C2    C3       C4  BIN_NUMBER
+0   1  1.2   2.0      1.0           1
+1   2  1.4   4.0      3.0           1
+2   3  1.6   6.0      9.0           2
+3   4  1.8   8.0     27.0           2
+4   5  2.0  10.0     81.0           3
+5   6  2.2  12.0    243.0           3
+6   7  2.4  14.0    729.0           4
+7   8  2.6  16.0   2187.0           4
+8   9  2.8  18.0   6561.0           5
+9  10  3.0  20.0  19683.0           5
+Create five bins of equal widths on a column that varies significantly:
+>>> df.bin('C4', strategy='uniform_number', bins=5).collect()
+   C1   C2    C3       C4  BIN_NUMBER
+0   1  1.2   2.0      1.0           1
+1   2  1.4   4.0      3.0           1
+2   3  1.6   6.0      9.0           1
+3   4  1.8   8.0     27.0           1
+4   5  2.0  10.0     81.0           1
+5   6  2.2  12.0    243.0           1
+6   7  2.4  14.0    729.0           1
+7   8  2.6  16.0   2187.0           1
+8   9  2.8  18.0   6561.0           2
+9  10  3.0  20.0  19683.0           5
+Create bins of equal width:
+>>> df.bin('C1', strategy='uniform_size', bin_width=3).collect()
+   C1   C2    C3       C4  BIN_NUMBER
+0   1  1.2   2.0      1.0           1
+1   2  1.4   4.0      3.0           1
+2   3  1.6   6.0      9.0           2
+3   4  1.8   8.0     27.0           2
+4   5  2.0  10.0     81.0           2
+5   6  2.2  12.0    243.0           3
+6   7  2.4  14.0    729.0           3
+7   8  2.6  16.0   2187.0           3
+8   9  2.8  18.0   6561.0           4
+9  10  3.0  20.0  19683.0           4
+agg(self, agg_list, group_by=None)¶
+Returns a DataFrame with the group_by column along with the aggregates.
+The name of the column in the returned DataFrame is the same as the
+original column.
+Parameters
+agg_listA list of tuplesA list of tuples. Each tuple is a triplet.
+The triplet consists of (aggregate_operator, expression, name) where:
+aggregate_operator is one of [‘max’, ‘min’, ‘count’, ‘avg’]
+expression is a str that is a column or column expression
+name that is the name of this aggregate in the project list.
+group_bystr or list of str, optionalThe group by column. Only a column is allowed although
+expressions are allowed in SQL. To group by an expression, create a
+DataFrame  by providing the entire SQL.
+So, if you have a table T with columns C1, C2, and C3 that are all
+integers, to calculate the max(C1) grouped by (C2+C3) a DataFrame
+would need to be created as below:
+cc.sql(‘SELECT “C2”+”C3”, max(“C1”) FROM “T” GROUP BY “C2”+”C3”’)
+Returns
+DataFrameA DataFrame containing the group_by column (if it exists), as well as
+the aggregate expressions that are aliased with the specified names.
+Examples
+Input:
+>>> df.collect()
+    ID  SEPALLENGTHCM  SEPALWIDTHCM  PETALLENGTHCM  PETALWIDTHCM          SPECIES
+0    1            5.1           3.5            1.4           0.2      Iris-setosa
+1    2            4.9           3.0            1.4           0.2      Iris-setosa
+2    3            4.7           3.2            1.3           0.2      Iris-setosa
+3   51            7.0           3.2            4.7           1.4  Iris-versicolor
+4   52            6.4           3.2            4.5           1.5  Iris-versicolor
+5  101            6.3           3.3            6.0           2.5   Iris-virginica
+6  102            5.8           2.7            5.1           1.9   Iris-virginica
+7  103            7.1           3.0            5.9           2.1   Iris-virginica
+8  104            6.3           2.9            5.6           1.8   Iris-virginica
+Another way to do a count:
+>>> df.agg([('count', 'SPECIES', 'COUNT')]).collect()
+    COUNT
+0      9
+Get counts by SPECIES:
+>>> df.agg([('count', 'SPECIES', 'COUNT')], group_by='SPECIES').collect()
+           SPECIES  COUNT
+0  Iris-versicolor      2
+1   Iris-virginica      4
+2      Iris-setosa      3
+Get max values of SEPALLENGTHCM by SPECIES:
+>>> df.agg([('max', 'SEPALLENGTHCM', 'MAX_SEPAL_LENGTH')], group_by='SPECIES').collect()
+           SPECIES  MAX_SEPAL_LENGTH
+0  Iris-versicolor               7.0
+1   Iris-virginica               7.1
+2      Iris-setosa               5.1
+Get max and min values of SEPALLENGTHCM by SPECIES:
+>>> df.agg([('max', 'SEPALLENGTHCM', 'MAX_SEPAL_LENGTH'),
+    ('min', 'SEPALLENGTHCM', 'MIN_SEPAL_LENGTH')], group_by=['SPECIES']).collect()
+           SPECIES  MAX_SEPAL_LENGTH  MIN_SEPAL_LENGTH
+0  Iris-versicolor               7.0               6.4
+1   Iris-virginica               7.1               5.8
+2      Iris-setosa               5.1               4.7
+Get aggregate grouping by multiple columns:
+>>> df.agg([('count', 'SEPALLENGTHCM', 'COUNT_SEPAL_LENGTH')],
+            group_by=['SPECIES', 'PETALLENGTHCM']).collect()
+           SPECIES  PETALLENGTHCM  COUNT_SEPAL_LENGTH
+0   Iris-virginica            6.0                   1
+1      Iris-setosa            1.3                   1
+2   Iris-virginica            5.9                   1
+3   Iris-virginica            5.6                   1
+4      Iris-setosa            1.4                   2
+5  Iris-versicolor            4.7                   1
+6  Iris-versicolor            4.5                   1
+7   Iris-virginica            5.1                   1
+is_numeric(self, cols=None)¶
+Returns True if the column(s) in the DataFrame are numeric.
+Parameters
+colsstr or list, optionalThe column(s) to be tested for being numeric. Defaults to all columns.
+Returns
+boolTrue if all the columns are numeric.
+Examples
+Input:
+>>> df.head(5).collect()
+ID  SEPALLENGTHCM  SEPALWIDTHCM  PETALLENGTHCM  PETALWIDTHCM      SPECIES
+0   1            5.1           3.5            1.4           0.2  Iris-setosa
+1   2            4.9           3.0            1.4           0.2  Iris-setosa
+2   3            4.7           3.2            1.3           0.2  Iris-setosa
+3   4            4.6           3.1            1.5           0.2  Iris-setosa
+4   5            5.0           3.6            1.4           0.2  Iris-setosa
+>>> pprint.pprint(df.dtypes())
+[('ID', 'INT', 10),
+ ('SEPALLENGTHCM', 'DOUBLE', 15),
+ ('SEPALWIDTHCM', 'DOUBLE', 15),
+ ('PETALLENGTHCM', 'DOUBLE', 15),
+ ('PETALWIDTHCM', 'DOUBLE', 15),
+ ('SPECIES', 'NVARCHAR', 15)]
+Test a single column:
+>>> df.is_numeric('ID')
+True
+>>> df.is_numeric('SEPALLENGTHCM')
+True
+>>> df.is_numeric(['SPECIES'])
+False
+Test a list of columns:
+>>> df.is_numeric(['SEPALLENGTHCM', 'PETALLENGTHCM', 'PETALWIDTHCM'])
+True
+>>> df.is_numeric(['SEPALLENGTHCM', 'PETALLENGTHCM', 'SPECIES'])
+False
+corr(self, first_col, second_col)¶
+Returns a DataFrame that gives the correlation coefficient between two
+numeric columns.
+All rows with NULL values for first_col or second_col are removed
+prior to calculating the correlation coefficient.
+The correlation coefficient is:1/(n-1) * sum((col1_value - avg(col1)) * (col2 - avg(col2))) /
+(stddev(col1) * stddev(col2))
+Parameters
+first_colstrThe first column for calculating the correlation coefficient.
+second_colstrThe second column for calculating the correlation coefficient.
+Returns
+DataFrameA DataFrame with one value that contains the correlation coefficient.
+The name of the column is CORR_COEFF.
+Examples
+Input:
+>>> df.columns
+['C1', 'C2', 'C3', 'C4']
+>>> df.collect()
+   C1   C2      C3       C4
+0   1  1.2     2.0      1.0
+1   2  1.4     4.0      3.0
+2   3  1.6     8.0      9.0
+3   4  1.8    16.0     27.0
+4   5  2.0    32.0     81.0
+5   6  2.2    64.0    243.0
+6   7  2.4   128.0    729.0
+7   8  2.6   256.0   2187.0
+8   9  2.8   512.0   6561.0
+9  10  3.0  1024.0  19683.0
+Correlation with columns that are well correlated:
+>>> df.corr('C1', 'C2').collect()
+      CORR_COEFF
+0         1.0
+>>> df.corr('C1', 'C3').collect()
+    CORR_COEFF
+0         1.0
+Correlation with a column whose value is three times its previous value:
+>>> df.corr('C1', 'C4').collect()
+    CORR_COEFF
+0    0.696325
+pivot_table(self, values, index, columns, aggfunc='avg')¶
+Returns a DataFrame that gives the pivoted table.
+aggfunc is identical to SAP HANA aggregate functions.
+https://help.sap.com/viewer/7c78579ce9b14a669c1f3295b0d8ca16/Cloud/en-US/6fff7f0ae9184d1db47a25791545a1b6.html
+Parameters
+valuesstr or list of strThe targeted values for pivoting.
+indexstr or list of strThe index of the DataFrame.
+columnsstr or list of strThe pivoting columns.
+aggfunc{‘avg’, ‘max’, ‘min’,… }, optionalaggfunc is identical to SAP HANA aggregate functions.
+Defaults to ‘avg’.
+Returns
+DataFrameA pivoted DataFrame.
+Examples
+>>> df.pivot_table(values='C2', index='C1', columns='C3', aggfunc='max')
+generate_table_type(self)¶
+Generates an SAP HANA table type based on the dtypes function of the DataFrame. This is a convenience method for SQL tracing.
+Returns
+Table TypestrThe table type in string form.
+hana_ml.dataframe.create_dataframe_from_pandas(connection_context, pandas_df, table_name, schema=None, force=False, replace=True, object_type_as_bin=False)¶
+Uploads data from a Pandas DataFrame to an SAP HANA database and returns an SAP HANA DataFrame.
+Parameters
+connection_contextConnectionContextA connection to the SAP HANA system.
+pandas_dfpandas.DataFrameA Pandas DataFrame for uploading to the HANA database.
+table_namestrThe table name in the SAP HANA database.
+schemastr, optional, keyword-onlyThe schema name. If this value is not provided or set to None, then the value defaults to the
+ConnectionContext’s current schema.
+Defaults to the current schema.
+forcebool, optionalIf force is True, then the Sap HANA table with table_name is dropped.
+Defaults to False.
+replacebool, optionalIf replace is True, then the SAP HANA table performs the missing value handling.
+Defaults to True.
+object_type_as_binbool, optionalIf true, the object type will be considered CLOB in HANA.
+Defaults to False.
+Returns
+DataFrameAn SAP HANA DataFrame that contains the data in the pandas_df.
+Examples
+>>> create_dataframe_from_pandas(connection_context, p_df, 'test', force=False, replace=True)
+<hana_ml.dataframe.DataFrame at 0x7efbcb26fbe0>
+Table of Contents
+SAP HANA Python Client API for Machine Learning Algorithms
+Change Log for the SAP HANA Python Client API
+hana_ml.dataframe
+hana_ml.algorithms.apl package
+hana_ml.algorithms.pal package
+hana_ml.visualizers package
+hana_ml.ml_exceptions
+hana_ml.model_storage
+Previous topic
+Change Log for the SAP HANA Python Client API
+Next topic
+hana_ml.algorithms.apl package
+Quick search
+Navigation
+index
+modules |
+next |
+previous |
+hana_ml 1.0.8.post5 documentation »
