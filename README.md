@@ -8,9 +8,6 @@ Asking questions from additional content requires data augmentation. Let’s see
 https://blogs.sap.com/2023/05/25/sap-machine-learning-embedding-in-openai/ 
 
 Execute notebooks in your browser with Binder. <br>
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD?urlpath=https%3A%2F%2Fgithub.com%2Fitsergiu%2FSAP-Machine-Learning-Embedding-OpenAI%2Fblob%2Fmain%2F05%2520SAP%2520HANA%2520Machine%2520Learning%2520content%2520embedding%2520v1.3.ipynb)
-
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD?labpath=05%20SAP%20HANA%20Machine%20Learning%20content%20embedding%20v1.3.ipynb)
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD) <br>
-Open Notebook and start asking questions: 05 SAP HANA Machine Learning content embedding v1.3.ipynb
+Open Notebook and start asking questions: 05 SAP HANA Machine Learning content embedding v1.3.1.ipynb
