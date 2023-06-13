@@ -11,4 +11,5 @@ Execute notebooks in your browser with Binder. <br>
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD?labpath=05%20SAP%20HANA%20Machine%20Learning%20content%20embedding%20v1.3.ipynb)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD) <br>
+Open Notebook and start asking questions: 05 SAP HANA Machine Learning content embedding v1.3.ipynb
