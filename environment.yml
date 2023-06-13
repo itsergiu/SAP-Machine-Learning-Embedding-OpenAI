@@ -7,9 +7,12 @@ dependencies:
 - python=3.8.16
 - pip=22.3.1
 - pip:
+  - tensorflow==2.11.0
+  - transformers==4.28.1
   - openai==0.27.4
   - langchain==0.0.157
   - llama-index==0.6.21.post1
+  
 
 
 
