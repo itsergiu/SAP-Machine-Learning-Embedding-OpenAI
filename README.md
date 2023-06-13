@@ -7,7 +7,10 @@ Asking questions from additional content requires data augmentation. Let’s see
 
 https://blogs.sap.com/2023/05/25/sap-machine-learning-embedding-in-openai/ 
 
-Execute notebooks in your browser with Binder. <br>
+Execute notebook in your browser with Binder. <br>
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/itsergiu/SAP-Machine-Learning-Embedding-OpenAI/HEAD) <br>
-Open Notebook and start asking questions: 05 SAP HANA Machine Learning content embedding v1.3.1.ipynb
+Execute notebook _05 SAP HANA Machine Learning content embedding v1.3.1.ipynb_. It uses already embedded data in vector_store. Tokens are consumed only for questions.
+
+The notebook _05 SAP HANA Machine Learning content embedding v1.3.ipynb_ is the full version with collecting documents form previous steps and creatoin of vector_store. Creation of vector_store costs tokens.
+
